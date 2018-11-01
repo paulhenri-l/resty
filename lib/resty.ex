@@ -1,18 +1,5 @@
 defmodule Resty do
   @moduledoc """
-  Documentation for Resty.
+  Resty is Elixir's equivalent to Ruby's ActiveResource
   """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Resty.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
 end
