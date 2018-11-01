@@ -1,8 +1,9 @@
 defmodule Pipeline do
   use Resty.Resource
 
-  site("localhost:3000")
-  path("pipelines")
+  set_site("localhost:3000")
+  set_path("pipelines")
+  set_json_nesting_key("data", "pipeline")
 
   field(:id, :int)
   field(:name, :string)
