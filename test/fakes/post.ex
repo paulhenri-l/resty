@@ -1,4 +1,4 @@
-defmodule Pipeline do
+defmodule Fakes.Post do
   use Resty.Resource
 
   set_site("localhost:3000")

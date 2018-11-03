@@ -18,8 +18,8 @@ defmodule Resty.MixProject do
     ]
   end
 
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(:dev), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "test/fakes"]
+  defp elixirc_paths(:dev), do: ["lib", "test/fakes"]
   defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
