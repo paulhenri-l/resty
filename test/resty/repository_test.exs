@@ -9,10 +9,10 @@ defmodule Resty.RepositoryTest do
   end
 
   test "You can create a resource" do
-    pipeline = Post.build(name: "test")
-    saved_pipeline = Repository.save(pipeline)
+    post = Post.build(name: "test")
+    saved_post = Repository.save(post)
 
-    assert pipeline.name == saved_pipeline.name
-    assert pipeline.name == Repository.find(Post, saved_pipeline.id).name
+    assert post.name == saved_post.name
+    assert post.name == Repository.find(Post, saved_post.id).name
   end
 end

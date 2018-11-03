@@ -2,18 +2,15 @@ defmodule Resty.ResourceTest do
   use ExUnit.Case, async: true
   alias Fakes.Post
 
-  @json_read_resource ~s|{"data":{"id":1, "name": "test"}}|
-  @json_write_resource ~s|{"pipeline":{"id":1, "name": "test"}}|
-
-  # Add test for resource without json nesting key
+  @json_resource ~s({"id":1, "name": "test"})
   # Add test for resource with read, write json key
 
   test "The resource can generate paths" do
-    pipeline = Post.build(id: 1)
+    post = Post.build(id: 1)
 
-    assert "localhost:3000/pipelines" == Post.path()
-    assert "localhost:3000/pipelines/1" == Post.path(1)
-    assert "localhost:3000/pipelines/1" == Post.path(pipeline)
+    assert "site.tld/posts" == Post.path()
+    assert "site.tld/posts/1" == Post.path(1)
+    assert "site.tld/posts/1" == Post.path(post)
   end
 
   test "The resource knows its module" do
@@ -27,12 +24,24 @@ defmodule Resty.ResourceTest do
   end
 
   test "The resource can be created from json" do
-    assert %Post{id: 1, name: "test"} == Post.from_json(@json_read_resource)
+    assert %Post{id: 1, name: "test"} == Post.from_json(@json_resource)
+    assert Post == Post.from_json(@json_resource).__module__
+  end
+
+  test "Fields are cleaned when the resource is created from json" do
+    json =
+      Poison.encode!(%{
+        id: 1,
+        name: "hello",
+        __module__: "Hola"
+      })
+
+    assert %Post{id: 1, name: "hello", __module__: Post} == Post.from_json(json)
   end
 
   test "The resource can be converted to json" do
-    pipeline = Post.build(id: 1, name: "test")
+    post = Post.build(id: 1, name: "test")
 
-    assert Poison.decode!(@json_write_resource) == Poison.decode!(Post.to_json(pipeline))
+    assert Poison.decode!(@json_resource) == Poison.decode!(Post.to_json(post))
   end
 end

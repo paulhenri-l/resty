@@ -16,7 +16,7 @@ defmodule Resty.Repository do
   end
 
   def adapter do
-    Resty.Adapters.HTTPoison
+    Application.get_env(:resty, :adapter, Resty.Adapters.HTTPoison)
   end
 
   defp headers do
