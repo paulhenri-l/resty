@@ -1,23 +1,31 @@
 defmodule Resty.Repository do
-  def find(resource, id) do
-    response = resource.path(id) |> adapter().get!(headers())
+  @adapter Application.get_env(:resty, :adapter, Resty.Adapters.HTTPoison)
 
-    resource.from_json(response)
+  def find(resource_module, id) do
+    response = resource_module.path(id) |> adapter().get!(headers())
+
+    resource_module.from_json(response)
   end
 
   def save(resource), do: save(resource.__module__, resource)
 
-  def save(resource, data) do
-    data = data |> resource.to_json()
+  def save(resource_module, resource = %{id: nil}) do
+    resource = resource |> resource_module.to_json()
 
-    response = resource.path() |> adapter().post!(data, headers())
+    response = resource_module.path() |> adapter().post!(resource, headers())
 
-    resource.from_json(response)
+    resource_module.from_json(response)
   end
 
-  def adapter do
-    Application.get_env(:resty, :adapter, Resty.Adapters.HTTPoison)
+  def save(resource_module, resource) do
+    resource = resource |> resource_module.to_json()
+
+    response = resource_module.path() |> adapter().put!(resource, headers())
+
+    resource_module.from_json(response)
   end
+
+  def adapter, do: @adapter
 
   defp headers do
     [

@@ -15,4 +15,12 @@ defmodule Resty.RepositoryTest do
     assert post.name == saved_post.name
     assert post.name == Repository.find(Post, saved_post.id).name
   end
+
+  test "You can update a resource" do
+    post = Post.build(name: "test") |> Repository.save()
+    %{post|name: "updated"} |> Repository.save()
+    updated_post = Repository.find(Post, post.id)
+
+    assert "updated" == updated_post.name
+  end
 end

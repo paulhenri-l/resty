@@ -8,6 +8,8 @@ defmodule Fakes.TestAdapter do
     |> Post.to_json()
   end
 
+  def head!(_, _), do: ""
+
   def post!("site.tld/posts", body, _) do
     post =
       body
@@ -19,8 +21,18 @@ defmodule Fakes.TestAdapter do
 
   def post!(_, _, _), do: ""
 
-  def head!(_, _), do: ""
   def patch!(_, _, _), do: ""
+
+  def put!("site.tld/posts", body, _) do
+    post =
+      body
+      |> Post.from_json()
+
+    Fakes.TestDB.update(Post, post)
+    |> Post.to_json()
+  end
+
   def put!(_, _, _), do: ""
+
   def delete!(_, _), do: ""
 end
