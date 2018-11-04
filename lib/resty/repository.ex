@@ -4,7 +4,10 @@ defmodule Resty.Repository do
   def find(resource_module, id) do
     response = resource_module.path(id) |> adapter().get!(headers())
 
-    resource_module.from_json(response)
+    case response do
+      nil -> nil
+      response -> resource_module.from_json(response)
+    end
   end
 
   def save(resource), do: save(resource.__module__, resource)
@@ -23,6 +26,12 @@ defmodule Resty.Repository do
     response = resource_module.path() |> adapter().put!(resource, headers())
 
     resource_module.from_json(response)
+  end
+
+  def delete(resource), do: delete(resource.__module__, resource)
+
+  def delete(resource_module, resource) do
+    resource_module.path(resource) |> adapter().delete!(headers())
   end
 
   def adapter, do: @adapter

@@ -44,6 +44,17 @@ defmodule Fakes.TestDB do
     json
   end
 
+  def delete(resource_module, id) do
+    Agent.update(__MODULE__, fn state ->
+      resources =
+        state
+        |> Map.get(resource_module)
+        |> Map.delete(id)
+
+      Map.put(state, resource_module, resources)
+    end)
+  end
+
   defp get_next_id(resource_module) do
     Agent.get_and_update(__MODULE__, fn state ->
       next_id =

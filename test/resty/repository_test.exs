@@ -23,4 +23,12 @@ defmodule Resty.RepositoryTest do
 
     assert "updated" == updated_post.name
   end
+
+  test "You can delete a resource" do
+    post = Post.build(name: "Hello from test") |> Repository.save()
+
+    Repository.delete(post)
+
+    assert nil == Repository.find(Post, post.id)
+  end
 end
