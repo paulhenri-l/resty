@@ -27,5 +27,6 @@ defmodule Fakes.TestAdapter do
   def delete!("site.tld/posts/" <> id, _) do
     TestDB.delete(Post, String.to_integer(id))
   end
+
   def delete!(_, _), do: ""
 end

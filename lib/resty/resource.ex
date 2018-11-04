@@ -64,7 +64,7 @@ defmodule Resty.Resource do
   end
 
   defmacro __before_compile__(_env) do
-    quote do
+    quote location: :keep do
       defstruct @fields ++ [__module__: __MODULE__]
 
       def path, do: "#{@site}/#{@path}"
