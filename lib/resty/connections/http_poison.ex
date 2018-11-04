@@ -1,5 +1,5 @@
-defmodule Resty.Adapters.HTTPoison do
-  @behaviour Resty.Adapter
+defmodule Resty.Connections.HTTPoison do
+  @behaviour Resty.Connection
 
   alias Resty.Request
 

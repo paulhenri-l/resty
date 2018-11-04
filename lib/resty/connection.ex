@@ -1,4 +1,4 @@
-defmodule Resty.Adapter do
+defmodule Resty.Connection do
   @type path :: String.t()
   @type body :: String.t()
   @type headers :: keyword()

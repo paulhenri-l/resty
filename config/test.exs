@@ -1,3 +1,3 @@
 use Mix.Config
 
-config :resty, adapter: Fakes.TestAdapter
+config :resty, connection: Fakes.TestConnection

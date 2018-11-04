@@ -1,8 +1,8 @@
 defmodule Resty.Repository do
-  @adapter Application.get_env(:resty, :adapter, Resty.Adapters.HTTPoison)
+  @connection Application.get_env(:resty, :connection, Resty.Connections.HTTPoison)
 
   def find(resource_module, id) do
-    response = resource_module.path(id) |> adapter().get!(headers())
+    response = resource_module.path(id) |> connection().get!(headers())
 
     case response do
       nil -> nil
@@ -15,7 +15,7 @@ defmodule Resty.Repository do
   def save(resource_module, resource = %{id: nil}) do
     resource = resource |> resource_module.to_json()
 
-    response = resource_module.path() |> adapter().post!(resource, headers())
+    response = resource_module.path() |> connection().post!(resource, headers())
 
     resource_module.from_json(response)
   end
@@ -23,7 +23,7 @@ defmodule Resty.Repository do
   def save(resource_module, resource) do
     resource = resource |> resource_module.to_json()
 
-    response = resource_module.path() |> adapter().put!(resource, headers())
+    response = resource_module.path() |> connection().put!(resource, headers())
 
     resource_module.from_json(response)
   end
@@ -31,10 +31,10 @@ defmodule Resty.Repository do
   def delete(resource), do: delete(resource.__module__, resource)
 
   def delete(resource_module, resource) do
-    resource_module.path(resource) |> adapter().delete!(headers())
+    resource_module.path(resource) |> connection().delete!(headers())
   end
 
-  def adapter, do: @adapter
+  def connection, do: @connection
 
   defp headers do
     [

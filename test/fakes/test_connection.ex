@@ -1,8 +1,8 @@
-defmodule Fakes.TestAdapter do
+defmodule Fakes.TestConnection do
   alias Fakes.Post
   alias Fakes.TestDB
 
-  @behaviour Resty.Adapter
+  @behaviour Resty.Connection
 
   def get!("site.tld/posts/" <> id, _) do
     TestDB.get(Post, String.to_integer(id))

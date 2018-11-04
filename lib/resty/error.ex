@@ -5,6 +5,7 @@ defmodule Resty.Error do
     code = Keyword.get(opts, :code, nil)
 
     quote do
+      @behaviour Resty.Error
       defstruct code: unquote(code), message: nil
 
       def new, do: new([])

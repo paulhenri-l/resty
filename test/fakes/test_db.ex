@@ -44,6 +44,7 @@ defmodule Fakes.TestDB do
     json
   end
 
+  @doc "Delete the given resource's json"
   def delete(resource_module, id) do
     Agent.update(__MODULE__, fn state ->
       resources =
