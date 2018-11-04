@@ -4,29 +4,23 @@ defmodule Fakes.TestConnection do
 
   @behaviour Resty.Connection
 
-  def get!("site.tld/posts/" <> id, _) do
-    TestDB.get(Post, String.to_integer(id))
+  def send(%{method: :get, url: "site.tld/posts/" <> id}) do
+    {:ok, TestDB.get(Post, String.to_integer(id))}
   end
 
-  def head!(_, _), do: ""
-
-  def post!("site.tld/posts", body, _) do
-    TestDB.insert(Post, body)
+  def send(%{method: :post, url: "site.tld/posts", body: body}) do
+    {:ok, TestDB.insert(Post, body)}
   end
 
-  def post!(_, _, _), do: ""
-
-  def patch!(_, _, _), do: ""
-
-  def put!("site.tld/posts", body, _) do
-    TestDB.put(Post, body)
+  def send(%{method: :put, url: "site.tld/posts/" <> _id, body: body}) do
+    {:ok, TestDB.put(Post, body)}
   end
 
-  def put!(_, _, _), do: ""
-
-  def delete!("site.tld/posts/" <> id, _) do
-    TestDB.delete(Post, String.to_integer(id))
+  def send(%{method: :delete, url: "site.tld/posts/" <> id}) do
+    {:ok, TestDB.delete(Post, String.to_integer(id))}
   end
 
-  def delete!(_, _), do: ""
+  def send(_) do
+    {:error, Resty.Error.ResourceNotFound.new(message: "Not found")}
+  end
 end

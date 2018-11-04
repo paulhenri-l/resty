@@ -22,6 +22,7 @@ defmodule Fakes.TestDB do
 
   @doc "Insert json in the db"
   def insert(resource_module, json) when is_binary(json) do
+    init_resource_if_not_exists(resource_module)
     next_id = get_next_id(resource_module)
 
     json =
@@ -39,13 +40,19 @@ defmodule Fakes.TestDB do
   def put(resource_module, json) do
     id = Poison.decode!(json) |> Map.get("id")
 
-    Agent.update(__MODULE__, &put_in(&1, [resource_module, id], json))
+    case get(resource_module, id) do
+      nil ->
+        nil
 
-    json
+      _ ->
+        Agent.update(__MODULE__, &put_in(&1, [resource_module, id], json))
+        json
+    end
   end
 
   @doc "Delete the given resource's json"
   def delete(resource_module, id) do
+    init_resource_if_not_exists(resource_module)
     Agent.update(__MODULE__, fn state ->
       resources =
         state
@@ -53,6 +60,13 @@ defmodule Fakes.TestDB do
         |> Map.delete(id)
 
       Map.put(state, resource_module, resources)
+    end)
+  end
+
+  defp init_resource_if_not_exists(resource_module) do
+    Agent.update(__MODULE__, fn state ->
+      resource = Map.get(state, resource_module, %{last_insterted_id: 0})
+      Map.put(state, resource_module, resource)
     end)
   end
 

@@ -1,14 +1,6 @@
 defmodule Resty.Connections.HTTPoison do
-  @behaviour Resty.Connection
-
   alias Resty.Request
-
-  def get!(path, headers), do: HTTPoison.get!(path, headers).body
-  def head!(path, headers), do: HTTPoison.head!(path, headers).body
-  def post!(path, body, headers), do: HTTPoison.post!(path, body, headers).body
-  def patch!(path, body, headers), do: HTTPoison.patch!(path, body, headers).body
-  def put!(path, body, headers), do: HTTPoison.put!(path, body, headers).body
-  def delete!(path, headers), do: HTTPoison.delete!(path, headers).body
+  @behaviour Resty.Connection
 
   @doc "Send the given request thanks to HTTPoison"
   def send(%Request{} = request) do

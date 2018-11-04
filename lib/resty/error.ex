@@ -1,4 +1,9 @@
 defmodule Resty.Error do
+  @type t :: %{
+    code: any(),
+    message: any()
+  }
+
   @callback new(keyword()) :: map()
 
   defmacro __using__(opts) do

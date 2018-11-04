@@ -1,13 +1,8 @@
 defmodule Resty.Connection do
-  @type path :: String.t()
-  @type body :: String.t()
-  @type headers :: keyword()
-  @type response :: String.t()
+  @type json :: String.t()
 
-  @callback get!(path, headers) :: response
-  @callback head!(path, headers) :: response
-  @callback post!(path, body, headers) :: response
-  @callback patch!(path, body, headers) :: response
-  @callback put!(path, body, headers) :: response
-  @callback delete!(path, headers) :: response
+  @type response_ok :: {:ok, json}
+  @type response_error :: {:error, Resty.Error.t()}
+
+  @callback send(Resty.Request.t()) :: response_ok | response_error
 end
