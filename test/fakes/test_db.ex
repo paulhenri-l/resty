@@ -53,6 +53,7 @@ defmodule Fakes.TestDB do
   @doc "Delete the given resource's json"
   def delete(resource_module, id) do
     init_resource_if_not_exists(resource_module)
+
     Agent.update(__MODULE__, fn state ->
       resources =
         state

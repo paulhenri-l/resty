@@ -26,12 +26,12 @@ defmodule Resty.Connections.HTTPoison do
   end
 
   defp process_response({:ok, %{status_code: status_code, body: body}})
-      when status_code in [301, 302, 303, 307] do
+       when status_code in [301, 302, 303, 307] do
     {:error, Resty.Error.Redirection.new(code: status_code, message: body)}
   end
 
   defp process_response({:ok, %{status_code: status_code, body: body}})
-      when status_code >= 200 and status_code < 400 do
+       when status_code >= 200 and status_code < 400 do
     {:ok, body}
   end
 
@@ -68,12 +68,12 @@ defmodule Resty.Connections.HTTPoison do
   end
 
   defp process_response({:ok, %{status_code: status_code, body: body}})
-      when status_code >= 400 and status_code < 500 do
+       when status_code >= 400 and status_code < 500 do
     {:error, Resty.Error.ClientError.new(code: status_code, message: body)}
   end
 
   defp process_response({:ok, %{status_code: status_code, body: body}})
-      when status_code >= 500 and status_code < 600 do
+       when status_code >= 500 and status_code < 600 do
     {:error, Resty.Error.ServerError.new(code: status_code, message: body)}
   end
 

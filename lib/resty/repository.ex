@@ -18,7 +18,13 @@ defmodule Resty.Repository do
   def save(resource_module, resource = %{id: nil}) do
     resource = resource |> resource_module.to_json()
 
-    request = %Request{method: :post, url: resource_module.path(), headers: headers(), body: resource}
+    request = %Request{
+      method: :post,
+      url: resource_module.path(),
+      headers: headers(),
+      body: resource
+    }
+
     {:ok, response} = request |> connection().send()
 
     resource_module.from_json(response)
@@ -27,7 +33,13 @@ defmodule Resty.Repository do
   def save(resource_module, resource = %{id: id}) do
     resource = resource |> resource_module.to_json()
 
-    request = %Request{method: :put, url: resource_module.path(id), headers: headers(), body: resource}
+    request = %Request{
+      method: :put,
+      url: resource_module.path(id),
+      headers: headers(),
+      body: resource
+    }
+
     {:ok, response} = request |> connection().send()
 
     resource_module.from_json(response)
@@ -36,7 +48,13 @@ defmodule Resty.Repository do
   def delete(resource), do: delete(resource.__module__, resource)
 
   def delete(resource_module, resource = %{id: id}) do
-    request = %Request{method: :delete, url: resource_module.path(id), headers: headers(), body: resource}
+    request = %Request{
+      method: :delete,
+      url: resource_module.path(id),
+      headers: headers(),
+      body: resource
+    }
+
     {:ok, response} = request |> connection().send()
     response
   end

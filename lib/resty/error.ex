@@ -1,8 +1,8 @@
 defmodule Resty.Error do
   @type t :: %{
-    code: any(),
-    message: any()
-  }
+          code: any(),
+          message: any()
+        }
 
   @callback new(keyword()) :: map()
 
@@ -13,21 +13,11 @@ defmodule Resty.Error do
       @behaviour Resty.Error
       defstruct code: unquote(code), message: nil
 
-      def new, do: new([])
+      def new, do: %__MODULE__{}
 
       def new(opts) do
-        new(opts, %__MODULE__{})
+        new() |> struct(opts)
       end
-
-      def new([{:code, value} | t], error) do
-        new(t, Map.put(error, :code, value))
-      end
-
-      def new([{:message, value} | t], error) do
-        new(t, Map.put(error, :message, value))
-      end
-
-      def new([], error), do: error
     end
   end
 end
