@@ -8,7 +8,8 @@ defmodule Resty.MixProject do
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
@@ -25,6 +26,7 @@ defmodule Resty.MixProject do
   defp deps do
     [
       # Move to jason
+      {:excoveralls, "~> 0.10", only: :test},
       {:poison, "~> 3.1"},
       {:httpoison, "~> 1.4"}
       # {:inflex, "~> 1.10.0"}
