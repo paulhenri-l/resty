@@ -6,7 +6,7 @@ defmodule Fakes.TestDB do
   @initialDB %{
     Post => %{
       :last_insterted_id => 1,
-      1 => ~s({"id": 1, "name": "test"})
+      "1" => ~s({"id": 1, "name": "test"})
     }
   }
 
@@ -79,7 +79,7 @@ defmodule Fakes.TestDB do
 
       new_state = put_in(state, [resource_module, :last_insterted_id], next_id)
 
-      {next_id, new_state}
+      {to_string(next_id), new_state}
     end)
   end
 end

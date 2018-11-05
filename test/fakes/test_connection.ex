@@ -5,7 +5,7 @@ defmodule Fakes.TestConnection do
   @behaviour Resty.Connection
 
   def send(%{method: :get, url: "site.tld/posts/" <> id}) do
-    case TestDB.get(Post, String.to_integer(id)) do
+    case TestDB.get(Post, id) do
       nil -> {:error, Resty.Error.ResourceNotFound.new()}
       resource -> {:ok, resource}
     end
@@ -26,7 +26,7 @@ defmodule Fakes.TestConnection do
   end
 
   def send(%{method: :delete, url: "site.tld/posts/" <> id}) do
-    {:ok, TestDB.delete(Post, String.to_integer(id))}
+    {:ok, TestDB.delete(Post, id)}
   end
 
   def send(_) do
