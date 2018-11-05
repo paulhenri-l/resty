@@ -10,6 +10,7 @@ defmodule Resty.ResourceTest do
 
     assert "site.tld/posts" == Post.path()
     assert "site.tld/posts/1" == Post.path(1)
+    assert "site.tld/posts/uuid" == Post.path("uuid")
     assert "site.tld/posts/1" == Post.path(post)
   end
 

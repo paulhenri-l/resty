@@ -68,8 +68,8 @@ defmodule Resty.Resource do
       defstruct @fields ++ [__module__: __MODULE__]
 
       def path, do: "#{@site}/#{@path}"
-      def path(id) when is_integer(id), do: "#{path()}/#{id}"
       def path(%__MODULE__{id: id}), do: path(id)
+      def path(id), do: "#{path()}/#{id}"
 
       def build, do: %__MODULE__{}
 
