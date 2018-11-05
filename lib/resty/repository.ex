@@ -2,15 +2,12 @@ defmodule Resty.Repository do
   alias Resty.Request
   @connection Application.get_env(:resty, :connection, Resty.Connections.HTTPoison)
 
-  # We'll have to add bang methods
-  # regular methods will then return tuples
-
   def find(resource_module, id) do
     request = %Request{method: :get, url: resource_module.path(id), headers: headers()}
 
     case request |> connection().send() do
-      {:error, _} -> nil
-      {:ok, response} -> resource_module.from_json(response)
+      {:error, _} = error -> error
+      {:ok, response} -> {:ok, resource_module.from_json(response)}
     end
   end
 
@@ -27,8 +24,8 @@ defmodule Resty.Repository do
     }
 
     case request |> connection().send() do
-      {:error, _} -> nil
-      {:ok, response} -> resource_module.from_json(response)
+      {:error, error} -> error
+      {:ok, response} -> {:ok, resource_module.from_json(response)}
     end
   end
 
@@ -43,8 +40,8 @@ defmodule Resty.Repository do
     }
 
     case request |> connection().send() do
-      {:error, _} -> nil
-      {:ok, response} -> resource_module.from_json(response)
+      {:error, error} -> error
+      {:ok, response} -> {:ok, resource_module.from_json(response)}
     end
   end
 
@@ -59,8 +56,8 @@ defmodule Resty.Repository do
     }
 
     case request |> connection().send() do
-      {:error, _} -> nil
-      {:ok, _} -> true
+      {:error, error} -> error
+      {:ok, _} -> {:ok, true}
     end
   end
 

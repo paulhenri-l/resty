@@ -11,7 +11,7 @@ defmodule Resty.Error do
 
     quote do
       @behaviour Resty.Error
-      defstruct code: unquote(code), message: nil
+      defexception code: unquote(code), message: nil
 
       def new, do: %__MODULE__{}
 
