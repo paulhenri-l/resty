@@ -1,7 +1,9 @@
 defmodule Resty.Repository do
   alias Resty.Request
+
   @connection Application.get_env(:resty, :connection, Resty.Connections.HTTPoison)
 
+  # Add spec and rename to module.
   def find!(resource_module, id) do
     case find(resource_module, id) do
       {:ok, response} -> response

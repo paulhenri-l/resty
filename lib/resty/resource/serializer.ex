@@ -45,6 +45,7 @@ defmodule Resty.Resource.Serializer do
           key -> Poison.encode!(%{key => resource})
         end
       end
+
       def clean_json(json) do
         data = Poison.decode!(json)
 

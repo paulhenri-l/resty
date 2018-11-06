@@ -2,7 +2,7 @@ defmodule Fakes.Post do
   use Resty.Resource
 
   set_site("site.tld")
-  set_path("posts")
+  set_resource_path("posts")
 
   field(:id, :int)
   field(:name, :string)
