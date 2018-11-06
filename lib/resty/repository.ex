@@ -104,3 +104,15 @@ defmodule Resty.Repository do
     ]
   end
 end
+
+# Logging
+# Reload
+# Destroy or Delete?
+# Update(resource, field, value)
+# Update(resource, fields)
+
+# Here or on resource?
+# Clone
+# Persisted?
+# Custom id field
+# Encode
