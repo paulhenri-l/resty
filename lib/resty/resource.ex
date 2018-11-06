@@ -12,6 +12,7 @@ defmodule Resty.Resource do
       Module.put_attribute(__MODULE__, :json_nesting_key, nil)
 
       use Resty.Resource.Paths
+      use Resty.Resource.Builder
     end
   end
 
@@ -52,23 +53,6 @@ defmodule Resty.Resource do
   defmacro __before_compile__(_env) do
     quote location: :keep do
       defstruct @fields ++ [__module__: __MODULE__]
-
-      def build, do: %__MODULE__{}
-
-      def build(values) when is_map(values) do
-        build() |> Map.merge(values)
-      end
-
-      def build(values) when is_list(values) do
-        build(values, build())
-      end
-
-      def build([{field, value} | t], resource) do
-        resource = Map.put(resource, field, value)
-        build(t, resource)
-      end
-
-      def build([], resource), do: resource
 
       def from_json(json) when is_binary(json) do
         json = clean_json(json)
