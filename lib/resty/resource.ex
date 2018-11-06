@@ -1,16 +1,18 @@
 defmodule Resty.Resource do
+  # We may have to define a behaviour for the resource.
+  # This behaviour will contain all of the used modules
+  # callback definitions.
+
   defmacro __using__(_opts) do
     quote do
       import unquote(__MODULE__)
       @before_compile unquote(__MODULE__)
       Module.register_attribute(__MODULE__, :json_nesting_key, [])
-      Module.register_attribute(__MODULE__, :fields, accumulate: true)
-      Module.register_attribute(__MODULE__, :field_attributes, accumulate: true)
-
       Module.put_attribute(__MODULE__, :json_nesting_key, nil)
 
       use Resty.Resource.Paths
       use Resty.Resource.Builder
+      use Resty.Resource.Fields
     end
   end
 
@@ -27,24 +29,6 @@ defmodule Resty.Resource do
   defmacro set_json_nesting_key(read_key, write_key) do
     quote do
       Module.put_attribute(__MODULE__, :json_nesting_key, {unquote(read_key), unquote(write_key)})
-    end
-  end
-
-  @doc "Add a field to the resource"
-  defmacro field(name) do
-    quote do
-      field(unquote(name), :string)
-    end
-  end
-
-  defmacro field(name, type) do
-    quote do
-      field_attributes =
-        Map.new()
-        |> Map.put(:type, unquote(type))
-
-      Module.put_attribute(__MODULE__, :fields, unquote(name))
-      Module.put_attribute(__MODULE__, :field_attributes, {unquote(name), field_attributes})
     end
   end
 
