@@ -3,8 +3,6 @@ defmodule Resty.Resource do
     quote do
       import unquote(__MODULE__)
       @before_compile unquote(__MODULE__)
-      Module.register_attribute(__MODULE__, :path, [])
-      Module.register_attribute(__MODULE__, :site, [])
       Module.register_attribute(__MODULE__, :json_nesting_key, [])
       Module.register_attribute(__MODULE__, :fields, accumulate: true)
       Module.register_attribute(__MODULE__, :field_attributes, accumulate: true)
