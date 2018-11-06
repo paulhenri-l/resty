@@ -4,8 +4,8 @@ defmodule Resty.Repository do
 
   def find!(resource_module, id) do
     case find(resource_module, id) do
-      {:error, error} -> raise error
       {:ok, response} -> response
+      {:error, error} -> raise error
     end
   end
 
@@ -13,8 +13,18 @@ defmodule Resty.Repository do
     request = %Request{method: :get, url: resource_module.path(id), headers: headers()}
 
     case request |> connection().send() do
-      {:error, _} = error -> error
       {:ok, response} -> {:ok, resource_module.from_json(response)}
+      {:error, _} = error -> error
+    end
+  end
+
+  def exists?(resource), do: exists?(resource.__module__, resource.id)
+
+  def exists?(resource_module, resource_id) do
+    case find(resource_module, resource_id) do
+      {:ok, _} -> {:ok, true}
+      {:error, %Resty.Error.ResourceNotFound{}} -> {:ok, false}
+      {:error, _} = error -> error
     end
   end
 
@@ -22,8 +32,8 @@ defmodule Resty.Repository do
 
   def save!(resource_module, resource) do
     case save(resource_module, resource) do
-      {:error, error} -> raise error
       {:ok, response} -> response
+      {:error, error} -> raise error
     end
   end
 
@@ -40,8 +50,8 @@ defmodule Resty.Repository do
     }
 
     case request |> connection().send() do
-      {:error, _} = error -> error
       {:ok, response} -> {:ok, resource_module.from_json(response)}
+      {:error, _} = error -> error
     end
   end
 
@@ -56,8 +66,8 @@ defmodule Resty.Repository do
     }
 
     case request |> connection().send() do
-      {:error, _} = error -> error
       {:ok, response} -> {:ok, resource_module.from_json(response)}
+      {:error, _} = error -> error
     end
   end
 
@@ -65,8 +75,8 @@ defmodule Resty.Repository do
 
   def delete!(resource_module, resource) do
     case delete(resource_module, resource) do
-      {:error, error} -> raise error
       {:ok, response} -> response
+      {:error, error} -> raise error
     end
   end
 
@@ -80,8 +90,8 @@ defmodule Resty.Repository do
     }
 
     case request |> connection().send() do
-      {:error, _} = error -> error
       {:ok, _} -> {:ok, true}
+      {:error, _} = error -> error
     end
   end
 

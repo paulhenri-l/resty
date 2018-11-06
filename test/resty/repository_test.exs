@@ -23,6 +23,19 @@ defmodule Resty.RepositoryTest do
     end
   end
 
+  test "exists? :ok" do
+    assert {:ok, true} = Repository.exists?(Post, 1)
+    assert {:ok, true} = Post.existing() |> Repository.exists?()
+
+    assert {:ok, false} = Repository.exists?(Post, "not-an-id")
+    assert {:ok, false} = Post.non_existent() |> Repository.exists?()
+  end
+
+  test "exists? :error" do
+    assert {:error, %Error.BadRequest{}} = Repository.exists?(Post, "bad-request")
+    assert {:error, %Error.BadRequest{}} = Post.build(id: "bad-request") |> Repository.exists?()
+  end
+
   test "create :ok" do
     post = Post.valid()
     {:ok, saved_post} = Repository.save(post)

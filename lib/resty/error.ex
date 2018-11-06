@@ -8,10 +8,12 @@ defmodule Resty.Error do
 
   defmacro __using__(opts) do
     code = Keyword.get(opts, :code, nil)
+    message = Keyword.get(opts, :message, "ConnectionError")
 
     quote do
       @behaviour Resty.Error
-      defexception code: unquote(code), message: nil
+      defexception code: unquote(code),
+                   message: unquote(message)
 
       def new, do: %__MODULE__{}
 

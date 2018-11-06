@@ -5,6 +5,10 @@ defmodule Fakes.TestConnection do
   @behaviour Resty.Connection
   @invalid_post Post.invalid() |> Post.to_json()
 
+  def send(%{method: :get, url: "site.tld/posts/bad-request"}) do
+    {:error, Resty.Error.BadRequest.new()}
+  end
+
   def send(%{method: :get, url: "site.tld/posts/" <> id}) do
     case TestDB.get(Post, id) do
       nil -> {:error, Resty.Error.ResourceNotFound.new()}
