@@ -9,28 +9,14 @@ defmodule Resty.Resource do
       Module.register_attribute(__MODULE__, :fields, accumulate: true)
       Module.register_attribute(__MODULE__, :field_attributes, accumulate: true)
 
-      Module.put_attribute(__MODULE__, :path, "")
-      Module.put_attribute(__MODULE__, :site, "")
       Module.put_attribute(__MODULE__, :json_nesting_key, nil)
+
+      use Resty.Resource.Paths
     end
   end
 
   # @doc "Define the resource schema."
   # defmacro schema(path, do: fields), do: nil
-
-  @doc "Add a site to the resource"
-  defmacro set_site(site) do
-    quote do
-      Module.put_attribute(__MODULE__, :site, unquote(site))
-    end
-  end
-
-  @doc "Add a path to the resource"
-  defmacro set_path(path) do
-    quote do
-      Module.put_attribute(__MODULE__, :path, unquote(path))
-    end
-  end
 
   @doc "Add a json nesting key to the resource"
   defmacro set_json_nesting_key(key) do
@@ -66,10 +52,6 @@ defmodule Resty.Resource do
   defmacro __before_compile__(_env) do
     quote location: :keep do
       defstruct @fields ++ [__module__: __MODULE__]
-
-      def path, do: "#{@site}/#{@path}"
-      def path(%__MODULE__{id: id}), do: path(id)
-      def path(id), do: "#{path()}/#{id}"
 
       def build, do: %__MODULE__{}
 
