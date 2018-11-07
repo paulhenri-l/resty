@@ -2,65 +2,56 @@
 # Filter all unwanted fields when creating
 
 defmodule Resty.Resource.Serializer do
-  defmacro __using__(_opts) do
-    quote do
-      import unquote(__MODULE__)
-      @before_compile unquote(__MODULE__)
-      Module.register_attribute(__MODULE__, :json_nesting_key, [])
-      Module.put_attribute(__MODULE__, :json_nesting_key, nil)
-    end
+  @doc """
+  Given a resource module and a serialized_resource attempt
+  to unserialize it.
+  """
+  def deserialize(module, serialized_resource) do
+    serialized_resource
+    |> decode()
+    |> handle_decode_error()
+    |> filter_fields(module.fields)
+    # |> cast_fields()
+    # |> load_relations()
+    |> build(module)
   end
 
-  @doc "Add a json nesting key to the resource"
-  defmacro set_json_nesting_key(key) do
-    quote do
-      Module.put_attribute(__MODULE__, :json_nesting_key, unquote(key))
-    end
+  @doc "Serialize a resource"
+  def serialize(resource) do
+    # Do the work
   end
 
-  defmacro set_json_nesting_key(read_key, write_key) do
-    quote do
-      Module.put_attribute(__MODULE__, :json_nesting_key, {unquote(read_key), unquote(write_key)})
-    end
+  defp decode(response) do
+    response |> Jason.decode()
   end
 
-  defmacro __before_compile__(_env) do
-    quote do
-      def from_json(json) when is_binary(json) do
-        json = clean_json(json)
+  defp handle_decode_error({:ok, data}), do: data
 
-        case @json_nesting_key do
-          nil -> Poison.decode!(json, as: build())
-          {key, _} -> Poison.decode!(json, as: %{key => build()})[key]
-          key -> Poison.decode!(json, as: %{key => build()})[key]
-        end
+  defp handle_decode_error({:error, error}) do
+    # Should create custom SerializerError
+    raise error
+  end
+
+  defp filter_fields(data, expected_fields) do
+    do_filter_fields(expected_fields, data, %{})
+  end
+
+  defp do_filter_fields([], _, filtered_fields), do: filtered_fields
+
+  defp do_filter_fields([field | next_fields], data, filtered_fields) do
+    field_key = field |> to_string()
+
+    updated_filtered_fields =
+      case Map.get(data, field_key, false) do
+        false ->
+          filtered_fields
+
+        value ->
+          Map.put(filtered_fields, field, value)
       end
 
-      def to_json(resource) do
-        resource = Map.delete(resource, :__module__)
-
-        case @json_nesting_key do
-          nil -> Poison.encode!(resource)
-          {_, key} -> Poison.encode!(%{key => resource})
-          key -> Poison.encode!(%{key => resource})
-        end
-      end
-
-      def clean_json(json) do
-        data = Poison.decode!(json)
-
-        cleanded_data =
-          Enum.reduce(@fields, %{}, fn field, acc ->
-            value = Map.get(data, to_string(field))
-
-            case value do
-              nil -> acc
-              value -> Map.put(acc, field, value)
-            end
-          end)
-
-        cleanded_data |> Poison.encode!()
-      end
-    end
+    do_filter_fields(next_fields, data, updated_filtered_fields)
   end
+
+  defp build(data, module), do: struct(module, data)
 end

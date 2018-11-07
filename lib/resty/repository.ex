@@ -1,5 +1,6 @@
 defmodule Resty.Repository do
   alias Resty.Request
+  alias Resty.Resource.Path
 
   @connection Application.get_env(:resty, :connection, Resty.Connections.HTTPoison)
 
@@ -12,7 +13,7 @@ defmodule Resty.Repository do
   end
 
   def find(resource_module, id) do
-    request = %Request{method: :get, url: resource_module.path(id), headers: headers()}
+    request = %Request{method: :get, url: Path.to(resource_module, id), headers: headers()}
 
     case request |> connection().send() do
       {:ok, response} -> {:ok, resource_module.from_json(response)}
@@ -46,7 +47,7 @@ defmodule Resty.Repository do
 
     request = %Request{
       method: :post,
-      url: resource_module.path(),
+      url: Path.to(resource_module),
       headers: headers(),
       body: resource
     }
@@ -62,7 +63,7 @@ defmodule Resty.Repository do
 
     request = %Request{
       method: :put,
-      url: resource_module.path(id),
+      url: Path.to(resource_module, id),
       headers: headers(),
       body: resource
     }
@@ -87,7 +88,7 @@ defmodule Resty.Repository do
   def delete(resource_module, %{id: id}) do
     request = %Request{
       method: :delete,
-      url: resource_module.path(id),
+      url: Path.to(resource_module, id),
       headers: headers()
     }
 

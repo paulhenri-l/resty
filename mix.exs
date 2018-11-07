@@ -25,8 +25,8 @@ defmodule Resty.MixProject do
 
   defp deps do
     [
-      # Move to jason
       {:excoveralls, "~> 0.10", only: :test},
+      {:jason, "~> 1.1"},
       {:poison, "~> 3.1"},
       {:httpoison, "~> 1.4"}
       # {:inflex, "~> 1.10.0"}
