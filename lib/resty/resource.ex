@@ -45,42 +45,13 @@ defmodule Resty.Resource do
 
   defmacro __before_compile__(_env) do
     quote do
+      @derive {Jason.Encoder, only: @fields}
       defstruct @fields ++ [__module__: __MODULE__]
 
       def site, do: @site
       def id_column, do: @id_column
       def resource_path, do: @resource_path
       def fields, do: @fields
-
-      def from_json(json) when is_binary(json) do
-        Resty.Resource.Serializer.deserialize(__MODULE__, json)
-      end
-
-      def to_json(resource) do
-        resource = Map.delete(resource, :__module__)
-
-        case @json_nesting_key do
-          nil -> Poison.encode!(resource)
-          {_, key} -> Poison.encode!(%{key => resource})
-          key -> Poison.encode!(%{key => resource})
-        end
-      end
-
-      def clean_json(json) do
-        data = Poison.decode!(json)
-
-        cleanded_data =
-          Enum.reduce(@fields, %{}, fn field, acc ->
-            value = Map.get(data, to_string(field))
-
-            case value do
-              nil -> acc
-              value -> Map.put(acc, field, value)
-            end
-          end)
-
-        cleanded_data |> Poison.encode!()
-      end
     end
   end
 end

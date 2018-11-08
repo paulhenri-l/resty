@@ -1,6 +1,7 @@
 defmodule Resty.Repository do
   alias Resty.Request
   alias Resty.Resource.Path
+  alias Resty.Resource.Serializer
 
   @connection Application.get_env(:resty, :connection, Resty.Connections.HTTPoison)
 
@@ -16,7 +17,7 @@ defmodule Resty.Repository do
     request = %Request{method: :get, url: Path.to(resource_module, id), headers: headers()}
 
     case request |> connection().send() do
-      {:ok, response} -> {:ok, resource_module.from_json(response)}
+      {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
       {:error, _} = error -> error
     end
   end
@@ -43,7 +44,7 @@ defmodule Resty.Repository do
   def save(resource), do: save(resource.__module__, resource)
 
   def save(resource_module, resource = %{id: nil}) do
-    resource = resource |> resource_module.to_json()
+    resource = resource |> Serializer.serialize()
 
     request = %Request{
       method: :post,
@@ -53,13 +54,13 @@ defmodule Resty.Repository do
     }
 
     case request |> connection().send() do
-      {:ok, response} -> {:ok, resource_module.from_json(response)}
+      {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
       {:error, _} = error -> error
     end
   end
 
   def save(resource_module, resource = %{id: id}) do
-    resource = resource |> resource_module.to_json()
+    resource = resource |> Serializer.serialize()
 
     request = %Request{
       method: :put,
@@ -69,7 +70,7 @@ defmodule Resty.Repository do
     }
 
     case request |> connection().send() do
-      {:ok, response} -> {:ok, resource_module.from_json(response)}
+      {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
       {:error, _} = error -> error
     end
   end

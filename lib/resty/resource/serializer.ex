@@ -18,7 +18,13 @@ defmodule Resty.Resource.Serializer do
 
   @doc "Serialize a resource"
   def serialize(resource) do
-    # Do the work
+    resource
+    |> encode()
+    |> handle_encode_error()
+  end
+
+  defp encode(resource) do
+    resource |> Jason.encode()
   end
 
   defp decode(response) do
@@ -28,7 +34,14 @@ defmodule Resty.Resource.Serializer do
   defp handle_decode_error({:ok, data}), do: data
 
   defp handle_decode_error({:error, error}) do
-    # Should create custom SerializerError
+    # Should create custom DecodingError
+    raise error
+  end
+
+  defp handle_encode_error({:ok, data}), do: data
+
+  defp handle_encode_error({:error, error}) do
+    # Should create custom EncodingError
     raise error
   end
 

@@ -3,7 +3,7 @@ defmodule Fakes.TestConnection do
   alias Fakes.TestDB
 
   @behaviour Resty.Connection
-  @invalid_post Post.invalid() |> Post.to_json()
+  @invalid_post Post.invalid() |> Resty.Resource.Serializer.serialize()
 
   def send(%{method: :get, url: "site.tld/posts/bad-request"}) do
     {:error, Resty.Error.BadRequest.new()}
