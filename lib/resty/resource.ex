@@ -30,19 +30,6 @@ defmodule Resty.Resource do
     quote(do: @id_column(unquote(name)))
   end
 
-  @doc "Add a json nesting key to the resource"
-  defmacro set_json_nesting_key(key) do
-    quote do
-      Module.put_attribute(__MODULE__, :json_nesting_key, unquote(key))
-    end
-  end
-
-  defmacro set_json_nesting_key(read_key, write_key) do
-    quote do
-      Module.put_attribute(__MODULE__, :json_nesting_key, {unquote(read_key), unquote(write_key)})
-    end
-  end
-
   defmacro __before_compile__(_env) do
     quote do
       @derive {Jason.Encoder, only: @fields}
