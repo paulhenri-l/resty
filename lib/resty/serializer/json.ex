@@ -1,12 +1,12 @@
 defmodule Resty.Serializer.Json do
   # Decoding
-  def decode(json, module) do
+  def decode(json, allowed_fields) do
     json
     |> to_map()
-    |> filter_fields(module.fields())
+    |> remove_root()
+    |> filter_fields(allowed_fields)
+
     # |> cast_fields()
-    # |> load_relations()
-    |> module.build()
   end
 
   # defp decode_item(), do: nil
@@ -19,8 +19,21 @@ defmodule Resty.Serializer.Json do
     end
   end
 
-  defp filter_fields(data, resource_fields) do
-    do_filter_fields(resource_fields, data, %{})
+  defp remove_root(map) do
+    do_remove_root(map, Map.keys(map))
+  end
+
+  defp do_remove_root(map, [key | []]) do
+    case Map.get(map, key) do
+      data when is_map(data) -> data
+      map -> map
+    end
+  end
+
+  defp do_remove_root(map, _), do: map
+
+  defp filter_fields(data, allowed_fields) do
+    do_filter_fields(allowed_fields, data, %{})
   end
 
   defp do_filter_fields([], _, filtered_fields), do: filtered_fields
