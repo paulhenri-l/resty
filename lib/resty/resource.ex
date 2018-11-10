@@ -1,3 +1,8 @@
+# Remove root -> when decoding
+# Include root in json
+# resource name -> infer from module
+# These are serializer options
+
 defmodule Resty.Resource do
   defmacro __using__(_opts) do
     quote do
@@ -42,6 +47,7 @@ defmodule Resty.Resource do
       def primary_key, do: @primary_key
       def resource_path, do: @resource_path
       def fields, do: @fields
+      def serializer, do: Resty.Serializer.Json
 
       def build(values \\ []), do: __MODULE__ |> struct(values)
     end
