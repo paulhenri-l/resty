@@ -1,4 +1,4 @@
-defmodule Resty.Repository do
+defmodule Resty.Repo do
   alias Resty.Request
   alias Resty.Resource.Path
   alias Resty.Resource.Serializer
