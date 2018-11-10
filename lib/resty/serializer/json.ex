@@ -48,7 +48,14 @@ defmodule Resty.Serializer.Json do
   end
 
   # Encoding
-  def encode(map, allowed_fields) do
-    Map.take(map, allowed_fields) |> Jason.encode!([])
+  def encode(map, allowed_fields, root \\ false) do
+    map = Map.take(map, allowed_fields)
+
+    to_encode = case root do
+      false -> map
+      root -> Map.put(%{}, root, map)
+    end
+
+    to_encode |> Jason.encode!([])
   end
 end

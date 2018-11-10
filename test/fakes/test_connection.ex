@@ -2,6 +2,7 @@ defmodule Fakes.TestConnection do
   alias Fakes.Post
   alias Fakes.TestDB
 
+  @moduledoc false
   @behaviour Resty.Connection
   @invalid_post Post.invalid() |> Resty.Resource.Serializer.serialize()
 

@@ -13,6 +13,10 @@ defmodule Resty.Resource.Serializer do
   def serialize(resource), do: serialize(resource.__module__, resource)
 
   def serialize(module, resource) do
-    module.serializer.encode(resource, module.fields())
+    module.serializer.encode(
+      resource,
+      module.fields(),
+      module.include_root()
+    )
   end
 end

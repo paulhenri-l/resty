@@ -13,6 +13,7 @@ defmodule Resty.Resource do
       Module.put_attribute(__MODULE__, :site, "")
       Module.put_attribute(__MODULE__, :resource_path, "")
       Module.put_attribute(__MODULE__, :primary_key, :id)
+      Module.put_attribute(__MODULE__, :include_root, false)
     end
   end
 
@@ -38,6 +39,11 @@ defmodule Resty.Resource do
     quote(do: @primary_key(unquote(name)))
   end
 
+  @doc "Include the given root when serializing the resource"
+  defmacro include_root(value) do
+    quote(do: @include_root(unquote(value)))
+  end
+
   defmacro __before_compile__(_env) do
     quote do
       @derive {Jason.Encoder, only: @fields}
@@ -48,6 +54,7 @@ defmodule Resty.Resource do
       def resource_path, do: @resource_path
       def fields, do: @fields
       def serializer, do: Resty.Serializer.Json
+      def include_root, do: @include_root
 
       def build(values \\ []), do: __MODULE__ |> struct(values)
     end

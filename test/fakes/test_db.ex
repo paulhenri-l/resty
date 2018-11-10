@@ -1,8 +1,8 @@
 defmodule Fakes.TestDB do
   use Agent
-
   alias Fakes.Post
 
+  @moduledoc false
   @initialDB %{
     Post => %{
       :last_insterted_id => 1,

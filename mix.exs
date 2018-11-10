@@ -9,7 +9,17 @@ defmodule Resty.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      test_coverage: [tool: ExCoveralls]
+      test_coverage: [tool: ExCoveralls],
+
+      # Docs
+      name: "Resty",
+      source_url: "https://github.com/paulhenri-l/resty",
+      homepage_url: "https://github.com/paulhenri-l/resty",
+      docs: [
+        main: "Resty", # The main page in the docs
+        # logo: "path/to/logo.png",
+        # extras: ["README.md"]
+      ]
     ]
   end
 
@@ -26,6 +36,7 @@ defmodule Resty.MixProject do
   defp deps do
     [
       {:excoveralls, "~> 0.10", only: :test},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:jason, "~> 1.1"},
       {:poison, "~> 3.1"},
       {:httpoison, "~> 1.4"}

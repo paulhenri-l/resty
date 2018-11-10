@@ -21,4 +21,12 @@ defmodule Resty.Serializer.JsonTest do
 
     assert ~s({"id":1}) = result
   end
+
+  test "Data can be encoded with a root" do
+    result_data = %{id: 1} |> Json.encode([:id], "data")
+    result_post = %{id: 1} |> Json.encode([:id], "post")
+
+    assert ~s({"data":{"id":1}}) = result_data
+    assert ~s({"post":{"id":1}}) = result_post
+  end
 end
