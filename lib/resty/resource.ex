@@ -46,7 +46,6 @@ defmodule Resty.Resource do
 
   defmacro __before_compile__(_env) do
     quote do
-      @derive {Jason.Encoder, only: @fields}
       defstruct @fields ++ [__module__: __MODULE__]
 
       def site, do: @site

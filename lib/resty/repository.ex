@@ -103,7 +103,7 @@ defmodule Resty.Repository do
 
   defp headers do
     [
-      Accept: "Application/json; Charset=utf-8",
+      Accept: "application/json; Charset=utf-8",
       "Content-Type": "application/json"
     ]
   end
