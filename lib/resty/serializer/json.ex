@@ -1,16 +1,10 @@
 defmodule Resty.Serializer.Json do
-  # Decoding
   def decode(json, allowed_fields) do
     json
     |> to_map()
     |> remove_root()
     |> filter_fields(allowed_fields)
-
-    # |> cast_fields()
   end
-
-  # defp decode_item(), do: nil
-  # defp decode_collection(), do: nil
 
   defp to_map(json) do
     case Jason.decode(json) do
@@ -54,6 +48,7 @@ defmodule Resty.Serializer.Json do
   end
 
   # Encoding
-  def encode(_struct) do
+  def encode(map, allowed_fields) do
+    Map.take(map, allowed_fields) |> Jason.encode!([])
   end
 end

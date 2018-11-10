@@ -10,7 +10,7 @@ defmodule Resty.Resource.SerialierTest do
   """
 
   test "Serializing a resource" do
-    assert ~s({"name":"test","id":1}) == Post.build(id: 1, name: "test") |> Serializer.serialize()
+    assert ~s({"id":1,"name":"test"}) == Post.build(id: 1, name: "test") |> Serializer.serialize()
   end
 
   test "Deserializing a resource" do

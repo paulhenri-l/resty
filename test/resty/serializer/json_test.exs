@@ -15,4 +15,10 @@ defmodule Resty.Serializer.JsonTest do
 
     assert %{id: 1} == Json.decode(json, [:id])
   end
+
+  test "Data can be encoded" do
+    result = %{id: 1, nope: "nope"} |> Json.encode([:id])
+
+    assert ~s({"id":1}) = result
+  end
 end
