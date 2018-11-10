@@ -4,8 +4,8 @@ defmodule Fakes.Post do
   set_site("site.tld")
   set_resource_path("posts")
 
-  field(:id, :int)
-  field(:name, :string)
+  field(:id)
+  field(:name)
 
   def existing, do: build(id: 1)
   def valid, do: build(name: "test")

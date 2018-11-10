@@ -3,14 +3,18 @@ defmodule Resty.Resource do
     quote do
       import unquote(__MODULE__)
       @before_compile unquote(__MODULE__)
-      use Resty.Resource.Fields
 
+      Module.register_attribute(__MODULE__, :fields, accumulate: true)
       Module.put_attribute(__MODULE__, :site, "")
       Module.put_attribute(__MODULE__, :resource_path, "")
       Module.put_attribute(__MODULE__, :id_column, :id)
+    end
+  end
 
-      Module.register_attribute(__MODULE__, :json_nesting_key, [])
-      Module.put_attribute(__MODULE__, :json_nesting_key, nil)
+  @doc "Add a field to the resource"
+  defmacro field(name) do
+    quote do
+      Module.put_attribute(__MODULE__, :fields, unquote(name))
     end
   end
 
