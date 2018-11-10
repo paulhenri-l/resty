@@ -26,7 +26,7 @@ defmodule Resty.Serializer.Json do
   defp do_remove_root(map, [key | []]) do
     case Map.get(map, key) do
       data when is_map(data) -> data
-      map -> map
+      _ -> map
     end
   end
 
