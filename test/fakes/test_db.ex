@@ -27,9 +27,9 @@ defmodule Fakes.TestDB do
 
     json =
       json
-      |> Poison.decode!()
+      |> Jason.decode!()
       |> Map.put("id", next_id)
-      |> Poison.encode!()
+      |> Jason.encode!()
 
     Agent.update(__MODULE__, &put_in(&1, [resource_module, next_id], json))
 
@@ -38,7 +38,7 @@ defmodule Fakes.TestDB do
 
   @doc "Replace the json for an existing entry in db"
   def put(resource_module, json) do
-    id = Poison.decode!(json) |> Map.get("id")
+    id = Jason.decode!(json) |> Map.get("id")
 
     case get(resource_module, id) do
       nil ->

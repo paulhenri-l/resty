@@ -47,7 +47,6 @@ defmodule Resty.MixProject do
       {:excoveralls, "~> 0.10", only: :test},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:jason, "~> 1.1"},
-      {:poison, "~> 3.1"},
       {:httpoison, "~> 1.4"}
       # {:inflex, "~> 1.10.0"}
     ]
