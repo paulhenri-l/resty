@@ -33,6 +33,10 @@ IO.inspect(post.body)
 Almost all of the relevant functions can be found in the `Resty.Resource` and
 `Resty.Repo` modules.
 
+## Docs
+
+The documentation is available here [https://hexdocs.pm/resty](https://hexdocs.pm/resty/0.1.1)
+
 ## This is a work in progress
 
 This library does not implement all of the ActiveResource's features yet. I'll
