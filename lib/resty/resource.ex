@@ -3,7 +3,6 @@ defmodule Resty.Resource do
     quote do
       import unquote(__MODULE__)
       @before_compile unquote(__MODULE__)
-      use Resty.Resource.Builder
       use Resty.Resource.Fields
 
       Module.put_attribute(__MODULE__, :site, "")
@@ -39,6 +38,10 @@ defmodule Resty.Resource do
       def id_column, do: @id_column
       def resource_path, do: @resource_path
       def fields, do: @fields
+
+      def build(values \\ []) do
+        __MODULE__ |> struct(values)
+      end
     end
   end
 end
