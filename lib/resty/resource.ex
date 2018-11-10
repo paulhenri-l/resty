@@ -43,9 +43,7 @@ defmodule Resty.Resource do
       def resource_path, do: @resource_path
       def fields, do: @fields
 
-      def build(values \\ []) do
-        __MODULE__ |> struct(values)
-      end
+      def build(values \\ []), do: __MODULE__ |> struct(values)
     end
   end
 end
