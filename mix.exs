@@ -10,6 +10,8 @@ defmodule Resty.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
+      description: "Like ActiveResource but for Elixir",
+      package: package(),
 
       # Docs
       name: "Resty",
@@ -25,6 +27,14 @@ defmodule Resty.MixProject do
   def application do
     [
       extra_applications: [:logger]
+    ]
+  end
+
+  def package do
+    [
+      licenses: ["MIT"],
+      maintainers: ["paulhenri-l"],
+      links: %{github: "https://github.com/paulhenri-l/resty"}
     ]
   end
 
