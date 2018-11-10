@@ -52,10 +52,11 @@ defmodule Resty.Serializer.Json do
   def encode(map, allowed_fields, root \\ false) do
     map = Map.take(map, allowed_fields)
 
-    to_encode = case root do
-      false -> map
-      root -> Map.put(%{}, root, map)
-    end
+    to_encode =
+      case root do
+        false -> map
+        root -> Map.put(%{}, root, map)
+      end
 
     to_encode |> Jason.encode!([])
   end
