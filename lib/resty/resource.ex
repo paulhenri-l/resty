@@ -1,8 +1,3 @@
-# Remove root -> when decoding
-# Include root in json
-# resource name -> infer from module
-# These are serializer options
-
 defmodule Resty.Resource do
   defmacro __using__(_opts) do
     quote do

@@ -1,21 +1,40 @@
 # Resty
 
-**TODO: Add description**
+Resty aims to be like [ActiveResource](https://github.com/rails/activeresource)
+but for Elixir. ActiveResource is great and as I do not intend to reinvent the
+wheel a lot of the concepts found in ActiveResource have just been ported to
+this library so you should feel *kinda* right at home.
 
-## Installation
+## Basic usage
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `resty` to your list of dependencies in `mix.exs`:
+Here's how you would use Resty to query a rails API.
 
 ```elixir
-def deps do
-  [
-    {:resty, "~> 0.1.0"}
-  ]
+defmodule Post do
+  use Resty.Resource
+
+  set_site("site.tld")
+  set_resource_path("posts")
+
+  field(:id)
+  field(:name)
+  field(:body)
 end
+
+{:ok, post} = Resty.Repo.find(Post, 1)
+
+IO.inspect(post.id)
+IO.inspect(post.name)
+IO.inspect(post.body)
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/resty](https://hexdocs.pm/resty).
+## Resource and Repository
 
+Almost all of the relevant functions can be found in the `Resty.Resource` and
+`Resty.Repo` modules.
+
+## This is a work in progress
+
+This library does not implement all of the ActiveResource's features yet. I'll
+be adding more and more features as I need them. If you need something feel
+free to open a PR.

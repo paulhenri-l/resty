@@ -16,9 +16,8 @@ defmodule Resty.MixProject do
       source_url: "https://github.com/paulhenri-l/resty",
       homepage_url: "https://github.com/paulhenri-l/resty",
       docs: [
-        main: "Resty", # The main page in the docs
-        # logo: "path/to/logo.png",
-        # extras: ["README.md"]
+        main: "README",
+        extras: ["README.md"]
       ]
     ]
   end

@@ -1,6 +1,7 @@
 defmodule Resty.Connections.HTTPoison do
   alias Resty.Request
   @behaviour Resty.Connection
+  @moduledoc false
 
   @doc "Send the given request thanks to HTTPoison"
   def send(%Request{} = request) do

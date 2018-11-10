@@ -1,4 +1,5 @@
 defmodule Resty.Connection do
+  @moduledoc false
   @type json :: String.t()
 
   @type response_ok :: {:ok, json}

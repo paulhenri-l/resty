@@ -1,4 +1,5 @@
 defmodule Resty.Request do
+  @moduledoc false
   @type t :: %__MODULE__{}
 
   defstruct method: :get, url: "", headers: [], body: ""

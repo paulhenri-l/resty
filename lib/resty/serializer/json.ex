@@ -1,4 +1,5 @@
 defmodule Resty.Serializer.Json do
+  @moduledoc false
   def decode(json, allowed_fields) do
     json
     |> to_map()

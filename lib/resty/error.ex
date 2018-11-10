@@ -1,4 +1,5 @@
 defmodule Resty.Error do
+  @moduledoc false
   @type t :: %{
           code: any(),
           message: any()
