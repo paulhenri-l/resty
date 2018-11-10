@@ -7,7 +7,7 @@ defmodule Resty.Resource do
       Module.register_attribute(__MODULE__, :fields, accumulate: true)
       Module.put_attribute(__MODULE__, :site, "")
       Module.put_attribute(__MODULE__, :resource_path, "")
-      Module.put_attribute(__MODULE__, :id_column, :id)
+      Module.put_attribute(__MODULE__, :primary_key, :id)
     end
   end
 
@@ -29,8 +29,8 @@ defmodule Resty.Resource do
   end
 
   @doc "Set id column"
-  defmacro set_id_column(name) do
-    quote(do: @id_column(unquote(name)))
+  defmacro set_primary_key(name) do
+    quote(do: @primary_key(unquote(name)))
   end
 
   defmacro __before_compile__(_env) do
@@ -39,7 +39,7 @@ defmodule Resty.Resource do
       defstruct @fields ++ [__module__: __MODULE__]
 
       def site, do: @site
-      def id_column, do: @id_column
+      def primary_key, do: @primary_key
       def resource_path, do: @resource_path
       def fields, do: @fields
 

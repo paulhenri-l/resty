@@ -9,7 +9,7 @@ defmodule Resty.Resource.Path do
   end
 
   def to(module, %{} = resource) do
-    id = Map.get(resource, module.id_column())
+    id = Map.get(resource, module.primary_key())
     to(module, id)
   end
 
