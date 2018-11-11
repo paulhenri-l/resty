@@ -1,5 +1,7 @@
 # Resty
 
+[![Build Status](https://travis-ci.org/paulhenri-l/resty.svg?branch=master)](https://travis-ci.org/paulhenri-l/resty)
+
 Resty aims to be like [ActiveResource](https://github.com/rails/activeresource)
 but for Elixir. ActiveResource is great and as I do not intend to reinvent the
 wheel a lot of the concepts found in ActiveResource have just been ported to
