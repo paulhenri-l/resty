@@ -37,7 +37,7 @@ Almost all of the relevant functions can be found in the `Resty.Resource` and
 
 ## Docs
 
-The documentation is available here [https://hexdocs.pm/resty](https://hexdocs.pm/resty/0.1.1)
+The documentation is available here [https://hexdocs.pm/resty](https://hexdocs.pm/resty)
 
 ## This is a work in progress
 
