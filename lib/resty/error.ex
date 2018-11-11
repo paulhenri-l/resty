@@ -1,15 +1,51 @@
 defmodule Resty.Error do
-  @moduledoc false
+  @moduledoc """
+  This module is used in order to define all of `Resty`'s exceptions.
+  """
+
+  @typedoc "A Resty exception"
   @type t :: %{
-          code: any(),
-          message: any()
+          code: integer() | any(),
+          message: String.t() | any()
         }
 
-  @callback new(keyword()) :: map()
+  @doc """
+  Create a new exception with the given values.
 
+  ```
+  DummyError.new(code: 500, message: "ServerError")
+  ```
+  """
+  @callback new(opts :: Enum.t()) :: map()
+
+  @doc """
+  Turn the current module into a Resty exception.
+
+  ## Options
+  - `:code`: The default error code.
+  - `:message`: The default error message (defaults to "error").
+
+  ## Usage
+
+  Given a DummyError
+
+  ```
+  defmodule DummyError do
+    use Resty.Error, code: 500, message: "dummy"
+  end
+  ```
+
+  You can then do this
+
+  ```
+  iex> DummyError.new()
+  %DummyError{code: 500, message: "dummy"}
+  ```
+  """
+  @spec __using__(Keyword.t()) :: none()
   defmacro __using__(opts) do
     code = Keyword.get(opts, :code, nil)
-    message = Keyword.get(opts, :message, "ConnectionError")
+    message = Keyword.get(opts, :message, "Error")
 
     quote do
       @behaviour Resty.Error
