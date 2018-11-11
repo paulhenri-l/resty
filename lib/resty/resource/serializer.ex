@@ -4,7 +4,7 @@ defmodule Resty.Resource.Serializer do
   to unserialize it.
   """
   def deserialize(module, serialized_resource) do
-    data = module.serializer().decode(serialized_resource, module.fields())
+    data = module.serializer().decode(serialized_resource, module.known_attributes())
 
     build(module, data)
   end
@@ -15,7 +15,7 @@ defmodule Resty.Resource.Serializer do
   def serialize(module, resource) do
     module.serializer.encode(
       resource,
-      module.fields(),
+      module.known_attributes(),
       module.include_root()
     )
   end

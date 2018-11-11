@@ -1,10 +1,10 @@
 defmodule Resty.Serializer.Json do
   @moduledoc false
-  def decode(json, allowed_fields) do
+  def decode(json, known_attributes) do
     json
     |> do_decode()
     |> remove_root()
-    |> filter_fields(allowed_fields)
+    |> remove_unknown_attributes(known_attributes)
   end
 
   defp do_decode(json) do
@@ -28,34 +28,34 @@ defmodule Resty.Serializer.Json do
 
   defp do_remove_root(map, _), do: map
 
-  defp filter_fields(data, allowed_fields) when is_list(data) do
-    Enum.map(data, &do_filter_fields(allowed_fields, &1, %{}))
+  defp remove_unknown_attributes(data, known_attributes) when is_list(data) do
+    Enum.map(data, &do_remove_unknown_attributes(known_attributes, &1, %{}))
   end
 
-  defp filter_fields(data, allowed_fields) do
-    do_filter_fields(allowed_fields, data, %{})
+  defp remove_unknown_attributes(data, known_attributes) do
+    do_remove_unknown_attributes(known_attributes, data, %{})
   end
 
-  defp do_filter_fields([], _, filtered_fields), do: filtered_fields
+  defp do_remove_unknown_attributes([], _, filtered_attributes), do: filtered_attributes
 
-  defp do_filter_fields([field | next_fields], data, filtered_fields) do
-    field_key = field |> to_string()
+  defp do_remove_unknown_attributes([attribute | next_attributes], data, filtered_attributes) do
+    attribute_key = attribute |> to_string()
 
-    updated_filtered_fields =
-      case Map.get(data, field_key, false) do
+    updated_filtered_attributes =
+      case Map.get(data, attribute_key, false) do
         false ->
-          filtered_fields
+          filtered_attributes
 
         value ->
-          Map.put(filtered_fields, field, value)
+          Map.put(filtered_attributes, attribute, value)
       end
 
-    do_filter_fields(next_fields, data, updated_filtered_fields)
+    do_remove_unknown_attributes(next_attributes, data, updated_filtered_attributes)
   end
 
   # Encoding
-  def encode(map, allowed_fields, root \\ false) do
-    map = Map.take(map, allowed_fields)
+  def encode(map, known_attributes, root \\ false) do
+    map = Map.take(map, known_attributes)
 
     to_encode =
       case root do

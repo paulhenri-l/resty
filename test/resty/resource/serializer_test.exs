@@ -4,9 +4,9 @@ defmodule Resty.Resource.SerialierTest do
   alias Fakes.Post
   alias Resty.Resource.Serializer
 
-  @json_resource ~s({"id":1, "name": "test", "fake-field": "value"})
+  @json_resource ~s({"id":1, "name": "test", "fake-attribute": "value"})
   @corrupted_json_resource """
-  {"__module__": "Hola", "fake-field": "value"}
+  {"__module__": "Hola", "fake-attribute": "value"}
   """
 
   test "Serializing a resource" do
@@ -18,10 +18,10 @@ defmodule Resty.Resource.SerialierTest do
     assert Post == Serializer.deserialize(Post, @json_resource).__module__
   end
 
-  test "Unknown fields are cleaned when deserializing" do
+  test "Unknown attributes are cleaned when deserializing" do
     post = Serializer.deserialize(Post, @corrupted_json_resource)
 
-    assert nil == Map.get(post, :"fake-field")
+    assert nil == Map.get(post, :"fake-attribute")
     assert Post == Map.get(post, :__module__)
   end
 end

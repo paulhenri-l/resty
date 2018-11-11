@@ -9,7 +9,7 @@ defmodule Resty.Resource do
                          Accept: "application/json; Charset=utf-8"
                        )
 
-      Module.register_attribute(__MODULE__, :fields, accumulate: true)
+      Module.register_attribute(__MODULE__, :attributes, accumulate: true)
       Module.register_attribute(__MODULE__, :headers, accumulate: true)
       Module.put_attribute(__MODULE__, :site, "")
       Module.put_attribute(__MODULE__, :resource_path, "")
@@ -18,10 +18,10 @@ defmodule Resty.Resource do
     end
   end
 
-  @doc "Add a field to the resource"
-  defmacro field(name) do
+  @doc "Add an attribute to the resource"
+  defmacro attribute(name) do
     quote do
-      Module.put_attribute(__MODULE__, :fields, unquote(name))
+      Module.put_attribute(__MODULE__, :attributes, unquote(name))
     end
   end
 
@@ -52,12 +52,12 @@ defmodule Resty.Resource do
 
   defmacro __before_compile__(_env) do
     quote do
-      defstruct @fields ++ [__module__: __MODULE__]
+      defstruct @attributes ++ [__module__: __MODULE__]
 
       def site, do: @site
       def primary_key, do: @primary_key
       def resource_path, do: @resource_path
-      def fields, do: @fields
+      def known_attributes, do: @attributes
       def serializer, do: Resty.Serializer.Json
       def include_root, do: @include_root
       def headers, do: Keyword.merge(@default_headers, @headers)
