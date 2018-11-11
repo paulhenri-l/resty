@@ -87,6 +87,10 @@ defmodule Resty.Repo do
   def delete(resource), do: delete(resource.__module__, resource)
 
   def delete(resource_module, %{id: id}) do
+    delete(resource_module, id)
+  end
+
+  def delete(resource_module, id) do
     request = %Request{
       method: :delete,
       url: Path.to(resource_module, id),

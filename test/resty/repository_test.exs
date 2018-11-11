@@ -92,29 +92,42 @@ defmodule Resty.RepoTest do
   end
 
   test "delete :ok" do
-    {:ok, post} = Post.build(name: "Hello from test") |> Repo.save()
+    {:ok, post_1} = Post.build(name: "Hello from test") |> Repo.save()
+    {:ok, post_2} = Post.build(name: "Hello from test") |> Repo.save()
 
-    assert {:ok, _} = Repo.delete(post)
-    assert {:error, %Resty.Error.ResourceNotFound{}} = Repo.find(Post, post.id)
+    assert {:ok, _} = Repo.delete(post_1)
+    assert {:error, %Resty.Error.ResourceNotFound{}} = Repo.find(Post, post_1.id)
+
+    assert {:ok, _} = Repo.delete(Post, post_2.id)
+    assert {:error, %Resty.Error.ResourceNotFound{}} = Repo.find(Post, post_2.id)
   end
 
   test "delete :error" do
     assert {:error, %Error.ResourceNotFound{}} =
              Post.non_existent()
              |> Repo.delete()
+
+    assert {:error, %Error.ResourceNotFound{}} = Repo.delete(Post, "non_existent")
   end
 
   test "delete! ok" do
-    {:ok, post} = Post.valid() |> Repo.save()
+    {:ok, post_1} = Post.valid() |> Repo.save()
+    {:ok, post_2} = Post.valid() |> Repo.save()
 
-    Repo.delete!(post)
+    Repo.delete!(post_1)
+    Repo.delete!(Post, post_2.id)
 
-    assert {:error, %Resty.Error.ResourceNotFound{}} = Repo.find(Post, post.id)
+    assert {:error, %Resty.Error.ResourceNotFound{}} = Repo.find(Post, post_1.id)
+    assert {:error, %Resty.Error.ResourceNotFound{}} = Repo.find(Post, post_2.id)
   end
 
   test "delete! raise" do
     assert_raise Error.ResourceNotFound, fn ->
       Post.non_existent() |> Repo.delete!()
+    end
+
+    assert_raise Error.ResourceNotFound, fn ->
+      Repo.delete!(Post, "non_existent")
     end
   end
 end
