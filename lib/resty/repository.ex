@@ -5,11 +5,23 @@ defmodule Resty.Repo do
 
   @connection Application.get_env(:resty, :connection, Resty.Connections.HTTPoison)
 
-  # Add spec and rename to module.
   def find!(resource_module, id) do
     case find(resource_module, id) do
       {:ok, response} -> response
       {:error, error} -> raise error
+    end
+  end
+
+  def find(resource_module, :all) do
+    request = %Request{
+      method: :get,
+      url: Path.to(resource_module),
+      headers: resource_module.headers()
+    }
+
+    case request |> connection().send() do
+      {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
+      {:error, _} = error -> error
     end
   end
 

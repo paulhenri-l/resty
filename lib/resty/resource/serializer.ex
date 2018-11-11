@@ -6,7 +6,7 @@ defmodule Resty.Resource.Serializer do
   def deserialize(module, serialized_resource) do
     data = module.serializer().decode(serialized_resource, module.fields())
 
-    module.build(data)
+    build(module, data)
   end
 
   @doc "Serialize a resource"
@@ -18,5 +18,13 @@ defmodule Resty.Resource.Serializer do
       module.fields(),
       module.include_root()
     )
+  end
+
+  defp build(module, data) when is_list(data) do
+    Enum.map(data, &build(module, &1))
+  end
+
+  defp build(module, data) do
+    module.build(data)
   end
 end

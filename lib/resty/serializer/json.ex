@@ -21,11 +21,16 @@ defmodule Resty.Serializer.Json do
   defp do_remove_root(map, [key | []]) do
     case Map.get(map, key) do
       data when is_map(data) -> data
+      data when is_list(data) -> data
       _ -> map
     end
   end
 
   defp do_remove_root(map, _), do: map
+
+  defp filter_fields(data, allowed_fields) when is_list(data) do
+    Enum.map(data, &do_filter_fields(allowed_fields, &1, %{}))
+  end
 
   defp filter_fields(data, allowed_fields) do
     do_filter_fields(allowed_fields, data, %{})
