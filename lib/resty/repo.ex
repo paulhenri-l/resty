@@ -61,16 +61,6 @@ defmodule Resty.Repo do
     end
   end
 
-  def exists?(resource), do: exists?(resource.__module__, resource.id)
-
-  def exists?(resource_module, resource_id) do
-    case find(resource_module, resource_id) do
-      {:ok, _} -> {:ok, true}
-      {:error, %Resty.Error.ResourceNotFound{}} -> {:ok, false}
-      {:error, _} = error -> error
-    end
-  end
-
   def update_attribute(resource, key, value), do: update_attributes(resource, [{key, value}])
   def update_attribute!(resource, key, value), do: update_attributes!(resource, [{key, value}])
 
@@ -160,6 +150,19 @@ defmodule Resty.Repo do
       {:error, _} = error -> error
     end
   end
+
+  def exists?(resource), do: exists?(resource.__module__, resource.id)
+
+  def exists?(resource_module, resource_id) do
+    case find(resource_module, resource_id) do
+      {:ok, _} -> {:ok, true}
+      {:error, %Resty.Error.ResourceNotFound{}} -> {:ok, false}
+      {:error, _} = error -> error
+    end
+  end
+
+  def reload(resource), do: find(resource.__module__, resource.id)
+  def reload!(resource), do: find!(resource.__module__, resource.id)
 
   def connection, do: @connection
 end

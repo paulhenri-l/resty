@@ -101,19 +101,6 @@ defmodule Resty.RepoTest do
     end
   end
 
-  test "exists? :ok" do
-    assert {:ok, true} = Repo.exists?(Post, 1)
-    assert {:ok, true} = Post.build(id: 1) |> Repo.exists?()
-
-    assert {:ok, false} = Repo.exists?(NotFoundResource, 1)
-    assert {:ok, false} = NotFoundResource.build() |> Repo.exists?()
-  end
-
-  test "exists? :error" do
-    assert {:error, %Error.BadRequest{}} = Repo.exists?(BadRequestResource, 1)
-    assert {:error, %Error.BadRequest{}} = BadRequestResource.build() |> Repo.exists?()
-  end
-
   test "create :ok" do
     post = Post.build()
     {:ok, saved_post} = Repo.save(post)
@@ -261,6 +248,49 @@ defmodule Resty.RepoTest do
 
     assert_raise Error.ResourceNotFound, fn ->
       Repo.delete!(NotFoundResource, 1)
+    end
+  end
+
+  test "exists? :ok" do
+    assert {:ok, true} = Repo.exists?(Post, 1)
+    assert {:ok, true} = Post.build(id: 1) |> Repo.exists?()
+
+    assert {:ok, false} = Repo.exists?(NotFoundResource, 1)
+    assert {:ok, false} = NotFoundResource.build() |> Repo.exists?()
+  end
+
+  test "exists? :error" do
+    assert {:error, %Error.BadRequest{}} = Repo.exists?(BadRequestResource, 1)
+    assert {:error, %Error.BadRequest{}} = BadRequestResource.build() |> Repo.exists?()
+  end
+
+  test "reload :ok" do
+    {:ok, initial_post} = Post.build() |> Repo.save()
+
+    Repo.update_attributes!(initial_post, name: "updated")
+    {:ok, reloaded_post} = Repo.reload(initial_post)
+
+    assert reloaded_post.name != initial_post.name
+    assert "updated" == reloaded_post.name
+  end
+
+  test "reload :error" do
+    assert {:error, %Error.ResourceNotFound{}} = NotFoundResource.build() |> Repo.reload()
+  end
+
+  test "reload! ok" do
+    {:ok, initial_post} = Post.build() |> Repo.save()
+
+    Repo.update_attributes!(initial_post, name: "updated")
+    reloaded_post = Repo.reload!(initial_post)
+
+    assert reloaded_post.name != initial_post.name
+    assert "updated" == reloaded_post.name
+  end
+
+  test "reload! error" do
+    assert_raise Error.ResourceNotFound, fn ->
+      NotFoundResource.build() |> Repo.reload!()
     end
   end
 end
