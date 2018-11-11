@@ -4,7 +4,13 @@ defmodule Resty.Resource do
       import unquote(__MODULE__)
       @before_compile unquote(__MODULE__)
 
+      @default_headers Application.get_env(:resty, :default_headers,
+                         "Content-Type": "application/json",
+                         Accept: "application/json; Charset=utf-8"
+                       )
+
       Module.register_attribute(__MODULE__, :fields, accumulate: true)
+      Module.register_attribute(__MODULE__, :headers, accumulate: true)
       Module.put_attribute(__MODULE__, :site, "")
       Module.put_attribute(__MODULE__, :resource_path, "")
       Module.put_attribute(__MODULE__, :primary_key, :id)
@@ -39,6 +45,11 @@ defmodule Resty.Resource do
     quote(do: @include_root(unquote(value)))
   end
 
+  @doc "Add an header to the request sent from this resource"
+  defmacro add_header(name, value) when is_atom(name) do
+    quote(do: @headers({unquote(name), unquote(value)}))
+  end
+
   defmacro __before_compile__(_env) do
     quote do
       defstruct @fields ++ [__module__: __MODULE__]
@@ -49,6 +60,7 @@ defmodule Resty.Resource do
       def fields, do: @fields
       def serializer, do: Resty.Serializer.Json
       def include_root, do: @include_root
+      def headers, do: Keyword.merge(@default_headers, @headers)
 
       def build(values \\ []), do: __MODULE__ |> struct(values)
     end

@@ -5,6 +5,7 @@ defmodule Fakes.Post do
 
   set_site("site.tld")
   set_resource_path("posts")
+  add_header(:Custom, "hello")
 
   field(:id)
   field(:name)

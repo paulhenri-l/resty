@@ -14,7 +14,11 @@ defmodule Resty.Repo do
   end
 
   def find(resource_module, id) do
-    request = %Request{method: :get, url: Path.to(resource_module, id), headers: headers()}
+    request = %Request{
+      method: :get,
+      url: Path.to(resource_module, id),
+      headers: resource_module.headers()
+    }
 
     case request |> connection().send() do
       {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
@@ -49,7 +53,7 @@ defmodule Resty.Repo do
     request = %Request{
       method: :post,
       url: Path.to(resource_module),
-      headers: headers(),
+      headers: resource_module.headers(),
       body: resource
     }
 
@@ -65,7 +69,7 @@ defmodule Resty.Repo do
     request = %Request{
       method: :put,
       url: Path.to(resource_module, id),
-      headers: headers(),
+      headers: resource_module.headers(),
       body: resource
     }
 
@@ -94,7 +98,7 @@ defmodule Resty.Repo do
     request = %Request{
       method: :delete,
       url: Path.to(resource_module, id),
-      headers: headers()
+      headers: resource_module.headers()
     }
 
     case request |> connection().send() do
@@ -104,23 +108,4 @@ defmodule Resty.Repo do
   end
 
   def connection, do: @connection
-
-  defp headers do
-    [
-      Accept: "application/json; Charset=utf-8",
-      "Content-Type": "application/json"
-    ]
-  end
 end
-
-# Logging
-# Reload
-# Destroy or Delete?
-# Update(resource, field, value)
-# Update(resource, fields)
-
-# Here or on resource?
-# Clone
-# Persisted?
-# Custom id field
-# Encode
