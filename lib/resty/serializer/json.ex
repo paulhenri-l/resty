@@ -2,21 +2,21 @@ defmodule Resty.Serializer.Json do
   @moduledoc false
   def decode(json, allowed_fields) do
     json
-    |> to_map()
+    |> do_decode()
     |> remove_root()
     |> filter_fields(allowed_fields)
   end
 
-  defp to_map(json) do
+  defp do_decode(json) do
     case Jason.decode(json) do
       {:error, error} -> raise error
       {:ok, result} -> result
     end
   end
 
-  defp remove_root(map) do
-    do_remove_root(map, Map.keys(map))
-  end
+  defp remove_root(list) when is_list(list), do: list
+
+  defp remove_root(map), do: do_remove_root(map, Map.keys(map))
 
   defp do_remove_root(map, [key | []]) do
     case Map.get(map, key) do

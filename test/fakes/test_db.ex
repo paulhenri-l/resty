@@ -6,13 +6,33 @@ defmodule Fakes.TestDB do
   @initialDB %{
     Post => %{
       :last_insterted_id => 1,
-      "1" => ~s({"id": 1, "name": "test"})
+      "1" => ~s({"id": 1, "name": "test1"}),
+      "2" => ~s({"id": 1, "name": "test2"})
     }
   }
 
   @doc "Start the fake db"
   def start_link() do
     Agent.start_link(fn -> @initialDB end, name: __MODULE__)
+  end
+
+  @doc "Get a json collection fron the db"
+  def get(resource_module, :all) do
+    case Agent.get(__MODULE__, &get_in(&1, [resource_module])) do
+      nil ->
+        nil
+
+      data ->
+        data
+        |> Map.delete(:last_insterted_id)
+        |> Map.to_list()
+        |> Enum.reduce("[", fn({_, json}, acc) ->
+          acc <> json <> ","
+        end)
+        |> String.slice(0..-2)
+        |> Kernel.<>("]")
+        |> IO.inspect()
+    end
   end
 
   @doc "Get json fron the db"

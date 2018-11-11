@@ -6,6 +6,13 @@ defmodule Fakes.TestConnection do
   @behaviour Resty.Connection
   @invalid_post Post.invalid() |> Resty.Resource.Serializer.serialize()
 
+  def send(%{method: :get, url: "site.tld/posts"}) do
+    case TestDB.get(Post, :all) do
+      nil -> {:error, Resty.Error.ResourceNotFound.new()}
+      resource -> {:ok, resource}
+    end
+  end
+
   def send(%{method: :get, url: "site.tld/posts/bad-request"}) do
     {:error, Resty.Error.BadRequest.new()}
   end
