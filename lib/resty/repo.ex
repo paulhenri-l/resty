@@ -71,6 +71,25 @@ defmodule Resty.Repo do
     end
   end
 
+  def update_attribute(resource, key, value), do: update_attributes(resource, [{key, value}])
+  def update_attribute!(resource, key, value), do: update_attributes!(resource, [{key, value}])
+
+  def update_attributes!(resource, attributes) do
+    case update_attributes(resource, attributes) do
+      {:ok, response} -> response
+      {:error, error} -> raise error
+    end
+  end
+
+  def update_attributes(resource, [{key, value} | next]) do
+    Map.put(resource, key, value) |> update_attributes(next)
+  end
+
+  def update_attributes(resource, []) do
+    # might be interesting to filter out unkown fields.
+    resource |> save()
+  end
+
   def save!(resource), do: save!(resource.__module__, resource)
 
   def save!(resource_module, resource) do

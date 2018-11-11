@@ -168,6 +168,62 @@ defmodule Resty.RepoTest do
     end
   end
 
+  test "update_attribute :ok" do
+    {:ok, post} = Post.build() |> Repo.save()
+    {:ok, %Post{}} = Repo.update_attribute(post, :name, "updated")
+    {:ok, updated_post} = Repo.find(Post, post.id)
+
+    assert "updated" == updated_post.name
+  end
+
+  test "update_attribute :error" do
+    assert {:error, %Error.ResourceNotFound{}} =
+             NotFoundResource.build()
+             |> Repo.update_attribute(:name, "hey!")
+  end
+
+  test "update_attribute! ok" do
+    {:ok, post} = Post.build() |> Repo.save()
+    %Post{} = Repo.update_attribute!(post, :name, "updated")
+    {:ok, updated_post} = Repo.find(Post, post.id)
+
+    assert "updated" == updated_post.name
+  end
+
+  test "update_attribute! error" do
+    assert_raise Error.ResourceNotFound, fn ->
+      NotFoundResource.build() |> Repo.update_attribute!(:name, "Hey!")
+    end
+  end
+
+  test "update_attributes :ok" do
+    {:ok, post} = Post.build() |> Repo.save()
+    {:ok, %Post{}} = Repo.update_attributes(post, name: "updated")
+    {:ok, updated_post} = Repo.find(Post, post.id)
+
+    assert "updated" == updated_post.name
+  end
+
+  test "update_attributes :error" do
+    assert {:error, %Error.ResourceNotFound{}} =
+             NotFoundResource.build()
+             |> Repo.update_attributes(name: "hey!")
+  end
+
+  test "update_attributes! ok" do
+    {:ok, post} = Post.build() |> Repo.save()
+    %Post{} = Repo.update_attributes!(post, name: "updated")
+    {:ok, updated_post} = Repo.find(Post, post.id)
+
+    assert "updated" == updated_post.name
+  end
+
+  test "update_attributes! error" do
+    assert_raise Error.ResourceNotFound, fn ->
+      NotFoundResource.build() |> Repo.update_attributes!(name: "Hey!")
+    end
+  end
+
   test "delete :ok" do
     {:ok, post_1} = Post.build(name: "Hello from test") |> Repo.save()
     {:ok, post_2} = Post.build(name: "Hello from test") |> Repo.save()
