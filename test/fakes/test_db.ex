@@ -26,12 +26,11 @@ defmodule Fakes.TestDB do
         data
         |> Map.delete(:last_insterted_id)
         |> Map.to_list()
-        |> Enum.reduce("[", fn({_, json}, acc) ->
+        |> Enum.reduce("[", fn {_, json}, acc ->
           acc <> json <> ","
         end)
         |> String.slice(0..-2)
         |> Kernel.<>("]")
-        |> IO.inspect()
     end
   end
 

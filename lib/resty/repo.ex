@@ -5,10 +5,33 @@ defmodule Resty.Repo do
 
   @connection Application.get_env(:resty, :connection, Resty.Connections.HTTPoison)
 
+  def first(module), do: find(module, :first)
+  def first!(module), do: find!(module, :first)
+
+  def last(module), do: find(module, :last)
+  def last!(module), do: find!(module, :last)
+
+  def all(module), do: find(module, :all)
+  def all!(module), do: find!(module, :all)
+
   def find!(resource_module, id) do
     case find(resource_module, id) do
       {:ok, response} -> response
       {:error, error} -> raise error
+    end
+  end
+
+  def find(resource_module, :first) do
+    case find(resource_module, :all) do
+      {:error, _} = error -> error
+      {:ok, [first | _]} -> {:ok, first}
+    end
+  end
+
+  def find(resource_module, :last) do
+    case find(resource_module, :all) do
+      {:error, _} = error -> error
+      {:ok, collection} -> {:ok, List.last(collection)}
     end
   end
 
