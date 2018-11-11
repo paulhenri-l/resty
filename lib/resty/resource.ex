@@ -18,6 +18,16 @@ defmodule Resty.Resource do
     end
   end
 
+  @doc "Clone the given resource"
+  def clone(resource), do: clone(resource.__module__, resource)
+
+  defp clone(module, resource) do
+    resource
+    |> Map.take(module.known_attributes())
+    |> Map.delete(module.primary_key())
+    |> module.build()
+  end
+
   @doc "Add an attribute to the resource"
   defmacro attribute(name) do
     quote do

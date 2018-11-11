@@ -21,4 +21,12 @@ defmodule Resty.ResourceTest do
   test "The resource holds the headers" do
     assert @post_headers == Post.headers()
   end
+
+  test "The resource can be cloned" do
+    original = Post.build(id: 1, name: "Hey!")
+    cloned = original |> Resty.Resource.clone()
+
+    assert cloned.id == nil
+    assert cloned.name == original.name
+  end
 end
