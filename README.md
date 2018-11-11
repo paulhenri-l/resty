@@ -42,5 +42,13 @@ The documentation is available here [https://hexdocs.pm/resty](https://hexdocs.p
 ## This is a work in progress
 
 This library does not implement all of the ActiveResource's features yet. I'll
-be adding more and more features as I need them. If you need something feel
-free to open a PR.
+be adding more and more features as I need them. If you absolutely need something
+feel free to open a PR.
+
+If you want to known what I am currently working on you can also have a look at
+the open issues.
+
+I'll do my best not to make any backward incompatible changes but as this project
+is quite new the api cannot be considered stable yet.
+
+I'll do my best to document the code as we'll get near v1.0

@@ -4,7 +4,7 @@ defmodule Resty.MixProject do
   def project do
     [
       app: :resty,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
