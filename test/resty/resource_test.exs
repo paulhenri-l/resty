@@ -39,4 +39,8 @@ defmodule Resty.ResourceTest do
     assert Post.build(__persisted__: true) |> Resource.persisted?()
     refute Post.build(__persisted__: true) |> Resource.new?()
   end
+
+  test "The resource knows which connection to use" do
+    assert Fakes.TestConnection = Post.connection()
+  end
 end

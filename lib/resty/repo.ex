@@ -3,7 +3,7 @@ defmodule Resty.Repo do
   alias Resty.Resource.Path
   alias Resty.Resource.Serializer
 
-  @connection Application.get_env(:resty, :connection, Resty.Connections.HTTPoison)
+  @connection Resty.default_connection()
 
   def first(module), do: find(module, :first)
   def first!(module), do: find!(module, :first)

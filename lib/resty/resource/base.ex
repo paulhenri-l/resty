@@ -10,10 +10,7 @@ defmodule Resty.Resource.Base do
       import Resty.Resource.Base
       @before_compile unquote(__MODULE__)
 
-      @default_headers Application.get_env(:resty, :default_headers,
-                         "Content-Type": "application/json",
-                         Accept: "application/json; Charset=utf-8"
-                       )
+      @default_headers Resty.default_headers()
 
       Module.register_attribute(__MODULE__, :attributes, accumulate: true)
       Module.register_attribute(__MODULE__, :headers, accumulate: true)
@@ -21,6 +18,7 @@ defmodule Resty.Resource.Base do
       Module.put_attribute(__MODULE__, :resource_path, "")
       Module.put_attribute(__MODULE__, :primary_key, :id)
       Module.put_attribute(__MODULE__, :include_root, false)
+      Module.put_attribute(__MODULE__, :connection, Resty.default_connection())
     end
   end
 
@@ -113,6 +111,9 @@ defmodule Resty.Resource.Base do
 
       @doc false
       def headers, do: Keyword.merge(@default_headers, @headers)
+
+      @doc false
+      def connection, do: @connection
 
       @doc """
       Create a new resource with the given attributes
