@@ -24,4 +24,8 @@ defmodule Resty.Resource.SerialierTest do
     assert nil == Map.get(post, :"fake-attribute")
     assert Post == Map.get(post, :__module__)
   end
+
+  test "The Serializer marks resources as persisted when deserializing" do
+    assert %Post{__persisted__: true} = Serializer.deserialize(Post, @json_resource)
+  end
 end

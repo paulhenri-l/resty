@@ -9,6 +9,7 @@ defmodule Resty.Resource do
   @typedoc "A resource struct."
   @type t() :: %{
           __module__: resource_module(),
+          __persisted__: boolean()
         }
 
   @doc """
@@ -24,4 +25,16 @@ defmodule Resty.Resource do
     |> Map.delete(module.primary_key())
     |> module.build()
   end
+
+  @doc """
+  Is the given resource new? (not persisted)
+  """
+  @spec new?(t()) :: boolean()
+  def new?(resource), do: !persisted?(resource)
+
+  @doc """
+  Has the given resource been persisted?
+  """
+  @spec persisted?(t()) :: boolean()
+  def persisted?(%{__persisted__: persisted}), do: persisted
 end

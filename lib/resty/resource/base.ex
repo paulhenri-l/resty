@@ -87,7 +87,11 @@ defmodule Resty.Resource.Base do
 
   defmacro __before_compile__(_env) do
     quote do
-      defstruct @attributes ++ [__module__: __MODULE__]
+      defstruct @attributes ++
+                  [
+                    __module__: __MODULE__,
+                    __persisted__: false
+                  ]
 
       @doc false
       def site, do: @site
@@ -110,9 +114,13 @@ defmodule Resty.Resource.Base do
       @doc false
       def headers, do: Keyword.merge(@default_headers, @headers)
 
-      @doc "Create a new resource with the given attributes"
-      @spec build(Enum.t()) :: Resty.Resource.t()
-      def build(attributes \\ []), do: __MODULE__ |> struct(attributes)
+      @doc """
+      Create a new resource with the given attributes
+      """
+      @spec build(attributes :: Enum.t()) :: Resty.Resource.t()
+      def build(attributes \\ []) do
+        __MODULE__ |> struct(attributes)
+      end
     end
   end
 end
