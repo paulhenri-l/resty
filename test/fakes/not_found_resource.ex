@@ -1,5 +1,5 @@
 defmodule Fakes.NotFoundResource do
-  use Resty.Resource
+  use Resty.Resource.Base
   @moduledoc false
 
   set_site("site.tld")

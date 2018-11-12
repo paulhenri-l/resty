@@ -13,7 +13,7 @@ Here's how you would use Resty to query a rails API.
 
 ```elixir
 defmodule Post do
-  use Resty.Resource
+  use Resty.Resource.Base
 
   set_site("site.tld")
   set_resource_path("posts")

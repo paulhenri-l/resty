@@ -1,5 +1,5 @@
 defmodule Fakes.Post do
-  use Resty.Resource
+  use Resty.Resource.Base
 
   @moduledoc false
 
