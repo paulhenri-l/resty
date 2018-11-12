@@ -1,13 +1,7 @@
 defmodule Resty.Request do
   @moduledoc """
-  If you are fine with `Resty` using `HTTPoison` as its http client then you do
-  not need to worry about this module.
-
-  But if you feel the need to use another client you'll have to create a new
-  `Resty.Connection` module.
-
-  This module defines the struct that `Resty.Repo` will send to your newly
-  created `Resty.Connection` module whenever it will want to query the web API.
+  This module defines the struct that `Resty.Repo` will send to the configured
+  `Resty.Connection` implementation whenever it will want to query the web API.
   """
 
   @type t :: %__MODULE__{

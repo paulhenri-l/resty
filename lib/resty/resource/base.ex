@@ -53,13 +53,13 @@ defmodule Resty.Resource.Base do
 
   ## Usage
 
-    iex> defmodule Post do
-    ...> use Resty.Resource.Base
-    ...> set_primary_key(:uuid)
-    ...> end
-    ...>
-    ...> Post.primary_key()
-    :uuid
+      iex> defmodule Post do
+      ...> use Resty.Resource.Base
+      ...> set_primary_key(:uuid)
+      ...> end
+      ...>
+      ...> Post.primary_key()
+      :uuid
 
   """
   @spec set_primary_key(atom()) :: none()

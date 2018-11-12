@@ -1,10 +1,15 @@
 defmodule Resty.Resource.Serializer do
+  alias Resty.Resource
+  alias Resty.Connection
+
   @doc """
   Given a resource module and a serialized_resource attempt
   to unserialize it.
   """
-  def deserialize(module, serialized_resource) do
-    data = module.serializer().decode(serialized_resource, module.known_attributes())
+  @spec deserialize(Resource.resource_module(), Connection.serialized_response()) ::
+          [Resource.t()] | Resource.t()
+  def deserialize(module, serialized_response) do
+    data = module.serializer().decode(serialized_response, module.known_attributes())
 
     build(module, data)
   end
@@ -26,7 +31,7 @@ defmodule Resty.Resource.Serializer do
 
   defp build(module, data) do
     data
-    |> Enum.concat([__persisted__: true])
+    |> Enum.concat(__persisted__: true)
     |> module.build()
   end
 end
