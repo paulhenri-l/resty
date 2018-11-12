@@ -1,110 +1,53 @@
+# This copy pasta sucks, but defining types thanks to macros seems a bit hard.
 defmodule Resty.Error do
-  @moduledoc """
-  This module is used in order to define all of `Resty`'s exceptions.
-  """
+  @typedoc "Resty exceptions"
+  @type t ::
+          Resty.Error.ConnectionError.t()
+          | Resty.Error.ClientError.t()
+          | Resty.Error.ServerError.t()
+          | Resty.Error.Redirection.t()
+          | Resty.Error.BadRequest.t()
+          | Resty.Error.UnauthorizedAccess.t()
+          | Resty.Error.ForbiddenAccess.t()
+          | Resty.Error.ResourceNotFound.t()
+          | Resty.Error.MethodNotAllowed.t()
+          | Resty.Error.ResourceConflict.t()
+          | Resty.Error.ResourceGone.t()
+          | Resty.Error.ResourceInvalid.t()
+end
 
-  @typedoc "A Resty exception"
-  @type t :: %{
-          code: integer() | any(),
-          message: String.t() | any()
-        }
+errors = [
+  {Resty.Error.ConnectionError, nil, ""},
+  {Resty.Error.ClientError, nil, ""},
+  {Resty.Error.ServerError, 500, ""},
+  {Resty.Error.Redirection, 302, ""},
+  {Resty.Error.BadRequest, 400, ""},
+  {Resty.Error.UnauthorizedAccess, 401, ""},
+  {Resty.Error.ForbiddenAccess, 403, ""},
+  {Resty.Error.ResourceNotFound, 404, ""},
+  {Resty.Error.MethodNotAllowed, 405, ""},
+  {Resty.Error.ResourceConflict, 409, ""},
+  {Resty.Error.ResourceGone, 410, ""},
+  {Resty.Error.ResourceInvalid, 422, ""}
+]
 
-  @doc """
-  Create a new exception with the given values.
-
-  ```
-  DummyError.new(code: 500, message: "ServerError")
-  ```
-  """
-  @callback new(opts :: Enum.t()) :: map()
-
-  @doc """
-  Turn the current module into a Resty exception.
-
-  ## Options
-  - `:code`: The default error code.
-  - `:message`: The default error message (defaults to "error").
-
-  ## Usage
-
-  Given a DummyError
-
-  ```
-  defmodule DummyError do
-    use Resty.Error, code: 500, message: "dummy"
-  end
-  ```
-
-  You can then do this
-
-  ```
-  iex> DummyError.new()
-  %DummyError{code: 500, message: "dummy"}
-  ```
-  """
-  @spec __using__(Keyword.t()) :: none()
-  defmacro __using__(opts) do
-    code = Keyword.get(opts, :code, nil)
-    message = Keyword.get(opts, :message, "Error")
-
+for {error, code, message} <- errors do
+  content =
     quote do
-      @behaviour Resty.Error
-      defexception code: unquote(code),
-                   message: unquote(message)
+      defexception code: unquote(code), message: unquote(message)
 
-      def new, do: %__MODULE__{}
+      @type t() :: %__MODULE__{
+              code: integer() | any(),
+              message: String.t() | any()
+            }
 
-      def new(opts) do
-        new() |> struct(opts)
+      @doc """
+      Create a new exception with the given values.
+      """
+      def new(opts \\ []) do
+        %__MODULE__{} |> struct(opts)
       end
     end
-  end
-end
 
-defmodule Resty.Error.ConnectionError do
-  use Resty.Error
-end
-
-defmodule Resty.Error.ClientError do
-  use Resty.Error
-end
-
-defmodule Resty.Error.ServerError do
-  use Resty.Error, code: 500
-end
-
-defmodule Resty.Error.Redirection do
-  use Resty.Error, code: 302
-end
-
-defmodule Resty.Error.BadRequest do
-  use Resty.Error, code: 400
-end
-
-defmodule Resty.Error.UnauthorizedAccess do
-  use Resty.Error, code: 401
-end
-
-defmodule Resty.Error.ForbiddenAccess do
-  use Resty.Error, code: 403
-end
-
-defmodule Resty.Error.ResourceNotFound do
-  use Resty.Error, code: 404
-end
-
-defmodule Resty.Error.MethodNotAllowed do
-  use Resty.Error, code: 405
-end
-
-defmodule Resty.Error.ResourceConflict do
-  use Resty.Error, code: 409
-end
-
-defmodule Resty.Error.ResourceGone do
-  use Resty.Error, code: 410
-end
-
-defmodule Resty.Error.ResourceInvalid do
-  use Resty.Error, code: 422
+  Module.create(error, content, Macro.Env.location(__ENV__))
 end
