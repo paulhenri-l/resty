@@ -18,6 +18,7 @@ defmodule Resty.Resource.Base do
       Module.put_attribute(__MODULE__, :resource_path, "")
       Module.put_attribute(__MODULE__, :primary_key, :id)
       Module.put_attribute(__MODULE__, :include_root, false)
+      Module.put_attribute(__MODULE__, :extension, "")
       Module.put_attribute(__MODULE__, :connection, Resty.default_connection())
     end
   end
@@ -50,6 +51,13 @@ defmodule Resty.Resource.Base do
   """
   defmacro set_primary_key(name) do
     quote(do: @primary_key(unquote(name)))
+  end
+
+  @doc """
+  Sets the resource extension. The extension will be added in the URL.
+  """
+  defmacro set_extension(extension) do
+    quote(do: @extension(unquote(extension)))
   end
 
   @doc """
@@ -91,6 +99,9 @@ defmodule Resty.Resource.Base do
 
       @doc false
       def include_root, do: @include_root
+
+      @doc false
+      def extension, do: @extension
 
       @doc false
       def headers, do: Keyword.merge(@default_headers, @headers)
