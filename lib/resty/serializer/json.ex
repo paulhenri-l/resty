@@ -1,5 +1,9 @@
 defmodule Resty.Serializer.Json do
-  @moduledoc false
+  @moduledoc """
+  Serialize and deserialize resources structs from and to json. This is the
+  default `Resty.Serializer` implementation.
+  """
+
   def decode(json, known_attributes) do
     json
     |> do_decode()

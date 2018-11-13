@@ -1,6 +1,6 @@
 defmodule Resty.Resource do
   @moduledoc """
-  This module provides a few functions to work on resources.
+  This module provides a few functions to work with resource structs.
   """
 
   @typedoc "A resource module"
@@ -11,6 +11,9 @@ defmodule Resty.Resource do
           __module__: resource_module(),
           __persisted__: boolean()
         }
+
+  @typedoc "A collection of resource structs"
+  @type collection() :: [t()]
 
   @doc """
   Clone the given resource

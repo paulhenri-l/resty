@@ -1,9 +1,13 @@
-defmodule Resty.Connections.HTTPoison do
+defmodule Resty.Connection.HTTPoison do
   alias Resty.Request
   @behaviour Resty.Connection
-  @moduledoc ""
+  @moduledoc """
+  Default `Resty.Connection` implementation. It will use `HTTPoison` in order
+  to query the web API.
+  """
 
   @doc "Send the given request thanks to HTTPoison"
+  @spec send(Resty.Request.t()) :: Resty.Connection.response()
   def send(%Request{} = request) do
     request
     |> to_poison_request()

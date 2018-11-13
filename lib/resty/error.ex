@@ -1,6 +1,9 @@
 # This copy pasta sucks, but defining types thanks to macros seems a bit hard.
 defmodule Resty.Error do
-  @typedoc "Resty exceptions"
+  @moduledoc """
+  A bit of metaprogramming to define all of `Resty`'s exceptions.
+  """
+
   @type t ::
           Resty.Error.ConnectionError.t()
           | Resty.Error.ClientError.t()

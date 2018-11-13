@@ -2,7 +2,7 @@ defmodule Resty.Resource.SerialierTest do
   use ExUnit.Case, async: true
 
   alias Fakes.Post
-  alias Resty.Resource.Serializer
+  alias Resty.Serializer
 
   @json_resource ~s({"id":1, "name": "test", "fake-attribute": "value"})
   @corrupted_json_resource """

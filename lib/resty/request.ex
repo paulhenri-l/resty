@@ -5,11 +5,15 @@ defmodule Resty.Request do
   """
 
   @type t :: %__MODULE__{
-          method: atom(),
+          method: method(),
           url: String.t(),
-          headers: Keyword.t(String.t()),
-          body: String.t()
+          headers: headers(),
+          body: binary()
         }
+
+  @type method :: :get | :post | :patch | :put | :delete
+
+  @type headers :: Keyword.t(String.t())
 
   defstruct method: :get,
             url: "",

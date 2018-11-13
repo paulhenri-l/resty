@@ -1,7 +1,7 @@
 defmodule Resty.Repo do
   alias Resty.Request
   alias Resty.Resource.Path
-  alias Resty.Resource.Serializer
+  alias Resty.Serializer
 
   @connection Resty.default_connection()
 

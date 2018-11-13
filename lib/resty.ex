@@ -1,7 +1,7 @@
 defmodule Resty do
   @moduledoc """
   This module does not do much.
-  It is used in order to retrieve default values from the config.
+  It is used in order to retrieve values from the config.
   """
 
   @doc """
@@ -20,6 +20,6 @@ defmodule Resty do
   """
   @spec default_connection() :: Resty.Connection.t()
   def default_connection do
-    Application.get_env(:resty, :connection, Resty.Connections.HTTPoison)
+    Application.get_env(:resty, :connection, Resty.Connection.HTTPoison)
   end
 end

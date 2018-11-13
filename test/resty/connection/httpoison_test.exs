@@ -1,8 +1,8 @@
-defmodule Resty.Connections.HTTPoisonTest do
+defmodule Resty.Connection.HTTPoisonTest do
   use ExUnit.Case, async: true
   alias Resty.Error
   alias Resty.Request
-  alias Resty.Connections.HTTPoison, as: Connection
+  alias Resty.Connection.HTTPoison, as: Connection
 
   @test_address "https://httparrot.herokuapp.com"
 
