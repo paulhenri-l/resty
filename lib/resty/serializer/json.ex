@@ -4,6 +4,10 @@ defmodule Resty.Serializer.Json do
   default `Resty.Serializer` implementation.
   """
 
+  @doc """
+  Decode the given json and only allow the given `known_attributes` in the
+  final output.
+  """
   def decode(json, known_attributes) do
     json
     |> do_decode()
@@ -57,7 +61,11 @@ defmodule Resty.Serializer.Json do
     do_remove_unknown_attributes(next_attributes, data, updated_filtered_attributes)
   end
 
-  # Encoding
+  @doc """
+  Encode the given map to json and only allow the given `known_attributes` in
+  the final output. Also if `root` is present add the encoded map into a root
+  node named after the value found in `root`.
+  """
   def encode(map, known_attributes, root \\ false) do
     map = Map.take(map, known_attributes)
 

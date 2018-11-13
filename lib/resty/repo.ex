@@ -1,6 +1,6 @@
 defmodule Resty.Repo do
   alias Resty.Request
-  alias Resty.Resource.Path
+  alias Resty.Resource
   alias Resty.Serializer
 
   @connection Resty.default_connection()
@@ -38,7 +38,7 @@ defmodule Resty.Repo do
   def find(resource_module, :all) do
     request = %Request{
       method: :get,
-      url: Path.to(resource_module),
+      url: Resource.path_to(resource_module),
       headers: resource_module.headers()
     }
 
@@ -51,7 +51,7 @@ defmodule Resty.Repo do
   def find(resource_module, id) do
     request = %Request{
       method: :get,
-      url: Path.to(resource_module, id),
+      url: Resource.path_to(resource_module, id),
       headers: resource_module.headers()
     }
 
@@ -96,7 +96,7 @@ defmodule Resty.Repo do
 
     request = %Request{
       method: :post,
-      url: Path.to(resource_module),
+      url: Resource.path_to(resource_module),
       headers: resource_module.headers(),
       body: resource
     }
@@ -112,7 +112,7 @@ defmodule Resty.Repo do
 
     request = %Request{
       method: :put,
-      url: Path.to(resource_module, id),
+      url: Resource.path_to(resource_module, id),
       headers: resource_module.headers(),
       body: resource
     }
@@ -141,7 +141,7 @@ defmodule Resty.Repo do
   def delete(resource_module, id) do
     request = %Request{
       method: :delete,
-      url: Path.to(resource_module, id),
+      url: Resource.path_to(resource_module, id),
       headers: resource_module.headers()
     }
 

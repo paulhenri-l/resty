@@ -3,7 +3,6 @@ defmodule Fakes.TestConnection do
   alias Fakes.TestDB
 
   @moduledoc false
-  @behaviour Resty.Connection
 
   def send(%{method: :get, url: "site.tld/posts"}) do
     case TestDB.get(Post, :all) do

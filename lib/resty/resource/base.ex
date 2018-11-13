@@ -25,7 +25,6 @@ defmodule Resty.Resource.Base do
   @doc """
   Add an attribute to the resource
   """
-  @spec attribute(atom()) :: none()
   defmacro attribute(name) do
     quote do
       Module.put_attribute(__MODULE__, :attributes, unquote(name))
@@ -35,7 +34,6 @@ defmodule Resty.Resource.Base do
   @doc """
   Add a site to the resource
   """
-  @spec set_site(String.t()) :: none()
   defmacro set_site(site) do
     quote(do: @site(unquote(site)))
   end
@@ -43,26 +41,13 @@ defmodule Resty.Resource.Base do
   @doc """
   Add a path to the resource
   """
-  @spec set_resource_path(String.t()) :: none()
   defmacro set_resource_path(path) do
     quote(do: @resource_path(unquote(path)))
   end
 
   @doc """
   Sets the resource primary key. By default it is `:id`.
-
-  ## Usage
-
-      iex> defmodule Post do
-      ...> use Resty.Resource.Base
-      ...> set_primary_key(:uuid)
-      ...> end
-      ...>
-      ...> Post.primary_key()
-      :uuid
-
   """
-  @spec set_primary_key(atom()) :: none()
   defmacro set_primary_key(name) do
     quote(do: @primary_key(unquote(name)))
   end
@@ -70,7 +55,6 @@ defmodule Resty.Resource.Base do
   @doc """
   Include the given root when serializing the resource
   """
-  @spec include_root(false | String.t()) :: none()
   defmacro include_root(value) do
     quote(do: @include_root(unquote(value)))
   end
@@ -78,7 +62,6 @@ defmodule Resty.Resource.Base do
   @doc """
   Add an header to the request sent from this resource
   """
-  @spec add_header(atom(), String.t()) :: none()
   defmacro add_header(name, value) when is_atom(name) do
     quote(do: @headers({unquote(name), unquote(value)}))
   end
@@ -118,7 +101,6 @@ defmodule Resty.Resource.Base do
       @doc """
       Create a new resource with the given attributes
       """
-      @spec build(attributes :: Enum.t()) :: Resty.Resource.t()
       def build(attributes \\ []) do
         __MODULE__ |> struct(attributes)
       end

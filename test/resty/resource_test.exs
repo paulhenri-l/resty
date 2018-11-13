@@ -43,4 +43,16 @@ defmodule Resty.ResourceTest do
   test "The resource knows which connection to use" do
     assert Fakes.TestConnection = Post.connection()
   end
+
+  test "generate path to resource collection" do
+    assert "site.tld/posts" == Post |> Resource.path_to()
+  end
+
+  test "generate path to specific resource" do
+    assert "site.tld/posts/1" == Post.build(id: 1) |> Resource.path_to()
+    assert "site.tld/posts/uuid" == Post.build(id: "uuid") |> Resource.path_to()
+
+    assert "site.tld/posts/1" == Post |> Resource.path_to(1)
+    assert "site.tld/posts/uuid" == Post |> Resource.path_to("uuid")
+  end
 end
