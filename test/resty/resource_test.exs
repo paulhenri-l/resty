@@ -46,25 +46,26 @@ defmodule Resty.ResourceTest do
   end
 
   test "generate path to resource collection" do
-    assert "site.tld/posts" == Post |> Resource.path_to()
-    assert "site.tld/with-extension.json" == JsonExtensionResource |> Resource.path_to()
+    assert "site.tld/posts" == Post |> Resource.url_for()
+    assert "site.tld/with-extension.json" == JsonExtensionResource |> Resource.url_for()
   end
 
   test "generate path to specific resource" do
-    assert "site.tld/posts/1" == Post.build(id: 1) |> Resource.path_to()
-    assert "site.tld/posts/1" == Post |> Resource.path_to(1)
-    assert "site.tld/posts/uuid" == Post.build(id: "uuid") |> Resource.path_to()
-    assert "site.tld/posts/uuid" == Post |> Resource.path_to("uuid")
+    # Remove tests that test the builder. Only test functions once.
+    assert "site.tld/posts/1" == Post.build(id: 1) |> Resource.url_for()
+    assert "site.tld/posts/1" == Post |> Resource.url_for(1)
+    assert "site.tld/posts/uuid" == Post.build(id: "uuid") |> Resource.url_for()
+    assert "site.tld/posts/uuid" == Post |> Resource.url_for("uuid")
 
     assert "site.tld/with-extension/1.json" ==
-             JsonExtensionResource.build(id: 1) |> Resource.path_to()
+             JsonExtensionResource.build(id: 1) |> Resource.url_for()
 
-    assert "site.tld/with-extension/1.json" == JsonExtensionResource |> Resource.path_to(1)
-
-    assert "site.tld/with-extension/uuid.json" ==
-             JsonExtensionResource.build(id: "uuid") |> Resource.path_to()
+    assert "site.tld/with-extension/1.json" == JsonExtensionResource |> Resource.url_for(1)
 
     assert "site.tld/with-extension/uuid.json" ==
-             JsonExtensionResource |> Resource.path_to("uuid")
+             JsonExtensionResource.build(id: "uuid") |> Resource.url_for()
+
+    assert "site.tld/with-extension/uuid.json" ==
+             JsonExtensionResource |> Resource.url_for("uuid")
   end
 end

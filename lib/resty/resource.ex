@@ -25,23 +25,43 @@ defmodule Resty.Resource do
   """
   def persisted?(%{__persisted__: persisted}), do: persisted
 
-  @doc "Get the path to the given resource."
-  def path_to(module) when is_atom(module) do
-    Resty.Resource.UrlBuilder.build(module, nil, [])
+  @doc """
+  Get the url to the given resource.
+  **I will add examples**
+  """
+  def url_for(module) when is_atom(module) do
+    url_for(module, [])
   end
 
-  def path_to(%{} = resource) do
-    path_to(resource.__module__, resource)
-  end
-
-  @doc "Get the path to the given resource."
-  def path_to(module, %{} = resource) do
+  def url_for(resource) when is_map(resource) do
+    module = resource.__struct__
     id = Map.get(resource, module.primary_key())
-
-    Resty.Resource.UrlBuilder.build(module, id, [])
+    url_for(module, id)
   end
 
-  def path_to(module, id) do
-    Resty.Resource.UrlBuilder.build(module, id, [])
+  @doc """
+  Get the url to the given resource.
+  **I will add examples**
+  """
+  def url_for(resource, params) when is_map(resource) and is_list(params) do
+    module = resource.__struct__
+    id = Map.get(resource, module.primary_key())
+    url_for(module, id, params)
+  end
+
+  def url_for(module, params) when is_atom(module) and is_list(params) do
+    url_for(module, nil, params)
+  end
+
+  def url_for(module, id) when is_atom(module) do
+    url_for(module, id, [])
+  end
+
+  @doc """
+  Get the url to the given resource.
+  **I will add examples**
+  """
+  def url_for(module, resource_id, params) when is_atom(module) and is_list(params) do
+    Resty.Resource.UrlBuilder.build(module, resource_id, params)
   end
 end
