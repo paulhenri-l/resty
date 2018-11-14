@@ -4,7 +4,7 @@ defmodule Fakes.JsonExtensionResource do
   use Resty.Resource.Base
 
   set_site("site.tld")
-  set_resource_path("with-extension")
+  set_resource_path("/with-extension")
   set_extension(".json")
 
   attribute(:id)

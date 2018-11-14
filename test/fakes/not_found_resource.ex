@@ -3,7 +3,7 @@ defmodule Fakes.NotFoundResource do
   @moduledoc false
 
   set_site("site.tld")
-  set_resource_path("not-found")
+  set_resource_path("/not-found")
 
   attribute(:id)
 end

@@ -27,7 +27,7 @@ defmodule Resty.Resource do
 
   @doc "Get the path to the given resource."
   def path_to(module) when is_atom(module) do
-    base_path(module) <> module.extension()
+    Resty.Resource.UrlBuilder.build(module, nil, [])
   end
 
   def path_to(%{} = resource) do
@@ -37,14 +37,11 @@ defmodule Resty.Resource do
   @doc "Get the path to the given resource."
   def path_to(module, %{} = resource) do
     id = Map.get(resource, module.primary_key())
-    path_to(module, id)
+
+    Resty.Resource.UrlBuilder.build(module, id, [])
   end
 
   def path_to(module, id) do
-    "#{base_path(module)}/#{id}#{module.extension()}"
-  end
-
-  defp base_path(module) when is_atom(module) do
-    "#{module.site()}/#{module.resource_path()}"
+    Resty.Resource.UrlBuilder.build(module, id, [])
   end
 end

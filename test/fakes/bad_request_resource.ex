@@ -3,7 +3,7 @@ defmodule Fakes.BadRequestResource do
   @moduledoc false
 
   set_site("site.tld")
-  set_resource_path("bad-request")
+  set_resource_path("/bad-request")
 
   attribute(:id)
 end

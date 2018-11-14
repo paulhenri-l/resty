@@ -16,7 +16,7 @@ defmodule Post do
   use Resty.Resource.Base
 
   set_site("site.tld")
-  set_resource_path("posts")
+  set_resource_path("/posts")
 
   attribute(:id)
   attribute(:name)

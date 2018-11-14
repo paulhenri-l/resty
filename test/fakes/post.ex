@@ -4,7 +4,7 @@ defmodule Fakes.Post do
   @moduledoc false
 
   set_site("site.tld")
-  set_resource_path("posts")
+  set_resource_path("/posts")
   add_header(:Custom, "hello")
 
   attribute(:id)

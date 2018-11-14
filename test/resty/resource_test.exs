@@ -56,9 +56,15 @@ defmodule Resty.ResourceTest do
     assert "site.tld/posts/uuid" == Post.build(id: "uuid") |> Resource.path_to()
     assert "site.tld/posts/uuid" == Post |> Resource.path_to("uuid")
 
-    assert "site.tld/with-extension/1.json" == JsonExtensionResource.build(id: 1) |> Resource.path_to()
+    assert "site.tld/with-extension/1.json" ==
+             JsonExtensionResource.build(id: 1) |> Resource.path_to()
+
     assert "site.tld/with-extension/1.json" == JsonExtensionResource |> Resource.path_to(1)
-    assert "site.tld/with-extension/uuid.json" == JsonExtensionResource.build(id: "uuid") |> Resource.path_to()
-    assert "site.tld/with-extension/uuid.json" == JsonExtensionResource |> Resource.path_to("uuid")
+
+    assert "site.tld/with-extension/uuid.json" ==
+             JsonExtensionResource.build(id: "uuid") |> Resource.path_to()
+
+    assert "site.tld/with-extension/uuid.json" ==
+             JsonExtensionResource |> Resource.path_to("uuid")
   end
 end
