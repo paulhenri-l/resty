@@ -7,6 +7,18 @@ but for Elixir. ActiveResource is great and as I do not intend to reinvent the
 wheel a lot of the concepts found in ActiveResource have just been ported to
 this library so you should feel *kinda* right at home.
 
+## Installation
+
+First, add Resty to your mix.exs dependencies:
+
+```
+def deps do
+  [{:resty, "~> 0.5.0"}]
+end
+```
+
+and run `mix deps.get`.
+
 ## Basic usage
 
 Here's how you would use Resty to query a rails API.
