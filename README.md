@@ -11,7 +11,7 @@ this library so you should feel *kinda* right at home.
 
 First, add Resty to your mix.exs dependencies:
 
-```
+```elixir
 def deps do
   [{:resty, "~> 0.5.0"}]
 end
