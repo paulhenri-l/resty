@@ -7,5 +7,5 @@ defmodule Fakes.JsonExtensionResource do
   set_resource_path("/with-extension")
   set_extension(".json")
 
-  attributes([:id])
+  define_attributes([:id])
 end

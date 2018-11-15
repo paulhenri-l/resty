@@ -7,5 +7,5 @@ defmodule Fakes.PrefixedResource do
   set_resource_path("/comments")
   set_extension(".json")
 
-  attributes([:id, :name])
+  define_attributes([:id, :name])
 end

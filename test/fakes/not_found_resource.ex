@@ -5,5 +5,5 @@ defmodule Fakes.NotFoundResource do
   set_site("site.tld")
   set_resource_path("/not-found")
 
-  attributes([:id])
+  define_attributes([:id])
 end

@@ -20,7 +20,7 @@ defmodule Resty.Resource.Base do
     set_site("site.tld")
     set_resource_path("/posts")
 
-    attributes([:id, :name])
+    define_attributes([:id, :name])
   end
   ```
 
@@ -69,7 +69,7 @@ defmodule Resty.Resource.Base do
 
   *I'll add support for default values.*
   """
-  defmacro attributes(attributes) when is_list(attributes) do
+  defmacro define_attributes(attributes) when is_list(attributes) do
     quote do
       for new_attribute <- unquote(attributes) do
         Module.put_attribute(__MODULE__, :attributes, new_attribute)

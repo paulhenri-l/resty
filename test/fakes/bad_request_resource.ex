@@ -5,5 +5,5 @@ defmodule Fakes.BadRequestResource do
   set_site("site.tld")
   set_resource_path("/bad-request")
 
-  attributes([:id])
+  define_attributes([:id])
 end
