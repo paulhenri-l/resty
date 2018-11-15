@@ -27,6 +27,9 @@ defmodule Resty.MixProject do
             Resty.Resource,
             Resty.Resource.Base
           ],
+          Auth: [
+            Resty.Auth.Basic
+          ],
           customization: [
             Resty.Connection,
             Resty.Connection.HTTPoison,
