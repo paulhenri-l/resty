@@ -7,6 +7,5 @@ defmodule Fakes.Post do
   set_resource_path("/posts")
   add_header(:Custom, "hello")
 
-  attribute(:id)
-  attribute(:name)
+  attributes([:id, :name])
 end

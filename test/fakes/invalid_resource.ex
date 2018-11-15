@@ -5,5 +5,5 @@ defmodule Fakes.InvalidResource do
   set_site("site.tld")
   set_resource_path("/invalid")
 
-  attribute(:id)
+  attributes([:id])
 end
