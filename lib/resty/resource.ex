@@ -43,14 +43,14 @@ defmodule Resty.Resource do
   Get the url to the given resource.
   **I will add examples**
   """
+  def url_for(module, params) when is_atom(module) and is_list(params) do
+    url_for(module, nil, params)
+  end
+
   def url_for(resource, params) when is_map(resource) and is_list(params) do
     module = resource.__struct__
     id = Map.get(resource, module.primary_key())
     url_for(module, id, params)
-  end
-
-  def url_for(module, params) when is_atom(module) and is_list(params) do
-    url_for(module, nil, params)
   end
 
   def url_for(module, id) when is_atom(module) do

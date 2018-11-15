@@ -51,21 +51,16 @@ defmodule Resty.ResourceTest do
   end
 
   test "generate path to specific resource" do
-    # Remove tests that test the builder. Only test functions once.
-    assert "site.tld/posts/1" == Post.build(id: 1) |> Resource.url_for()
+    # url_for/1
+    assert "site.tld/posts" == Post |> Resource.url_for()
+    assert "site.tld/posts/1" == %Post{id: 1} |> Resource.url_for()
+
+    # url_for/2
     assert "site.tld/posts/1" == Post |> Resource.url_for(1)
-    assert "site.tld/posts/uuid" == Post.build(id: "uuid") |> Resource.url_for()
-    assert "site.tld/posts/uuid" == Post |> Resource.url_for("uuid")
+    assert "site.tld/posts?key=value" == Post |> Resource.url_for([key: "value"])
+    assert "site.tld/posts/1?key=value" == %Post{id: 1} |> Resource.url_for([key: "value"])
 
-    assert "site.tld/with-extension/1.json" ==
-             JsonExtensionResource.build(id: 1) |> Resource.url_for()
-
-    assert "site.tld/with-extension/1.json" == JsonExtensionResource |> Resource.url_for(1)
-
-    assert "site.tld/with-extension/uuid.json" ==
-             JsonExtensionResource.build(id: "uuid") |> Resource.url_for()
-
-    assert "site.tld/with-extension/uuid.json" ==
-             JsonExtensionResource |> Resource.url_for("uuid")
+    # url_for/3
+    assert "site.tld/posts/1?key=value" == Post |> Resource.url_for(1, [key: "value"])
   end
 end
