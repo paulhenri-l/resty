@@ -1,7 +1,49 @@
 defmodule Resty.Resource.Base do
   @moduledoc """
-  This module is used to create **resources** that you'll then be able to
-  use with `Resty.Repo` in order to query a web API.
+  This module is used to create **resource struct** that you'll then be able to
+  use with `Resty.Repo` and `Resty.Resource`.
+
+  ## Using the module
+
+  `Resty.Resource.Base` is here to help you create resource structs. The
+  resource struct and its module holds informations about how to query the API
+  such as the *site*, *headers*, *path*, *auth* etc...
+
+  This module (`Resty.Resource.Base`) defines a lot of macros to configure
+  these options. You'll be able to call them right after calling
+  `use Resty.Resource.Base`.
+
+  ```
+  defmodule MyResource do
+    use Resty.Resource.Base
+
+    set_site("site.tld")
+    set_resource_path("/posts")
+
+    attribute(:id)
+    attribute(:name)
+  end
+  ```
+
+  ### Attributes
+
+  Unlike *ActiveResource* `Resty` will need you to define which attributes
+  should be allowed on the resource.
+
+  They are defined thanks to the `attribute/1` macro. The attributes does not
+  support type casting, types are taken as they come from the json serializer.
+
+  If you need to support more types than what json supports you can write your
+  own `Resty.Serializer`.
+
+  ## Using the resource
+
+  Once you have a resource you can use it with `Resty.Repo` and `Resty.Resource`
+  in order to query the API or get informations about retrieved resources.
+
+  ```
+  MyResource |> Resty.Repo.all!()
+  ```
   """
 
   defmacro __using__(_opts) do

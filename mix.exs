@@ -4,7 +4,7 @@ defmodule Resty.MixProject do
   def project do
     [
       app: :resty,
-      version: "0.3.0",
+      version: "0.4.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -18,8 +18,23 @@ defmodule Resty.MixProject do
       source_url: "https://github.com/paulhenri-l/resty",
       homepage_url: "https://github.com/paulhenri-l/resty",
       docs: [
-        main: "readme",
-        extras: ["README.md"]
+        main: Resty.Resource.Base,
+        extras: ["README.md"],
+        groups_for_modules: [
+          "The Basics": [
+            Resty,
+            Resty.Repo,
+            Resty.Resource,
+            Resty.Resource.Base
+          ],
+          customization: [
+            Resty.Connection,
+            Resty.Connection.HTTPoison,
+            Resty.Request,
+            Resty.Serializer,
+            Resty.Serializer.Json
+          ]
+        ]
       ]
     ]
   end

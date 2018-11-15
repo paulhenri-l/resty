@@ -49,6 +49,7 @@ If you want to known what I am currently working on you can also have a look at
 the open issues.
 
 I'll do my best not to make any backward incompatible changes but as this project
-is quite new the api cannot be considered stable yet.
+is quite new the api cannot be considered stable yet. I'll stop making these big
+changes when we'll hit 1.0. Which should be comming soon.
 
 I'll do my best to document the code as we'll get near v1.0

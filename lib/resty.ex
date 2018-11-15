@@ -2,6 +2,8 @@ defmodule Resty do
   @moduledoc """
   This module does not do much.
   It is used in order to retrieve values from the config.
+
+  *I will explain what are these values and how to set them before 1.0*
   """
 
   @doc """

@@ -26,10 +26,11 @@ defmodule Resty.ResourceTest do
   end
 
   test "The resource can be cloned" do
-    original = Post.build(id: 1, name: "Hey!")
+    original = Post.build(id: 1, name: "Hey!", __persisted__: true)
     cloned = original |> Resource.clone()
 
     assert cloned.id == nil
+    assert cloned |> Resource.new?()
     assert cloned.name == original.name
   end
 
@@ -57,10 +58,10 @@ defmodule Resty.ResourceTest do
 
     # url_for/2
     assert "site.tld/posts/1" == Post |> Resource.url_for(1)
-    assert "site.tld/posts?key=value" == Post |> Resource.url_for([key: "value"])
-    assert "site.tld/posts/1?key=value" == %Post{id: 1} |> Resource.url_for([key: "value"])
+    assert "site.tld/posts?key=value" == Post |> Resource.url_for(key: "value")
+    assert "site.tld/posts/1?key=value" == %Post{id: 1} |> Resource.url_for(key: "value")
 
     # url_for/3
-    assert "site.tld/posts/1?key=value" == Post |> Resource.url_for(1, [key: "value"])
+    assert "site.tld/posts/1?key=value" == Post |> Resource.url_for(1, key: "value")
   end
 end
