@@ -34,4 +34,12 @@ defmodule Resty.Auth.BasicTest do
 
     assert "https://u%24er:pa%24%24word@site.tld/posts/1" == authenicated_request.url
   end
+
+  test "User and password can be set from config" do
+    request = %Request{url: "https://site.tld/posts/1"}
+
+    authenicated_request = Basic.authenticate(request, [])
+
+    assert "https://conf-user:conf-password@site.tld/posts/1" == authenicated_request.url
+  end
 end
