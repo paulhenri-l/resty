@@ -28,14 +28,19 @@ defmodule Resty.MixProject do
             Resty.Resource.Base
           ],
           Auth: [
-            Resty.Auth.Basic
+            Resty.Auth,
+            Resty.Auth.Basic,
+            Resty.Auth.Bearer,
+            Resty.Auth.Null
           ],
-          customization: [
-            Resty.Connection,
-            Resty.Connection.HTTPoison,
-            Resty.Request,
+          Serializer: [
             Resty.Serializer,
             Resty.Serializer.Json
+          ],
+          Connection: [
+            Resty.Connection,
+            Resty.Connection.HTTPoison,
+            Resty.Request
           ]
         ]
       ]

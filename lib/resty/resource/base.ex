@@ -26,14 +26,12 @@ defmodule Resty.Resource.Base do
 
   ### Attributes
 
-  Unlike *ActiveResource* `Resty` will need you to define which attributes
+  Unlike *ActiveResource* Resty will need you to define which attributes
   should be allowed on the resource.
 
-  They are defined thanks to the `attribute/1` macro. The attributes does not
-  support type casting, types are taken as they come from the json serializer.
-
-  If you need to support more types than what json supports you can write your
-  own `Resty.Serializer`.
+  They are defined thanks to the `define_attributes/1` macro. The attributes does not
+  support type casting, types are taken as they come from the configured
+  `Resty.Serializer`.
 
   ## Using the resource
 
@@ -61,6 +59,8 @@ defmodule Resty.Resource.Base do
       Module.put_attribute(__MODULE__, :include_root, false)
       Module.put_attribute(__MODULE__, :extension, "")
       Module.put_attribute(__MODULE__, :connection, Resty.default_connection())
+      Module.put_attribute(__MODULE__, :auth, Resty.default_auth())
+      Module.put_attribute(__MODULE__, :auth_params, [])
     end
   end
 
@@ -75,6 +75,14 @@ defmodule Resty.Resource.Base do
         Module.put_attribute(__MODULE__, :attributes, new_attribute)
       end
     end
+  end
+
+  @doc """
+  Set the `Resty.Connection` implementation that should be used to query this
+  resource.
+  """
+  defmacro set_connection(connection) do
+    quote(do: @connection(unquote(connection)))
   end
 
   @doc """
@@ -106,6 +114,16 @@ defmodule Resty.Resource.Base do
   end
 
   @doc """
+  Set the `Resty.Auth` implementation that should be used to query this resource.
+  """
+  defmacro with_auth(auth, params \\ []) do
+    quote do
+      @auth unquote(auth)
+      @auth_params unquote(params)
+    end
+  end
+
+  @doc """
   Include the given root when serializing the resource
   """
   defmacro include_root(value) do
@@ -117,6 +135,14 @@ defmodule Resty.Resource.Base do
   """
   defmacro add_header(name, value) when is_atom(name) do
     quote(do: @headers({unquote(name), unquote(value)}))
+  end
+
+  @doc """
+  This will replace the default headers (`Resty.default_headers/0`) used by
+  this resource.
+  """
+  defmacro set_headers(new_headers) do
+    quote(do: @default_headers(unquote(new_headers)))
   end
 
   defmacro __before_compile__(_env) do
@@ -153,6 +179,9 @@ defmodule Resty.Resource.Base do
 
       @doc false
       def connection, do: @connection
+
+      @doc false
+      def auth, do: {@auth, @auth_params}
 
       @doc """
       Create a new resource with the given attributes

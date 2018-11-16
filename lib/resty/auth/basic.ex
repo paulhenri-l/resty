@@ -9,7 +9,11 @@ defmodule Resty.Auth.Basic do
   ## Usage
 
   ```
-  with_auth(Resty.Auth.Basic, user: "hello", password: "hola")
+  defmodule MyResource do
+    use Resty.Resource.Base
+
+    with_auth(Resty.Auth.Basic, user: "hello", password: "hola")
+  end
   ```
   """
 
