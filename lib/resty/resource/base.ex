@@ -147,11 +147,7 @@ defmodule Resty.Resource.Base do
 
   defmacro __before_compile__(_env) do
     quote do
-      defstruct @attributes ++
-                  [
-                    __module__: __MODULE__,
-                    __persisted__: false
-                  ]
+      defstruct @attributes ++ [__persisted__: false]
 
       @doc false
       def site, do: @site

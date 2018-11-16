@@ -25,7 +25,7 @@ defmodule Resty.Serializer do
   @doc """
   Given a resource struct return its serialized counterpart.
   """
-  def serialize(resource), do: serialize(resource.__module__, resource)
+  def serialize(resource), do: serialize(resource.__struct__, resource)
 
   defp serialize(module, resource) do
     module.serializer.encode(

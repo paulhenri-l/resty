@@ -80,7 +80,7 @@ defmodule Resty.Repo do
     resource |> save()
   end
 
-  def save!(resource), do: save!(resource.__module__, resource)
+  def save!(resource), do: save!(resource.__struct__, resource)
 
   def save!(resource_module, resource) do
     case save(resource_module, resource) do
@@ -89,7 +89,7 @@ defmodule Resty.Repo do
     end
   end
 
-  def save(resource), do: save(resource.__module__, resource)
+  def save(resource), do: save(resource.__struct__, resource)
 
   def save(resource_module, resource = %{id: nil}) do
     resource = resource |> Serializer.serialize()
@@ -123,7 +123,7 @@ defmodule Resty.Repo do
     end
   end
 
-  def delete!(resource), do: delete!(resource.__module__, resource)
+  def delete!(resource), do: delete!(resource.__struct__, resource)
 
   def delete!(resource_module, resource) do
     case delete(resource_module, resource) do
@@ -132,7 +132,7 @@ defmodule Resty.Repo do
     end
   end
 
-  def delete(resource), do: delete(resource.__module__, resource)
+  def delete(resource), do: delete(resource.__struct__, resource)
 
   def delete(resource_module, %{id: id}) do
     delete(resource_module, id)
@@ -151,7 +151,7 @@ defmodule Resty.Repo do
     end
   end
 
-  def exists?(resource), do: exists?(resource.__module__, resource.id)
+  def exists?(resource), do: exists?(resource.__struct__, resource.id)
 
   def exists?(resource_module, resource_id) do
     case find(resource_module, resource_id) do
@@ -161,6 +161,6 @@ defmodule Resty.Repo do
     end
   end
 
-  def reload(resource), do: find(resource.__module__, resource.id)
-  def reload!(resource), do: find!(resource.__module__, resource.id)
+  def reload(resource), do: find(resource.__struct__, resource.id)
+  def reload!(resource), do: find!(resource.__struct__, resource.id)
 end

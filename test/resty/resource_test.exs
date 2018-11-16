@@ -11,10 +11,6 @@ defmodule Resty.ResourceTest do
     Custom: "hello"
   ]
 
-  test "The resource knows its module" do
-    assert Post == Post.build().__module__
-  end
-
   test "The resource can be built" do
     assert %Post{id: nil, name: nil} == Post.build()
     assert %Post{id: 1, name: "test"} == Post.build(id: 1, name: "test")

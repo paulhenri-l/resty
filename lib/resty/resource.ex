@@ -20,7 +20,7 @@ defmodule Resty.Resource do
   %Fakes.Post{id: nil, name: "test1"}
   ```
   """
-  def clone(resource), do: clone(resource.__module__, resource)
+  def clone(resource), do: clone(resource.__struct__, resource)
 
   defp clone(module, resource) do
     resource
