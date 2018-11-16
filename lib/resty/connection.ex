@@ -10,4 +10,9 @@ defmodule Resty.Connection do
   the appropriate `Resty.Resource.Base` macro or globally by setting it in the
   config.
   """
+
+  @doc false
+  def send(request, resource_module) do
+    request |> resource_module.connection().send()
+  end
 end

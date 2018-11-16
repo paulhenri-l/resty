@@ -2,9 +2,8 @@ defmodule Resty.Repo do
   alias Resty.Auth
   alias Resty.Request
   alias Resty.Resource
+  alias Resty.Connection
   alias Resty.Serializer
-
-  @connection Resty.default_connection()
 
   def first(module), do: find(module, :first)
   def first!(module), do: find!(module, :first)
@@ -43,7 +42,7 @@ defmodule Resty.Repo do
       headers: resource_module.headers()
     }
 
-    case request |> Auth.authenticate(resource_module) |> connection().send() do
+    case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
       {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
       {:error, _} = error -> error
     end
@@ -56,7 +55,7 @@ defmodule Resty.Repo do
       headers: resource_module.headers()
     }
 
-    case request |> Auth.authenticate(resource_module) |> connection().send() do
+    case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
       {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
       {:error, _} = error -> error
     end
@@ -102,7 +101,7 @@ defmodule Resty.Repo do
       body: resource
     }
 
-    case request |> Auth.authenticate(resource_module) |> connection().send() do
+    case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
       {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
       {:error, _} = error -> error
     end
@@ -118,7 +117,7 @@ defmodule Resty.Repo do
       body: resource
     }
 
-    case request |> Auth.authenticate(resource_module) |> connection().send() do
+    case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
       {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
       {:error, _} = error -> error
     end
@@ -146,7 +145,7 @@ defmodule Resty.Repo do
       headers: resource_module.headers()
     }
 
-    case request |> Auth.authenticate(resource_module) |> connection().send() do
+    case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
       {:ok, _} -> {:ok, true}
       {:error, _} = error -> error
     end
@@ -164,6 +163,4 @@ defmodule Resty.Repo do
 
   def reload(resource), do: find(resource.__module__, resource.id)
   def reload!(resource), do: find!(resource.__module__, resource.id)
-
-  def connection, do: @connection
 end
