@@ -18,7 +18,7 @@ defmodule Resty.MixProject do
       source_url: "https://github.com/paulhenri-l/resty",
       homepage_url: "https://github.com/paulhenri-l/resty",
       docs: [
-        main: Resty.Resource.Base,
+        # main: Resty,
         extras: ["README.md"],
         groups_for_modules: [
           "The Basics": [
