@@ -68,7 +68,7 @@ And now we can do CRUD!
 
 Find will issue a GET request to the resource.
 
-```
+```elixir
 {:ok, post} = Post |> Resty.Repo.find(1)
 
 IO.inspect(post) # %Post{id: 1, title: "The title", body: "The body", userId: 1}
@@ -85,7 +85,7 @@ IO.inspect(post) # %Post{id: 1, title: "The title", body: "The body", userId: 1}
 
 Create will issue a POST request to the resource
 
-```
+```elixir
 {:ok, post} = Post.build(title: "The title", body: "The body", userId: 1) |> Resty.Repo.save()
 
 IO.inspect(post) # %Post{id: 1, title: "The title", body: "The body", userId: 1}
@@ -103,7 +103,7 @@ IO.inspect(post) # %Post{id: 1, title: "The title", body: "The body", userId: 1}
 
 Update will issue a PUT request to the resource
 
-```
+```elixir
 {:ok, post} = Post |> Resty.Repo.find(1)
 
 {:ok, updated_post} = %{post | title: "updated-title"} |> Resty.Repo.save()
@@ -123,7 +123,7 @@ IO.inspect(update_post) # %Post{id: 1, title: "updated-title", body: "The body",
 
 Delete will issue a DELETE request to the resource
 
-```
+```elixir
 {:ok, post} = Post |> Resty.Repo.find(1)
 {:ok, true} = post |> Resty.Repo.delete()
 ```
