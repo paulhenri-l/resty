@@ -22,7 +22,7 @@ defmodule Resty.MixProject do
         extras: ["README.md"],
         groups_for_modules: [
           Config: [
-            Resty,
+            Resty
           ],
           "The Basics": [
             Resty.Repo,

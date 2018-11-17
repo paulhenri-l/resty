@@ -8,7 +8,7 @@ defmodule Resty do
   """
 
   @doc """
-  Return the *global headers* that are going to be sent for every resource.
+  Return the *default headers* that are going to be sent for every resource.
 
   The defaults are:
 
@@ -91,5 +91,23 @@ defmodule Resty do
   """
   def default_serializer do
     Application.get_env(:resty, :serialize, Resty.Serializer.Json)
+  end
+
+  @doc """
+  Return the default site that is going to be queried for every resource.
+
+  The default is `nil`.
+
+  This value can be configured in your config.exs file like this:
+
+  ```
+  config :resty, site: "https://my-webservice.com/api/v2"
+  ```
+
+  You can also set it on a per resource basis thanks to the
+  `Resty.Resource.Base.set_site/1` macro.
+  """
+  def default_site do
+    Application.get_env(:resty, :site, nil)
   end
 end

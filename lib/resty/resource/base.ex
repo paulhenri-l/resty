@@ -53,7 +53,7 @@ defmodule Resty.Resource.Base do
 
       Module.register_attribute(__MODULE__, :attributes, accumulate: true)
       Module.register_attribute(__MODULE__, :headers, accumulate: true)
-      Module.put_attribute(__MODULE__, :site, "")
+      Module.put_attribute(__MODULE__, :site, Resty.default_site())
       Module.put_attribute(__MODULE__, :resource_path, "")
       Module.put_attribute(__MODULE__, :primary_key, :id)
       Module.put_attribute(__MODULE__, :include_root, false)

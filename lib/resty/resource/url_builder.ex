@@ -4,8 +4,8 @@ defmodule Resty.Resource.UrlBuilder do
   def build(module, id, params) do
     {final_url, _} =
       {module.site(), params}
-      |> replace_prefix_params()
       |> add_resource_path(module.resource_path(), id)
+      |> replace_prefix_params()
       |> add_extension(module.extension())
       |> add_query_string()
 
