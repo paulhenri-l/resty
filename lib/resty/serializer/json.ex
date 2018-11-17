@@ -1,14 +1,29 @@
 defmodule Resty.Serializer.Json do
   @moduledoc """
-  Serialize and deserialize resources structs from and to json. This is the
-  default `Resty.Serializer` implementation.
+  This is the default `Resty.Serializer` implementation.
+
+  Under the hood it uses `Jason` to decode/encode json.
+
+  ## Params
+
+  This serializer do not use any parameter.
+
+  ## Usage
+
+  As this is the default you should not have to manually set it except if you
+  have changed the default serializer in your config.exs file.
+
+  ```
+  defmodule MyResource do
+    use Resty.Resource.Base
+
+    set_serializer(Resty.Serializer.Json)
+  end
+  ```
   """
 
-  @doc """
-  Decode the given json and only allow the given `known_attributes` in the
-  final output.
-  """
-  def decode(json, known_attributes) do
+  @doc false
+  def decode(json, known_attributes, _) do
     json
     |> do_decode()
     |> remove_root()
@@ -61,13 +76,10 @@ defmodule Resty.Serializer.Json do
     do_remove_unknown_attributes(next_attributes, data, updated_filtered_attributes)
   end
 
-  @doc """
-  Encode the given map to json and only allow the given `known_attributes` in
-  the final output. Also if `root` is present add the encoded map into a root
-  node named after the value found in `root`.
-  """
-  def encode(map, known_attributes, root \\ false) do
+  @doc false
+  def encode(map, known_attributes, params) do
     map = Map.take(map, known_attributes)
+    root = Keyword.get(params, :include_root, false)
 
     to_encode =
       case root do

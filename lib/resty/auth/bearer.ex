@@ -42,7 +42,8 @@ defmodule Resty.Auth.Bearer do
     %{request | headers: updated_headers}
   end
 
+  @doc false
   def default do
-    Application.get_env(:resty, __MODULE__) |> Keyword.get(:token)
+    Application.get_env(:resty, __MODULE__) |> Keyword.get(:token, "")
   end
 end

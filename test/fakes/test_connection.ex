@@ -4,47 +4,47 @@ defmodule Fakes.TestConnection do
 
   @moduledoc false
 
-  def send(%{method: :get, url: "site.tld/posts"}) do
+  def send(%{method: :get, url: "site.tld/posts"}, _) do
     case TestDB.get(Post, :all) do
       nil -> {:error, Resty.Error.ResourceNotFound.new()}
       resource -> {:ok, resource}
     end
   end
 
-  def send(%{method: :get, url: "site.tld/posts/" <> id}) do
+  def send(%{method: :get, url: "site.tld/posts/" <> id}, _) do
     case TestDB.get(Post, id) do
       nil -> {:error, Resty.Error.ResourceNotFound.new()}
       resource -> {:ok, resource}
     end
   end
 
-  def send(%{method: :post, url: "site.tld/posts", body: body}) do
+  def send(%{method: :post, url: "site.tld/posts", body: body}, _) do
     case TestDB.insert(Post, body) do
       nil -> {:error, Resty.Error.ServerError.new()}
       resource -> {:ok, resource}
     end
   end
 
-  def send(%{method: :put, url: "site.tld/posts/" <> _id, body: body}) do
+  def send(%{method: :put, url: "site.tld/posts/" <> _id, body: body}, _) do
     case TestDB.put(Post, body) do
       nil -> {:error, Resty.Error.ServerError.new()}
       resource -> {:ok, resource}
     end
   end
 
-  def send(%{method: :delete, url: "site.tld/posts/" <> id}) do
+  def send(%{method: :delete, url: "site.tld/posts/" <> id}, _) do
     {:ok, TestDB.delete(Post, id)}
   end
 
-  def send(%{url: "site.tld/bad-request" <> _}) do
+  def send(%{url: "site.tld/bad-request" <> _}, _) do
     {:error, Resty.Error.BadRequest.new(message: "Bad request")}
   end
 
-  def send(%{url: "site.tld/invalid" <> _}) do
+  def send(%{url: "site.tld/invalid" <> _}, _) do
     {:error, Resty.Error.ResourceInvalid.new(message: "Invalid")}
   end
 
-  def send(_) do
+  def send(_, _) do
     {:error, Resty.Error.ResourceNotFound.new(message: "Not found")}
   end
 end

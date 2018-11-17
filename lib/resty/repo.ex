@@ -43,7 +43,7 @@ defmodule Resty.Repo do
     }
 
     case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
-      {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
+      {:ok, response} -> {:ok, Serializer.deserialize(response, resource_module)}
       {:error, _} = error -> error
     end
   end
@@ -56,7 +56,7 @@ defmodule Resty.Repo do
     }
 
     case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
-      {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
+      {:ok, response} -> {:ok, Serializer.deserialize(response, resource_module)}
       {:error, _} = error -> error
     end
   end
@@ -102,7 +102,7 @@ defmodule Resty.Repo do
     }
 
     case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
-      {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
+      {:ok, response} -> {:ok, Serializer.deserialize(response, resource_module)}
       {:error, _} = error -> error
     end
   end
@@ -118,7 +118,7 @@ defmodule Resty.Repo do
     }
 
     case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
-      {:ok, response} -> {:ok, Serializer.deserialize(resource_module, response)}
+      {:ok, response} -> {:ok, Serializer.deserialize(response, resource_module)}
       {:error, _} = error -> error
     end
   end

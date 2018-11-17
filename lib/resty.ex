@@ -74,6 +74,22 @@ defmodule Resty do
     Application.get_env(:resty, :auth, Resty.Auth.Null)
   end
 
-  @doc false
-  def global_serializer, do: Resty.Serializer.Json
+  @doc """
+  Return the `Resty.Serializer` implementation that should be used to serialize
+  and deserialize resources.
+
+  The default is `Resty.Serializer.Json`
+
+  This value can be configured in your config.exs file like this:
+
+  ```
+  config :resty, serializer: Resty.Serializer.Json
+  ```
+
+  You can also set it on a per resource basis thanks to the
+  `Resty.Resource.Base.set_serializer/2` macro.
+  """
+  def default_serializer do
+    Application.get_env(:resty, :serialize, Resty.Serializer.Json)
+  end
 end

@@ -1,8 +1,5 @@
 defmodule Resty.Request do
-  @moduledoc """
-  This module defines the struct that `Resty.Repo` will send to the configured
-  `Resty.Connection` implementation whenever it will want to query the web API.
-  """
+  @moduledoc false
 
   defstruct method: :get, url: "", headers: [], body: ""
 

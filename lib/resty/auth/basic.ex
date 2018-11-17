@@ -64,10 +64,10 @@ defmodule Resty.Auth.Basic do
   end
 
   defp default_user do
-    Application.get_env(:resty, __MODULE__) |> Keyword.get(:user)
+    Application.get_env(:resty, __MODULE__) |> Keyword.get(:user, "")
   end
 
   defp default_password do
-    Application.get_env(:resty, __MODULE__) |> Keyword.get(:password)
+    Application.get_env(:resty, __MODULE__) |> Keyword.get(:password, "")
   end
 end

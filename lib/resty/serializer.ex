@@ -12,26 +12,25 @@ defmodule Resty.Serializer do
   config.
   """
 
-  @doc """
-  Given a resource module and a serialized resource attempt
-  to unserialize it.
-  """
-  def deserialize(module, serialized) do
-    data = module.serializer().decode(serialized, module.known_attributes())
+  @doc false
+  def deserialize(serialized, resource_module) do
+    {implementation, params} = resource_module.serializer()
 
-    build(module, data)
+    data = implementation.decode(serialized, resource_module.known_attributes(), params)
+
+    build(resource_module, data)
   end
 
-  @doc """
-  Given a resource struct return its serialized counterpart.
-  """
-  def serialize(resource), do: serialize(resource.__struct__, resource)
+  @doc false
+  def serialize(resource), do: serialize(resource, resource.__struct__)
 
-  defp serialize(module, resource) do
-    module.serializer.encode(
+  defp serialize(resource, resource_module) do
+    {implementation, params} = resource_module.serializer()
+
+    implementation.encode(
       resource,
-      module.known_attributes(),
-      module.include_root()
+      resource_module.known_attributes(),
+      params ++ [include_root: resource_module.include_root()]
     )
   end
 

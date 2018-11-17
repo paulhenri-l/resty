@@ -13,6 +13,8 @@ defmodule Resty.Connection do
 
   @doc false
   def send(request, resource_module) do
-    request |> resource_module.connection().send()
+    {implementation, params} = resource_module.connection()
+
+    request |> implementation.send(params)
   end
 end

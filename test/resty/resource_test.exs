@@ -38,8 +38,16 @@ defmodule Resty.ResourceTest do
     refute Post.build(__persisted__: true) |> Resource.new?()
   end
 
-  test "The resource knows which connection to use" do
-    assert Fakes.TestConnection = Post.connection()
+  test "The resource knows which connection to use and its params" do
+    assert {Fakes.TestConnection, []} = Post.connection()
+  end
+
+  test "The resource knows which auth to use and its params" do
+    assert {Resty.Auth.Null, []} = Post.auth()
+  end
+
+  test "The resource knows which serializer to use and its params" do
+    assert {Resty.Serializer.Json, []} = Post.serializer()
   end
 
   test "generate path to resource collection" do

@@ -59,8 +59,11 @@ defmodule Resty.Resource.Base do
       Module.put_attribute(__MODULE__, :include_root, false)
       Module.put_attribute(__MODULE__, :extension, "")
       Module.put_attribute(__MODULE__, :connection, Resty.default_connection())
+      Module.put_attribute(__MODULE__, :connection_params, [])
       Module.put_attribute(__MODULE__, :auth, Resty.default_auth())
       Module.put_attribute(__MODULE__, :auth_params, [])
+      Module.put_attribute(__MODULE__, :serializer, Resty.default_serializer())
+      Module.put_attribute(__MODULE__, :serializer_params, [])
     end
   end
 
@@ -81,8 +84,22 @@ defmodule Resty.Resource.Base do
   Set the `Resty.Connection` implementation that should be used to query this
   resource.
   """
-  defmacro set_connection(connection) do
-    quote(do: @connection(unquote(connection)))
+  defmacro set_connection(connection, params \\ []) do
+    quote do
+      @connection unquote(connection)
+      @connection_params unquote(params)
+    end
+  end
+
+  @doc """
+  Set the `Resty.Serializer` implementation that should be used to serialize
+  and deserialize this resource.
+  """
+  defmacro set_serializer(serializer, params \\ []) do
+    quote do
+      @serializer unquote(serializer)
+      @serializer_params unquote(params)
+    end
   end
 
   @doc """
@@ -162,7 +179,7 @@ defmodule Resty.Resource.Base do
       def known_attributes, do: @attributes
 
       @doc false
-      def serializer, do: Resty.Serializer.Json
+      def serializer, do: {@serializer, @serializer_params}
 
       @doc false
       def include_root, do: @include_root
@@ -174,7 +191,7 @@ defmodule Resty.Resource.Base do
       def headers, do: Keyword.merge(@default_headers, @headers)
 
       @doc false
-      def connection, do: @connection
+      def connection, do: {@connection, @connection_params}
 
       @doc false
       def auth, do: {@auth, @auth_params}

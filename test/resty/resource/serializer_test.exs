@@ -14,18 +14,18 @@ defmodule Resty.Resource.SerialierTest do
   end
 
   test "Deserializing a resource" do
-    assert %Post{id: 1, name: "test"} = Serializer.deserialize(Post, @json_resource)
-    assert Post == Serializer.deserialize(Post, @json_resource).__struct__
+    assert %Post{id: 1, name: "test"} = Serializer.deserialize(@json_resource, Post)
+    assert Post == Serializer.deserialize(@json_resource, Post).__struct__
   end
 
   test "Unknown attributes are cleaned when deserializing" do
-    post = Serializer.deserialize(Post, @corrupted_json_resource)
+    post = Serializer.deserialize(@corrupted_json_resource, Post)
 
     assert nil == Map.get(post, :"fake-attribute")
     assert Post == Map.get(post, :__struct__)
   end
 
   test "The Serializer marks resources as persisted when deserializing" do
-    assert %Post{__persisted__: true} = Serializer.deserialize(Post, @json_resource)
+    assert %Post{__persisted__: true} = Serializer.deserialize(@json_resource, Post)
   end
 end
