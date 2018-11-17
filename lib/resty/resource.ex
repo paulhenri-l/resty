@@ -22,11 +22,11 @@ defmodule Resty.Resource do
   """
   def clone(resource), do: clone(resource.__struct__, resource)
 
-  defp clone(module, resource) do
+  defp clone(resource_module, resource) do
     resource
-    |> Map.take(module.known_attributes())
-    |> Map.delete(module.primary_key())
-    |> module.build()
+    |> Map.take(resource_module.known_attributes())
+    |> Map.delete(resource_module.primary_key())
+    |> resource_module.build()
   end
 
   @doc """
@@ -75,14 +75,14 @@ defmodule Resty.Resource do
   """
   def url_for(module_or_resource)
 
-  def url_for(module) when is_atom(module) do
-    url_for(module, [])
+  def url_for(resource_module) when is_atom(resource_module) do
+    url_for(resource_module, [])
   end
 
   def url_for(resource) when is_map(resource) do
-    module = resource.__struct__
-    id = Map.get(resource, module.primary_key())
-    url_for(module, id)
+    resource_module = resource.__struct__
+    id = Map.get(resource, resource_module.primary_key())
+    url_for(resource_module, id)
   end
 
   @doc """
@@ -101,18 +101,18 @@ defmodule Resty.Resource do
   """
   def url_for(module_or_resource, id_or_params)
 
-  def url_for(module, params) when is_atom(module) and is_list(params) do
-    url_for(module, nil, params)
+  def url_for(resource_module, params) when is_atom(resource_module) and is_list(params) do
+    url_for(resource_module, nil, params)
   end
 
   def url_for(resource, params) when is_map(resource) and is_list(params) do
-    module = resource.__struct__
-    id = Map.get(resource, module.primary_key())
-    url_for(module, id, params)
+    resource_module = resource.__struct__
+    id = Map.get(resource, resource_module.primary_key())
+    url_for(resource_module, id, params)
   end
 
-  def url_for(module, id) when is_atom(module) do
-    url_for(module, id, [])
+  def url_for(resource_module, id) when is_atom(resource_module) do
+    url_for(resource_module, id, [])
   end
 
   @doc """
@@ -123,7 +123,7 @@ defmodule Resty.Resource do
   "site.tld/posts/slug?key=value"
   ```
   """
-  def url_for(module, resource_id, params) when is_atom(module) and is_list(params) do
-    Resty.Resource.UrlBuilder.build(module, resource_id, params)
+  def url_for(resource_module, resource_id, params) when is_atom(resource_module) and is_list(params) do
+    Resty.Resource.UrlBuilder.build(resource_module, resource_id, params)
   end
 end

@@ -5,14 +5,14 @@ defmodule Resty.Repo do
   alias Resty.Connection
   alias Resty.Serializer
 
-  def first(module), do: find(module, :first)
-  def first!(module), do: find!(module, :first)
+  def first(resource_module), do: find(resource_module, :first)
+  def first!(resource_module), do: find!(resource_module, :first)
 
-  def last(module), do: find(module, :last)
-  def last!(module), do: find!(module, :last)
+  def last(resource_module), do: find(resource_module, :last)
+  def last!(resource_module), do: find!(resource_module, :last)
 
-  def all(module), do: find(module, :all)
-  def all!(module), do: find!(module, :all)
+  def all(resource_module), do: find(resource_module, :all)
+  def all!(resource_module), do: find!(resource_module, :all)
 
   def find!(resource_module, id) do
     case find(resource_module, id) do

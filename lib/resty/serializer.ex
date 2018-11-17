@@ -34,13 +34,13 @@ defmodule Resty.Serializer do
     )
   end
 
-  defp build(module, data) when is_list(data) do
-    Enum.map(data, &build(module, &1))
+  defp build(resource_module, data) when is_list(data) do
+    Enum.map(data, &build(resource_module, &1))
   end
 
-  defp build(module, data) do
+  defp build(resource_module, data) do
     data
     |> Enum.concat(__persisted__: true)
-    |> module.build()
+    |> resource_module.build()
   end
 end
