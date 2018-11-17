@@ -21,8 +21,10 @@ defmodule Resty.MixProject do
         # main: Resty,
         extras: ["README.md"],
         groups_for_modules: [
-          "The Basics": [
+          Config: [
             Resty,
+          ],
+          "The Basics": [
             Resty.Repo,
             Resty.Resource,
             Resty.Resource.Base
