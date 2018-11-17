@@ -2,6 +2,7 @@ defmodule Resty.ResourceTest do
   use ExUnit.Case, async: true
   doctest Resty.Resource
   alias Fakes.Post
+  alias Fakes.UuidResource
   alias Fakes.JsonExtensionResource
   alias Resty.Resource
 
@@ -28,6 +29,13 @@ defmodule Resty.ResourceTest do
     assert cloned.id == nil
     assert cloned |> Resource.new?()
     assert cloned.name == original.name
+  end
+
+  test "Primary key is cleared when clonning" do
+    original = UuidResource.build(uuid: "hello")
+    cloned = original |> Resource.clone()
+
+    assert cloned.uuid == nil
   end
 
   test "The resource holds data about its persisted state" do
@@ -59,11 +67,13 @@ defmodule Resty.ResourceTest do
     # url_for/1
     assert "site.tld/posts" == Post |> Resource.url_for()
     assert "site.tld/posts/1" == %Post{id: 1} |> Resource.url_for()
+    assert "site.tld/posts/uuid" == %UuidResource{uuid: "uuid"} |> Resource.url_for()
 
     # url_for/2
     assert "site.tld/posts/1" == Post |> Resource.url_for(1)
     assert "site.tld/posts?key=value" == Post |> Resource.url_for(key: "value")
     assert "site.tld/posts/1?key=value" == %Post{id: 1} |> Resource.url_for(key: "value")
+    assert "site.tld/posts/uuid?key=value" == %UuidResource{uuid: "uuid"} |> Resource.url_for(key: "value")
 
     # url_for/3
     assert "site.tld/posts/1?key=value" == Post |> Resource.url_for(1, key: "value")

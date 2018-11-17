@@ -30,7 +30,7 @@ defmodule Post do
   set_site("site.tld")
   set_resource_path("/posts")
 
-  define_attributes([:id, :name, :body])
+  define_attributes([:name, :body])
 end
 
 {:ok, post} = Resty.Repo.find(Post, 1)

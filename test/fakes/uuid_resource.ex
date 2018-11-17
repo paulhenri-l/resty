@@ -1,4 +1,4 @@
-defmodule Fakes.Post do
+defmodule Fakes.UuidResource do
   use Resty.Resource.Base
 
   @moduledoc false
@@ -6,6 +6,5 @@ defmodule Fakes.Post do
   set_site("site.tld")
   set_resource_path("/posts")
   add_header(:Custom, "hello")
-
-  define_attributes([:name])
+  set_primary_key(:uuid)
 end

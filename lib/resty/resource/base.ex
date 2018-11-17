@@ -20,9 +20,15 @@ defmodule Resty.Resource.Base do
     set_site("site.tld")
     set_resource_path("/posts")
 
-    define_attributes([:id, :name])
+    define_attributes([:name])
   end
   ```
+
+  ### Primary key
+
+  By default resty resources have a primary key attriubute that defaults to
+  `:id`. If you want to use another field as the primary key you can set it
+  thanks to the `set_primary_key/1` macro.
 
   ### Attributes
 
@@ -164,7 +170,9 @@ defmodule Resty.Resource.Base do
 
   defmacro __before_compile__(_env) do
     quote do
-      defstruct @attributes ++ [__persisted__: false]
+      @known_attributes [@primary_key] ++ @attributes
+
+      defstruct @known_attributes ++ [__persisted__: false]
 
       @doc false
       def site, do: @site
@@ -176,7 +184,7 @@ defmodule Resty.Resource.Base do
       def resource_path, do: @resource_path
 
       @doc false
-      def known_attributes, do: @attributes
+      def known_attributes, do: @known_attributes
 
       @doc false
       def serializer, do: {@serializer, @serializer_params}

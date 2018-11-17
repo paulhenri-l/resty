@@ -80,18 +80,19 @@ defmodule Resty.Repo do
     resource |> save()
   end
 
-  def save!(resource), do: save!(resource.__struct__, resource)
-
-  def save!(resource_module, resource) do
-    case save(resource_module, resource) do
+  def save!(resource) do
+    case save(resource) do
       {:ok, response} -> response
       {:error, error} -> raise error
     end
   end
 
-  def save(resource), do: save(resource.__struct__, resource)
+  def save(resource) do
+    id = Map.get(resource, resource.__struct__.primary_key())
+    save(resource, id)
+  end
 
-  def save(resource_module, resource = %{id: nil}) do
+  defp save(resource = %{__struct__: resource_module}, nil) do
     resource = resource |> Serializer.serialize()
 
     request = %Request{
@@ -107,7 +108,7 @@ defmodule Resty.Repo do
     end
   end
 
-  def save(resource_module, resource = %{id: id}) do
+  defp save(resource = %{__struct__: resource_module}, id) do
     resource = resource |> Serializer.serialize()
 
     request = %Request{
@@ -123,19 +124,23 @@ defmodule Resty.Repo do
     end
   end
 
-  def delete!(resource), do: delete!(resource.__struct__, resource)
-
-  def delete!(resource_module, resource) do
-    case delete(resource_module, resource) do
+  def delete!(resource) do
+    case delete(resource) do
       {:ok, response} -> response
       {:error, error} -> raise error
     end
   end
 
-  def delete(resource), do: delete(resource.__struct__, resource)
+  def delete!(resource_module, id) do
+    case delete(resource_module, id) do
+      {:ok, response} -> response
+      {:error, error} -> raise error
+    end
+  end
 
-  def delete(resource_module, %{id: id}) do
-    delete(resource_module, id)
+  def delete(resource) do
+    id = Map.get(resource, resource.__struct__.primary_key())
+    delete(resource.__struct__, id)
   end
 
   def delete(resource_module, id) do
@@ -151,7 +156,10 @@ defmodule Resty.Repo do
     end
   end
 
-  def exists?(resource), do: exists?(resource.__struct__, resource.id)
+  def exists?(resource) do
+    id = Map.get(resource, resource.__struct__.primary_key())
+    exists?(resource.__struct__, id)
+  end
 
   def exists?(resource_module, resource_id) do
     case find(resource_module, resource_id) do
@@ -161,6 +169,13 @@ defmodule Resty.Repo do
     end
   end
 
-  def reload(resource), do: find(resource.__struct__, resource.id)
-  def reload!(resource), do: find!(resource.__struct__, resource.id)
+  def reload(resource) do
+    id = Map.get(resource, resource.__struct__.primary_key())
+    find(resource.__struct__, id)
+  end
+
+  def reload!(resource) do
+    id = Map.get(resource, resource.__struct__.primary_key())
+    find!(resource.__struct__, id)
+  end
 end
