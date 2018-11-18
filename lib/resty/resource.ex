@@ -4,6 +4,23 @@ defmodule Resty.Resource do
   structs are created thanks to the `Resty.Resource.Base` module.
   """
 
+  @typedoc """
+  A resource struct (also called a resource).
+  """
+  @type t() :: struct()
+
+  @typedoc """
+  A resource module.
+
+  For the resource `%Post{}` the resource module would be `Post`
+  """
+  @type mod() :: module()
+
+  @typedoc """
+  A resource primary key.
+  """
+  @type primary_key() :: any()
+
   @doc """
   Clone the given resource
 
