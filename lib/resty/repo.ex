@@ -10,17 +10,21 @@ defmodule Resty.Repo do
   alias Resty.Connection
   alias Resty.Serializer
 
+  def first!(resource_module), do: find!(resource_module, :first)
   def first(resource_module), do: find(resource_module, :first)
 
-  def first!(resource_module), do: find!(resource_module, :first)
-
+  def last!(resource_module), do: find!(resource_module, :last)
   def last(resource_module), do: find(resource_module, :last)
 
-  def last!(resource_module), do: find!(resource_module, :last)
-
+  def all!(resource_module), do: find!(resource_module, :all)
   def all(resource_module), do: find(resource_module, :all)
 
-  def all!(resource_module), do: find!(resource_module, :all)
+  def find!(resource_module, id) do
+    case find(resource_module, id) do
+      {:ok, response} -> response
+      {:error, error} -> raise error
+    end
+  end
 
   def find(resource_module, :first) do
     case find(resource_module, :all) do
@@ -64,16 +68,15 @@ defmodule Resty.Repo do
     end
   end
 
-  def find!(resource_module, id) do
-    case find(resource_module, id) do
+  def update_attribute!(resource, key, value), do: update_attributes!(resource, [{key, value}])
+  def update_attribute(resource, key, value), do: update_attributes(resource, [{key, value}])
+
+  def update_attributes!(resource, attributes) do
+    case update_attributes(resource, attributes) do
       {:ok, response} -> response
       {:error, error} -> raise error
     end
   end
-
-  def update_attribute(resource, key, value), do: update_attributes(resource, [{key, value}])
-
-  def update_attribute!(resource, key, value), do: update_attributes!(resource, [{key, value}])
 
   def update_attributes(resource, [{key, value} | next]) do
     Map.put(resource, key, value) |> update_attributes(next)
@@ -84,8 +87,8 @@ defmodule Resty.Repo do
     resource |> save()
   end
 
-  def update_attributes!(resource, attributes) do
-    case update_attributes(resource, attributes) do
+  def save!(resource) do
+    case save(resource) do
       {:ok, response} -> response
       {:error, error} -> raise error
     end
@@ -128,8 +131,15 @@ defmodule Resty.Repo do
     end
   end
 
-  def save!(resource) do
-    case save(resource) do
+  def delete!(resource) do
+    case delete(resource) do
+      {:ok, response} -> response
+      {:error, error} -> raise error
+    end
+  end
+
+  def delete!(resource_module, id) do
+    case delete(resource_module, id) do
       {:ok, response} -> response
       {:error, error} -> raise error
     end
@@ -153,20 +163,6 @@ defmodule Resty.Repo do
     end
   end
 
-  def delete!(resource) do
-    case delete(resource) do
-      {:ok, response} -> response
-      {:error, error} -> raise error
-    end
-  end
-
-  def delete!(resource_module, id) do
-    case delete(resource_module, id) do
-      {:ok, response} -> response
-      {:error, error} -> raise error
-    end
-  end
-
   def exists?(resource) do
     id = Map.get(resource, resource.__struct__.primary_key())
     exists?(resource.__struct__, id)
@@ -180,13 +176,13 @@ defmodule Resty.Repo do
     end
   end
 
-  def reload(resource) do
-    id = Map.get(resource, resource.__struct__.primary_key())
-    find(resource.__struct__, id)
-  end
-
   def reload!(resource) do
     id = Map.get(resource, resource.__struct__.primary_key())
     find!(resource.__struct__, id)
+  end
+
+  def reload(resource) do
+    id = Map.get(resource, resource.__struct__.primary_key())
+    find(resource.__struct__, id)
   end
 end
