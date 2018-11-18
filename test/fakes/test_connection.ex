@@ -36,6 +36,10 @@ defmodule Fakes.TestConnection do
     {:ok, TestDB.delete(Post, id)}
   end
 
+  def send(%{url: "site.tld/empty"}, _) do
+    {:ok, "[]"}
+  end
+
   def send(%{url: "site.tld/bad-request" <> _}, _) do
     {:error, Resty.Error.BadRequest.new(message: "Bad request")}
   end

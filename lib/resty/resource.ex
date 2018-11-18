@@ -123,7 +123,8 @@ defmodule Resty.Resource do
   "site.tld/posts/slug?key=value"
   ```
   """
-  def url_for(resource_module, resource_id, params) when is_atom(resource_module) and is_list(params) do
+  def url_for(resource_module, resource_id, params)
+      when is_atom(resource_module) and is_list(params) do
     Resty.Resource.UrlBuilder.build(resource_module, resource_id, params)
   end
 end

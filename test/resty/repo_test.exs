@@ -7,9 +7,11 @@ defmodule Resty.RepoTest do
   alias Fakes.InvalidResource
   alias Fakes.NotFoundResource
   alias Fakes.BadRequestResource
+  alias Fakes.EmptyResource
 
   test "first :ok" do
     assert {:ok, %Post{id: 1}} = Repo.first(Post)
+    assert {:ok, nil} == Repo.first(EmptyResource)
   end
 
   test "first :error" do
@@ -18,6 +20,7 @@ defmodule Resty.RepoTest do
 
   test "first! ok" do
     assert %Post{id: 1} = Repo.first!(Post)
+    assert nil == Repo.first!(EmptyResource)
   end
 
   test "first! error" do
@@ -28,6 +31,7 @@ defmodule Resty.RepoTest do
 
   test "last :ok" do
     assert {:ok, %Post{}} = Repo.last(Post)
+    assert {:ok, nil} == Repo.last(EmptyResource)
   end
 
   test "last :error" do
@@ -36,6 +40,7 @@ defmodule Resty.RepoTest do
 
   test "last! ok" do
     assert %Post{} = Repo.last!(Post)
+    assert nil == Repo.last!(EmptyResource)
   end
 
   test "last! error" do
@@ -67,6 +72,10 @@ defmodule Resty.RepoTest do
     assert {:ok, %Post{id: 1}} = Repo.find(Post, :first)
     assert {:ok, %Post{}} = Repo.find(Post, :last)
     assert {:ok, [%Post{id: 1} | _]} = Repo.find(Post, :all)
+
+    assert {:ok, nil} == Repo.find(EmptyResource, :first)
+    assert {:ok, nil} == Repo.find(EmptyResource, :last)
+    assert {:ok, []} == Repo.find(EmptyResource, :all)
   end
 
   test "find :error" do
@@ -81,6 +90,10 @@ defmodule Resty.RepoTest do
     assert %Post{id: 1} = Repo.find!(Post, :first)
     assert %Post{} = Repo.find!(Post, :last)
     assert [%Post{id: 1} | _] = Repo.find!(Post, :all)
+
+    assert nil == Repo.find!(EmptyResource, :first)
+    assert nil == Repo.find!(EmptyResource, :last)
+    assert [] == Repo.find!(EmptyResource, :all)
   end
 
   test "find! raise" do

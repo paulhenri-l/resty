@@ -35,7 +35,7 @@ and run `mix deps.get`.
 ## Configuration
 
 Out of the box Resty works without needing you to configure anything. But if
-you want to change the defaults you can do in your config.exs file.
+you want to change the defaults you can do it in your config.exs file.
 Configurable options can be found in the [documentation](https://hexdocs.pm/resty/Resty.html).
 
 ## Usage

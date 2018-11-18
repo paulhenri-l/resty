@@ -73,7 +73,9 @@ defmodule Resty.ResourceTest do
     assert "site.tld/posts/1" == Post |> Resource.url_for(1)
     assert "site.tld/posts?key=value" == Post |> Resource.url_for(key: "value")
     assert "site.tld/posts/1?key=value" == %Post{id: 1} |> Resource.url_for(key: "value")
-    assert "site.tld/posts/uuid?key=value" == %UuidResource{uuid: "uuid"} |> Resource.url_for(key: "value")
+
+    assert "site.tld/posts/uuid?key=value" ==
+             %UuidResource{uuid: "uuid"} |> Resource.url_for(key: "value")
 
     # url_for/3
     assert "site.tld/posts/1?key=value" == Post |> Resource.url_for(1, key: "value")
