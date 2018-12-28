@@ -36,7 +36,8 @@ defmodule Resty.Repo do
     end
   end
 
-  @spec last(Resty.Resource.mod()) :: {:ok, nil} | {:ok, Resty.Resource.t()} | {:error, Exception.t()}
+  @spec last(Resty.Resource.mod()) ::
+          {:ok, nil} | {:ok, Resty.Resource.t()} | {:error, Exception.t()}
   def last(resource_module) do
     case all(resource_module) do
       {:error, _} = error -> error
@@ -129,7 +130,7 @@ defmodule Resty.Repo do
     end
   end
 
-  @spec save(Resty.Resource.t()) :: {:ok, Resty.Resource.t()} | {:error, nil}
+  @spec save(Resty.Resource.t()) :: {:ok, Resty.Resource.t()} | {:error, Exception.t()}
   def save(resource) do
     id = Map.get(resource, resource.__struct__.primary_key())
     save(resource, id)
