@@ -71,29 +71,24 @@ defmodule Resty.RepoTest do
     assert {:ok, %Post{id: 1}} = Repo.find(Post, 1)
     assert {:ok, %Post{id: 1}} = Repo.find(Post, :first)
     assert {:ok, %Post{}} = Repo.find(Post, :last)
-    assert {:ok, [%Post{id: 1} | _]} = Repo.find(Post, :all)
 
     assert {:ok, nil} == Repo.find(EmptyResource, :first)
     assert {:ok, nil} == Repo.find(EmptyResource, :last)
-    assert {:ok, []} == Repo.find(EmptyResource, :all)
   end
 
   test "find :error" do
     assert {:error, %Error.ResourceNotFound{}} = Repo.find(NotFoundResource, 1)
     assert {:error, %Error.ResourceNotFound{}} = Repo.find(NotFoundResource, :first)
     assert {:error, %Error.ResourceNotFound{}} = Repo.find(NotFoundResource, :last)
-    assert {:error, %Error.ResourceNotFound{}} = Repo.find(NotFoundResource, :all)
   end
 
   test "find! ok" do
     assert %Post{id: 1} = Repo.find!(Post, 1)
     assert %Post{id: 1} = Repo.find!(Post, :first)
     assert %Post{} = Repo.find!(Post, :last)
-    assert [%Post{id: 1} | _] = Repo.find!(Post, :all)
 
     assert nil == Repo.find!(EmptyResource, :first)
     assert nil == Repo.find!(EmptyResource, :last)
-    assert [] == Repo.find!(EmptyResource, :all)
   end
 
   test "find! raise" do
@@ -107,10 +102,6 @@ defmodule Resty.RepoTest do
 
     assert_raise Error.ResourceNotFound, fn ->
       Repo.find!(NotFoundResource, :last)
-    end
-
-    assert_raise Error.ResourceNotFound, fn ->
-      Repo.find!(NotFoundResource, :all)
     end
   end
 

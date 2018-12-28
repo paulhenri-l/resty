@@ -7,7 +7,7 @@ defmodule Resty.Repo do
   @typedoc """
   Special values used in order to make find behave differently.
   """
-  @type special_find_key() :: :first | :last | :all
+  @type special_find_key() :: :first | :last
 
   alias Resty.Auth
   alias Resty.Request
@@ -33,12 +33,28 @@ defmodule Resty.Repo do
   Same as `all/1` but raise in case of error.
   """
   @spec all!(Resty.Resource.mod()) :: [Resty.Resource.t()]
-  def all!(module), do: find!(module, :all)
+  def all!(module) do
+    case all(module) do
+      {:ok, response} -> response
+      {:error, error} -> raise error
+    end
+  end
 
   @doc """
   """
   @spec all(Resty.Resource.mod()) :: {:ok, [Resty.Resource.t()]} | {:error, Exception.t()}
-  def all(module), do: find(module, :all)
+  def all(module) do
+    request = %Request{
+      method: :get,
+      url: Resource.url_for(module),
+      headers: module.headers()
+    }
+
+    case request |> Auth.authenticate(module) |> Connection.send(module) do
+      {:ok, response} -> {:ok, Serializer.deserialize(response, module)}
+      {:error, _} = error -> error
+    end
+  end
 
   @spec find!(Resty.Resource.mod(), Resty.Resource.primary_key()) :: Resty.Resource.t() | nil
   def find!(resource_module, id) do
@@ -51,7 +67,7 @@ defmodule Resty.Repo do
   @spec find(Resty.Resource.mod(), Resty.Resource.primary_key() | special_find_key()) ::
           {:ok, nil} | {:ok, Resty.Resource.t()} | {:error, Exception.t()}
   def find(resource_module, :first) do
-    case find(resource_module, :all) do
+    case all(resource_module) do
       {:error, _} = error -> error
       {:ok, []} -> {:ok, nil}
       {:ok, [first | _]} -> {:ok, first}
@@ -59,23 +75,10 @@ defmodule Resty.Repo do
   end
 
   def find(resource_module, :last) do
-    case find(resource_module, :all) do
+    case all(resource_module) do
       {:error, _} = error -> error
       {:ok, []} -> {:ok, nil}
       {:ok, collection} -> {:ok, List.last(collection)}
-    end
-  end
-
-  def find(resource_module, :all) do
-    request = %Request{
-      method: :get,
-      url: Resource.url_for(resource_module),
-      headers: resource_module.headers()
-    }
-
-    case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
-      {:ok, response} -> {:ok, Serializer.deserialize(response, resource_module)}
-      {:error, _} = error -> error
     end
   end
 
