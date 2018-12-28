@@ -38,8 +38,8 @@ defmodule Resty.Repo do
 
   @spec last(Resty.Resource.mod()) ::
           {:ok, nil} | {:ok, Resty.Resource.t()} | {:error, Exception.t()}
-  def last(resource_module) do
-    case all(resource_module) do
+  def last(module) do
+    case all(module) do
       {:error, _} = error -> error
       {:ok, []} -> {:ok, nil}
       {:ok, collection} -> {:ok, List.last(collection)}
@@ -74,8 +74,8 @@ defmodule Resty.Repo do
   end
 
   @spec find!(Resty.Resource.mod(), Resty.Resource.primary_key()) :: Resty.Resource.t() | nil
-  def find!(resource_module, id) do
-    case find(resource_module, id) do
+  def find!(module, id) do
+    case find(module, id) do
       {:ok, response} -> response
       {:error, error} -> raise error
     end
@@ -83,15 +83,15 @@ defmodule Resty.Repo do
 
   @spec find(Resty.Resource.mod(), Resty.Resource.primary_key()) ::
           {:ok, nil} | {:ok, Resty.Resource.t()} | {:error, Exception.t()}
-  def find(resource_module, id) do
+  def find(module, id) do
     request = %Request{
       method: :get,
-      url: Resource.url_for(resource_module, id),
-      headers: resource_module.headers()
+      url: Resource.url_for(module, id),
+      headers: module.headers()
     }
 
-    case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
-      {:ok, response} -> {:ok, Serializer.deserialize(response, resource_module)}
+    case request |> Auth.authenticate(module) |> Connection.send(module) do
+      {:ok, response} -> {:ok, Serializer.deserialize(response, module)}
       {:error, _} = error -> error
     end
   end
@@ -136,34 +136,34 @@ defmodule Resty.Repo do
     save(resource, id)
   end
 
-  defp save(resource = %{__struct__: resource_module}, nil) do
+  defp save(resource = %{__struct__: module}, nil) do
     resource = resource |> Serializer.serialize()
 
     request = %Request{
       method: :post,
-      url: Resource.url_for(resource_module),
-      headers: resource_module.headers(),
+      url: Resource.url_for(module),
+      headers: module.headers(),
       body: resource
     }
 
-    case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
-      {:ok, response} -> {:ok, Serializer.deserialize(response, resource_module)}
+    case request |> Auth.authenticate(module) |> Connection.send(module) do
+      {:ok, response} -> {:ok, Serializer.deserialize(response, module)}
       {:error, _} = error -> error
     end
   end
 
-  defp save(resource = %{__struct__: resource_module}, id) do
+  defp save(resource = %{__struct__: module}, id) do
     resource = resource |> Serializer.serialize()
 
     request = %Request{
       method: :put,
-      url: Resource.url_for(resource_module, id),
-      headers: resource_module.headers(),
+      url: Resource.url_for(module, id),
+      headers: module.headers(),
       body: resource
     }
 
-    case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
-      {:ok, response} -> {:ok, Serializer.deserialize(response, resource_module)}
+    case request |> Auth.authenticate(module) |> Connection.send(module) do
+      {:ok, response} -> {:ok, Serializer.deserialize(response, module)}
       {:error, _} = error -> error
     end
   end
@@ -177,8 +177,8 @@ defmodule Resty.Repo do
   end
 
   @spec delete!(Resty.Resource.mod(), Resty.Resource.primary_key()) :: true
-  def delete!(resource_module, id) do
-    case delete(resource_module, id) do
+  def delete!(module, id) do
+    case delete(module, id) do
       {:ok, response} -> response
       {:error, error} -> raise error
     end
@@ -192,14 +192,14 @@ defmodule Resty.Repo do
 
   @spec delete(Resty.Resource.mod(), Resty.Resource.primary_key()) ::
           {:ok, true} | {:error, Exception.t()}
-  def delete(resource_module, id) do
+  def delete(module, id) do
     request = %Request{
       method: :delete,
-      url: Resource.url_for(resource_module, id),
-      headers: resource_module.headers()
+      url: Resource.url_for(module, id),
+      headers: module.headers()
     }
 
-    case request |> Auth.authenticate(resource_module) |> Connection.send(resource_module) do
+    case request |> Auth.authenticate(module) |> Connection.send(module) do
       {:ok, _} -> {:ok, true}
       {:error, _} = error -> error
     end
@@ -213,8 +213,8 @@ defmodule Resty.Repo do
 
   @spec exists?(Resty.Resource.mod(), Resty.Resource.primary_key()) ::
           {:ok, boolean()} | {:error, Exception.t()}
-  def exists?(resource_module, resource_id) do
-    case find(resource_module, resource_id) do
+  def exists?(module, resource_id) do
+    case find(module, resource_id) do
       {:ok, _} -> {:ok, true}
       {:error, %Resty.Error.ResourceNotFound{}} -> {:ok, false}
       {:error, _} = error -> error
