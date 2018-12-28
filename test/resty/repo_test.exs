@@ -69,30 +69,19 @@ defmodule Resty.RepoTest do
 
   test "find :ok" do
     assert {:ok, %Post{id: 1}} = Repo.find(Post, 1)
-    assert {:ok, %Post{}} = Repo.find(Post, :last)
-
-    assert {:ok, nil} == Repo.find(EmptyResource, :last)
   end
 
   test "find :error" do
     assert {:error, %Error.ResourceNotFound{}} = Repo.find(NotFoundResource, 1)
-    assert {:error, %Error.ResourceNotFound{}} = Repo.find(NotFoundResource, :last)
   end
 
   test "find! ok" do
     assert %Post{id: 1} = Repo.find!(Post, 1)
-    assert %Post{} = Repo.find!(Post, :last)
-
-    assert nil == Repo.find!(EmptyResource, :last)
   end
 
   test "find! raise" do
     assert_raise Error.ResourceNotFound, fn ->
       Repo.find!(NotFoundResource, 1)
-    end
-
-    assert_raise Error.ResourceNotFound, fn ->
-      Repo.find!(NotFoundResource, :last)
     end
   end
 

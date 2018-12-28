@@ -4,11 +4,6 @@ defmodule Resty.Repo do
   responses to resource structs.
   """
 
-  @typedoc """
-  Special values used in order to make find behave differently.
-  """
-  @type special_find_key() :: :last
-
   alias Resty.Auth
   alias Resty.Request
   alias Resty.Resource
@@ -34,11 +29,21 @@ defmodule Resty.Repo do
   end
 
   @spec last!(Resty.Resource.mod()) :: Resty.Resource.t() | nil
-  def last!(resource_module), do: find!(resource_module, :last)
+  def last!(module) do
+    case last(module) do
+      {:ok, response} -> response
+      {:error, error} -> raise error
+    end
+  end
 
-  @spec last(Resty.Resource.mod()) ::
-          {:ok, nil} | {:ok, Resty.Resource.t()} | {:error, Exception.t()}
-  def last(resource_module), do: find(resource_module, :last)
+  @spec last(Resty.Resource.mod()) :: {:ok, nil} | {:ok, Resty.Resource.t()} | {:error, Exception.t()}
+  def last(resource_module) do
+    case all(resource_module) do
+      {:error, _} = error -> error
+      {:ok, []} -> {:ok, nil}
+      {:ok, collection} -> {:ok, List.last(collection)}
+    end
+  end
 
   @doc """
   Same as `all/1` but raise in case of error.
@@ -75,16 +80,8 @@ defmodule Resty.Repo do
     end
   end
 
-  @spec find(Resty.Resource.mod(), Resty.Resource.primary_key() | special_find_key()) ::
+  @spec find(Resty.Resource.mod(), Resty.Resource.primary_key()) ::
           {:ok, nil} | {:ok, Resty.Resource.t()} | {:error, Exception.t()}
-  def find(resource_module, :last) do
-    case all(resource_module) do
-      {:error, _} = error -> error
-      {:ok, []} -> {:ok, nil}
-      {:ok, collection} -> {:ok, List.last(collection)}
-    end
-  end
-
   def find(resource_module, id) do
     request = %Request{
       method: :get,
