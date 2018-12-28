@@ -7,7 +7,7 @@ defmodule Resty.Repo do
   @typedoc """
   Special values used in order to make find behave differently.
   """
-  @type special_find_key() :: :first | :last
+  @type special_find_key() :: :last
 
   alias Resty.Auth
   alias Resty.Request
@@ -16,11 +16,22 @@ defmodule Resty.Repo do
   alias Resty.Serializer
 
   @spec first!(Resty.Resource.mod()) :: Resty.Resource.t() | nil
-  def first!(resource_module), do: find!(resource_module, :first)
+  def first!(module) do
+    case first(module) do
+      {:ok, response} -> response
+      {:error, error} -> raise error
+    end
+  end
 
   @spec first(Resty.Resource.mod()) ::
           {:ok, nil} | {:ok, Resty.Resource.t()} | {:error, Exception.t()}
-  def first(resource_module), do: find(resource_module, :first)
+  def first(module) do
+    case all(module) do
+      {:error, _} = error -> error
+      {:ok, []} -> {:ok, nil}
+      {:ok, [first | _]} -> {:ok, first}
+    end
+  end
 
   @spec last!(Resty.Resource.mod()) :: Resty.Resource.t() | nil
   def last!(resource_module), do: find!(resource_module, :last)
@@ -66,14 +77,6 @@ defmodule Resty.Repo do
 
   @spec find(Resty.Resource.mod(), Resty.Resource.primary_key() | special_find_key()) ::
           {:ok, nil} | {:ok, Resty.Resource.t()} | {:error, Exception.t()}
-  def find(resource_module, :first) do
-    case all(resource_module) do
-      {:error, _} = error -> error
-      {:ok, []} -> {:ok, nil}
-      {:ok, [first | _]} -> {:ok, first}
-    end
-  end
-
   def find(resource_module, :last) do
     case all(resource_module) do
       {:error, _} = error -> error
