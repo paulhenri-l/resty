@@ -59,6 +59,7 @@ defmodule Resty.Resource.Base do
 
       Module.register_attribute(__MODULE__, :attributes, accumulate: true)
       Module.register_attribute(__MODULE__, :headers, accumulate: true)
+      Module.register_attribute(__MODULE__, :relations, accumulate: true)
       Module.put_attribute(__MODULE__, :site, Resty.default_site())
       Module.put_attribute(__MODULE__, :resource_path, "")
       Module.put_attribute(__MODULE__, :primary_key, :id)
@@ -75,8 +76,6 @@ defmodule Resty.Resource.Base do
 
   @doc """
   Define the given attributes on the resource struct.
-
-  *I'll add support for default values.*
   """
   defmacro define_attributes(attributes) when is_list(attributes) do
     quote do
@@ -204,12 +203,13 @@ defmodule Resty.Resource.Base do
       @doc false
       def auth, do: {@auth, @auth_params}
 
+      @doc false
+      def relations, do: @relations
+
       @doc """
       Create a new resource with the given attributes
       """
-      def build(attributes \\ []) do
-        __MODULE__ |> struct(attributes)
-      end
+      def build(attributes \\ []), do: Resty.Resource.Builder.build(__MODULE__, attributes)
     end
   end
 end

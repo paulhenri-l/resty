@@ -8,4 +8,6 @@ defmodule Fakes.Post do
   add_header(:Custom, "hello")
 
   define_attributes([:name])
+
+  # has_many(Fakes.Comment)
 end

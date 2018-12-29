@@ -5,7 +5,7 @@ defmodule Fakes.TestDB do
   @moduledoc false
   @initialDB %{
     Post => %{
-      :last_insterted_id => 1,
+      :last_insterted_id => 2,
       "1" => ~s({"id": 1, "name": "test1"}),
       "2" => ~s({"id": 1, "name": "test2"})
     }

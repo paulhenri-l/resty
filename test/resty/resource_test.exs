@@ -80,4 +80,8 @@ defmodule Resty.ResourceTest do
     # url_for/3
     assert "site.tld/posts/1?key=value" == Post |> Resource.url_for(1, key: "value")
   end
+
+  test "the resource has informations about relationhips" do
+    _relations = Post.relations()
+  end
 end
