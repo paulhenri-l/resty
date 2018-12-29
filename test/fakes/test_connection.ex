@@ -1,39 +1,45 @@
 defmodule Fakes.TestConnection do
-  alias Fakes.Post
   alias Fakes.TestDB
+
+  @resources [
+    {Fakes.Post, "posts"},
+    {Fakes.PostWithRelations, "posts-with-relations"}
+  ]
 
   @moduledoc false
 
-  def send(%{method: :get, url: "site.tld/posts"}, _) do
-    case TestDB.get(Post, :all) do
-      nil -> {:error, Resty.Error.ResourceNotFound.new()}
-      resource -> {:ok, resource}
+  for {module, path} <- @resources do
+    def send(%{method: :get, url: "site.tld/" <> unquote(path)}, _) do
+      case TestDB.get(unquote(module), :all) do
+        nil -> {:error, Resty.Error.ResourceNotFound.new()}
+        resource -> {:ok, resource}
+      end
     end
-  end
 
-  def send(%{method: :get, url: "site.tld/posts/" <> id}, _) do
-    case TestDB.get(Post, id) do
-      nil -> {:error, Resty.Error.ResourceNotFound.new()}
-      resource -> {:ok, resource}
+    def send(%{method: :get, url: "site.tld/" <> unquote(path) <> "/" <> id}, _) do
+      case TestDB.get(unquote(module), id) do
+        nil -> {:error, Resty.Error.ResourceNotFound.new()}
+        resource -> {:ok, resource}
+      end
     end
-  end
 
-  def send(%{method: :post, url: "site.tld/posts", body: body}, _) do
-    case TestDB.insert(Post, body) do
-      nil -> {:error, Resty.Error.ServerError.new()}
-      resource -> {:ok, resource}
+    def send(%{method: :post, url: "site.tld/" <> unquote(path), body: body}, _) do
+      case TestDB.insert(unquote(module), body) do
+        nil -> {:error, Resty.Error.ServerError.new()}
+        resource -> {:ok, resource}
+      end
     end
-  end
 
-  def send(%{method: :put, url: "site.tld/posts/" <> _id, body: body}, _) do
-    case TestDB.put(Post, body) do
-      nil -> {:error, Resty.Error.ServerError.new()}
-      resource -> {:ok, resource}
+    def send(%{method: :put, url: "site.tld/" <> unquote(path) <> "/" <> _id, body: body}, _) do
+      case TestDB.put(unquote(module), body) do
+        nil -> {:error, Resty.Error.ServerError.new()}
+        resource -> {:ok, resource}
+      end
     end
-  end
 
-  def send(%{method: :delete, url: "site.tld/posts/" <> id}, _) do
-    {:ok, TestDB.delete(Post, id)}
+    def send(%{method: :delete, url: "site.tld/" <> unquote(path) <> "/" <> id}, _) do
+      {:ok, TestDB.delete(unquote(module), id)}
+    end
   end
 
   def send(%{url: "site.tld/empty"}, _) do

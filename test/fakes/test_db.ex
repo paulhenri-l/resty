@@ -1,6 +1,7 @@
 defmodule Fakes.TestDB do
   use Agent
   alias Fakes.Post
+  alias Fakes.PostWithRelations
 
   @moduledoc false
   @initialDB %{
@@ -8,6 +9,10 @@ defmodule Fakes.TestDB do
       :last_insterted_id => 2,
       "1" => ~s({"id": 1, "name": "test1"}),
       "2" => ~s({"id": 1, "name": "test2"})
+    },
+    PostWithRelations => %{
+      :last_insterted_id => 1,
+      "1" => ~s({"id": 1, "body": "lorem", "author": {"id": 1, "name": "PH"}})
     }
   }
 

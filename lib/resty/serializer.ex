@@ -39,8 +39,6 @@ defmodule Resty.Serializer do
   end
 
   defp build(resource_module, data) do
-    data
-    |> Enum.concat(__persisted__: true)
-    |> resource_module.build()
+    resource_module.build(data, true)
   end
 end

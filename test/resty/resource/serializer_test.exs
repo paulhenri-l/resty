@@ -10,6 +10,7 @@ defmodule Resty.Resource.SerialierTest do
   """
 
   test "Serializing a resource" do
+    # I am not sure if the relations should be serialized.
     assert ~s({"id":1,"name":"test"}) == Post.build(id: 1, name: "test") |> Serializer.serialize()
   end
 

@@ -99,9 +99,9 @@ defmodule Resty.Repo do
 
   @spec find(Resty.Resource.mod(), Resty.Resource.primary_key()) ::
           {:ok, nil} | {:ok, Resty.Resource.t()} | {:error, Exception.t()}
-          @doc """
-          Return the matching resource for the given module and id or nil.
-          """
+  @doc """
+  Return the matching resource for the given module and id or nil.
+  """
   def find(module, id) do
     request = %Request{
       method: :get,
@@ -123,9 +123,9 @@ defmodule Resty.Repo do
 
   @spec update_attribute(Resty.Resource.t(), atom(), any()) ::
           {:ok, Resty.Resource.t()} | {:error, Exception.t()}
-          @doc """
-          Update the given resource's attribute.
-          """
+  @doc """
+  Update the given resource's attribute.
+  """
   def update_attribute(resource, key, value), do: update_attributes(resource, [{key, value}])
 
   @spec update_attributes!(Resty.Resource.t(), Keyword.t()) :: Resty.Resource.t()
@@ -141,9 +141,9 @@ defmodule Resty.Repo do
 
   @spec update_attributes(Resty.Resource.t(), Keyword.t()) ::
           {:ok, Resty.Resource.t()} | {:error, Exception.t()}
-          @doc """
-          Update the given resource with the given list of attributes.
-          """
+  @doc """
+  Update the given resource with the given list of attributes.
+  """
   def update_attributes(resource, [{key, value} | next]) do
     Map.put(resource, key, value) |> update_attributes(next)
   end
@@ -239,9 +239,9 @@ defmodule Resty.Repo do
 
   @spec delete(Resty.Resource.mod(), Resty.Resource.primary_key()) ::
           {:ok, true} | {:error, Exception.t()}
-          @doc """
-          Delete the resource matching the given module and id.
-          """
+  @doc """
+  Delete the resource matching the given module and id.
+  """
   def delete(module, id) do
     request = %Request{
       method: :delete,
