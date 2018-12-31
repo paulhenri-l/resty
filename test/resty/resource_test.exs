@@ -1,9 +1,6 @@
 defmodule Resty.ResourceTest do
   use ExUnit.Case, async: true
-  doctest Resty.Resource
-  alias Fakes.Post
-  alias Fakes.UuidResource
-  alias Fakes.JsonExtensionResource
+  # doctest Resty.Resource
   alias Resty.Resource
 
   @post_headers [
@@ -32,7 +29,8 @@ defmodule Resty.ResourceTest do
   end
 
   test "Primary key is cleared when clonning" do
-    original = UuidResource.build(uuid: "hello")
+    original = Admin.build(uuid: "hello")
+
     cloned = original |> Resource.clone()
 
     assert cloned.uuid == nil
@@ -47,7 +45,7 @@ defmodule Resty.ResourceTest do
   end
 
   test "The resource knows which connection to use and its params" do
-    assert {Fakes.TestConnection, []} = Post.connection()
+    assert {MockedConnection, []} = Post.connection()
   end
 
   test "The resource knows which auth to use and its params" do
@@ -60,30 +58,29 @@ defmodule Resty.ResourceTest do
 
   test "generate path to resource collection" do
     assert "site.tld/posts" == Post |> Resource.url_for()
-    assert "site.tld/with-extension.json" == JsonExtensionResource |> Resource.url_for()
+    assert "site.tld/admins.json" == Admin |> Resource.url_for()
   end
 
   test "generate path to specific resource" do
     # url_for/1
     assert "site.tld/posts" == Post |> Resource.url_for()
     assert "site.tld/posts/1" == %Post{id: 1} |> Resource.url_for()
-    assert "site.tld/posts/uuid" == %UuidResource{uuid: "uuid"} |> Resource.url_for()
+    assert "site.tld/admins/uuid.json" == %Admin{uuid: "uuid"} |> Resource.url_for()
 
     # url_for/2
     assert "site.tld/posts/1" == Post |> Resource.url_for(1)
     assert "site.tld/posts?key=value" == Post |> Resource.url_for(key: "value")
     assert "site.tld/posts/1?key=value" == %Post{id: 1} |> Resource.url_for(key: "value")
 
-    assert "site.tld/posts/uuid?key=value" ==
-             %UuidResource{uuid: "uuid"} |> Resource.url_for(key: "value")
+    assert "site.tld/admins/uuid.json?k=v" == %Admin{uuid: "uuid"} |> Resource.url_for(k: "v")
 
     # url_for/3
     assert "site.tld/posts/1?key=value" == Post |> Resource.url_for(1, key: "value")
   end
 
   test "the resource has informations about relationhips" do
-    post = Resty.Repo.find!(Fakes.PostWithRelations, 1)
+    # post = Resty.Repo.find!(Fakes.PostWithRelations, 1)
 
-    post.author |> IO.inspect()
+    # post.author |> IO.inspect()
   end
 end

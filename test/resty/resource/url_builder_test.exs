@@ -1,6 +1,5 @@
 defmodule Resty.Resource.UrlBuilderTest do
   use ExUnit.Case, async: true
-  alias Fakes.PrefixedResource, as: Comment
 
   test "Building complicated urls" do
     params = [post_id: "some-post-id", key: "value"]

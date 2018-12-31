@@ -1,69 +1,65 @@
 defmodule Resty.RepoTest do
   use ExUnit.Case, async: true
-
-  alias Fakes.Post
-  alias Resty.Error
   alias Resty.Repo
-  alias Fakes.InvalidResource
-  alias Fakes.NotFoundResource
-  alias Fakes.BadRequestResource
-  alias Fakes.EmptyResource
+  alias Resty.Error
 
   test "first :ok" do
     assert {:ok, %Post{id: 1}} = Repo.first(Post)
-    assert {:ok, nil} == Repo.first(EmptyResource)
+    assert {:ok, nil} == Repo.first(Subscriber)
   end
 
   test "first :error" do
-    assert {:error, %Error.ResourceNotFound{}} = Repo.first(NotFoundResource)
+    assert {:error, %Error.ResourceNotFound{}} = Repo.first(Like)
   end
 
   test "first! ok" do
     assert %Post{id: 1} = Repo.first!(Post)
-    assert nil == Repo.first!(EmptyResource)
+    assert nil == Repo.first!(Subscriber)
   end
 
   test "first! error" do
     assert_raise Error.ResourceNotFound, fn ->
-      Repo.first!(NotFoundResource)
+      Repo.first!(Like)
     end
   end
 
   test "last :ok" do
-    assert {:ok, %Post{}} = Repo.last(Post)
-    assert {:ok, nil} == Repo.last(EmptyResource)
+    assert {:ok, %Post{id: 3}} = Repo.last(Post)
+    assert {:ok, nil} == Repo.last(Subscriber)
   end
 
   test "last :error" do
-    assert {:error, %Error.ResourceNotFound{}} = Repo.last(NotFoundResource)
+    assert {:error, %Error.ResourceNotFound{}} = Repo.last(Like)
   end
 
   test "last! ok" do
-    assert %Post{} = Repo.last!(Post)
-    assert nil == Repo.last!(EmptyResource)
+    assert %Post{id: 3} = Repo.last!(Post)
+    assert nil == Repo.last!(Subscriber)
   end
 
   test "last! error" do
     assert_raise Error.ResourceNotFound, fn ->
-      Repo.last!(NotFoundResource)
+      Repo.last!(Like)
     end
   end
 
   test "all :ok" do
     assert {:ok, [%Post{id: 1} | _]} = Repo.all(Post)
+    assert {:ok, []} = Repo.all(Subscriber)
   end
 
   test "all :error" do
-    assert {:error, %Error.ResourceNotFound{}} = Repo.all(NotFoundResource)
+    assert {:error, %Error.ResourceNotFound{}} = Repo.all(Like)
   end
 
   test "all! ok" do
     assert [%Post{id: 1} | _] = Repo.all!(Post)
+    assert [] = Repo.all!(Subscriber)
   end
 
   test "all! error" do
     assert_raise Error.ResourceNotFound, fn ->
-      Repo.all!(NotFoundResource)
+      Repo.all!(Like)
     end
   end
 
@@ -72,7 +68,7 @@ defmodule Resty.RepoTest do
   end
 
   test "find :error" do
-    assert {:error, %Error.ResourceNotFound{}} = Repo.find(NotFoundResource, 1)
+    assert {:error, %Error.ResourceNotFound{}} = Repo.find(Subscriber, 1)
   end
 
   test "find! ok" do
@@ -81,157 +77,155 @@ defmodule Resty.RepoTest do
 
   test "find! raise" do
     assert_raise Error.ResourceNotFound, fn ->
-      Repo.find!(NotFoundResource, 1)
+      Repo.find!(Subscriber, 1)
     end
   end
 
   test "create :ok" do
-    post = Post.build()
+    post = Post.build(name: "name")
+
     {:ok, saved_post} = Repo.save(post)
-    {:ok, fetched_post} = Repo.find(Post, saved_post.id)
 
     assert post.name == saved_post.name
-    assert post.name == fetched_post.name
   end
 
   test "create :error" do
-    assert {:error, %Error.ResourceInvalid{}} = InvalidResource.build() |> Repo.save()
+    assert {:error, %Error.ResourceNotFound{}} = Like.build() |> Repo.save()
   end
 
   test "create! ok" do
-    post = Post.build()
+    post = Post.build(name: "name")
+
     saved_post = Repo.save!(post)
-    fetched_post = Repo.find!(Post, saved_post.id)
 
     assert post.name == saved_post.name
-    assert post.name == fetched_post.name
   end
 
   test "create! raise" do
-    assert_raise Error.ResourceInvalid, fn ->
-      InvalidResource.build() |> Repo.save!()
+    assert_raise Error.ResourceNotFound, fn ->
+      Like.build() |> Repo.save!()
     end
   end
 
   test "update :ok" do
-    {:ok, post} = Post.build() |> Repo.save()
-    %{post | name: "updated"} |> Repo.save()
-    {:ok, updated_post} = Repo.find(Post, post.id)
+    {:ok, post} = Repo.find(Post, 1)
+
+    {:ok, updated_post} = %{post | name: "updated"} |> Repo.save()
 
     assert "updated" == updated_post.name
   end
 
   test "update :error" do
-    assert {:error, %Error.ResourceNotFound{}} = NotFoundResource.build() |> Repo.save()
+    {:ok, post} = Repo.find(Post, 2)
+
+    assert {:error, %Error.ResourceInvalid{}} = post |> Repo.save()
   end
 
   test "update! ok" do
-    post = Post.build() |> Repo.save!()
-    %{post | name: "updated"} |> Repo.save!()
-    updated_post = Repo.find!(Post, post.id)
+    {:ok, post} = Repo.find(Post, 1)
+
+    updated_post = %{post | name: "updated"} |> Repo.save!()
 
     assert "updated" == updated_post.name
   end
 
   test "update! raise" do
-    assert_raise Error.ResourceNotFound, fn ->
-      NotFoundResource.build() |> Repo.save!()
+    assert_raise Error.ResourceInvalid, fn ->
+      {:ok, post} = Repo.find(Post, 2)
+
+      post |> Repo.save!()
     end
   end
 
   test "update_attribute :ok" do
-    {:ok, post} = Post.build() |> Repo.save()
-    {:ok, %Post{}} = Repo.update_attribute(post, :name, "updated")
-    {:ok, updated_post} = Repo.find(Post, post.id)
+    {:ok, post} = Repo.find(Post, 1)
+
+    {:ok, updated_post} = Repo.update_attribute(post, :name, "updated")
 
     assert "updated" == updated_post.name
   end
 
   test "update_attribute :error" do
-    assert {:error, %Error.ResourceNotFound{}} =
-             NotFoundResource.build()
-             |> Repo.update_attribute(:name, "hey!")
+    {:ok, post} = Repo.find(Post, 2)
+
+    update_result = post |> Repo.update_attribute(:name, "hey!")
+
+    assert {:error, %Error.ResourceInvalid{}} = update_result
   end
 
   test "update_attribute! ok" do
-    {:ok, post} = Post.build() |> Repo.save()
-    %Post{} = Repo.update_attribute!(post, :name, "updated")
-    {:ok, updated_post} = Repo.find(Post, post.id)
+    {:ok, post} = Repo.find(Post, 1)
+
+    updated_post = Repo.update_attribute!(post, :name, "updated")
 
     assert "updated" == updated_post.name
   end
 
   test "update_attribute! error" do
-    assert_raise Error.ResourceNotFound, fn ->
-      NotFoundResource.build() |> Repo.update_attribute!(:name, "Hey!")
+    assert_raise Error.ResourceInvalid, fn ->
+      {:ok, post} = Repo.find(Post, 2)
+
+      post |> Repo.update_attribute!(:name, "Hey!")
     end
   end
 
   test "update_attributes :ok" do
-    {:ok, post} = Post.build() |> Repo.save()
-    {:ok, %Post{}} = Repo.update_attributes(post, name: "updated")
-    {:ok, updated_post} = Repo.find(Post, post.id)
+    {:ok, post} = Repo.find(Post, 1)
+
+    {:ok, updated_post} = Repo.update_attributes(post, name: "updated")
 
     assert "updated" == updated_post.name
   end
 
   test "update_attributes :error" do
-    assert {:error, %Error.ResourceNotFound{}} =
-             NotFoundResource.build()
-             |> Repo.update_attributes(name: "hey!")
+    {:ok, post} = Repo.find(Post, 2)
+
+    update_result = post |> Repo.update_attributes(name: "hey!")
+
+    assert {:error, %Error.ResourceInvalid{}} = update_result
   end
 
   test "update_attributes! ok" do
-    {:ok, post} = Post.build() |> Repo.save()
-    %Post{} = Repo.update_attributes!(post, name: "updated")
-    {:ok, updated_post} = Repo.find(Post, post.id)
+    {:ok, post} = Repo.find(Post, 1)
+
+    updated_post = Repo.update_attributes!(post, name: "updated")
 
     assert "updated" == updated_post.name
   end
 
   test "update_attributes! error" do
-    assert_raise Error.ResourceNotFound, fn ->
-      NotFoundResource.build() |> Repo.update_attributes!(name: "Hey!")
+    assert_raise Error.ResourceInvalid, fn ->
+      {:ok, post} = Repo.find(Post, 2)
+
+      post |> Repo.update_attributes!(name: "Hey!")
     end
   end
 
   test "delete :ok" do
-    {:ok, post_1} = Post.build(name: "Hello from test") |> Repo.save()
-    {:ok, post_2} = Post.build(name: "Hello from test") |> Repo.save()
+    {:ok, post} = Repo.find(Post, 1)
 
-    assert {:ok, _} = Repo.delete(post_1)
-    assert {:error, %Resty.Error.ResourceNotFound{}} = Repo.find(Post, post_1.id)
-
-    assert {:ok, _} = Repo.delete(Post, post_2.id)
-    assert {:error, %Resty.Error.ResourceNotFound{}} = Repo.find(Post, post_2.id)
+    assert {:ok, true} = Repo.delete(post)
   end
 
   test "delete :error" do
-    assert {:error, %Error.ResourceNotFound{}} =
-             NotFoundResource.build()
-             |> Repo.delete()
+    {:ok, post} = Repo.find(Post, 2)
 
-    assert {:error, %Error.ResourceNotFound{}} = Repo.delete(NotFoundResource, 1)
+    delete_response = post |> Repo.delete()
+
+    assert {:error, %Error.ForbiddenAccess{}} = delete_response
   end
 
   test "delete! ok" do
-    {:ok, post_1} = Post.build() |> Repo.save()
-    {:ok, post_2} = Post.build() |> Repo.save()
+    {:ok, post} = Repo.find(Post, 1)
 
-    Repo.delete!(post_1)
-    Repo.delete!(Post, post_2.id)
-
-    assert {:error, %Resty.Error.ResourceNotFound{}} = Repo.find(Post, post_1.id)
-    assert {:error, %Resty.Error.ResourceNotFound{}} = Repo.find(Post, post_2.id)
+    assert true = Repo.delete!(post)
   end
 
   test "delete! raise" do
-    assert_raise Error.ResourceNotFound, fn ->
-      NotFoundResource.build() |> Repo.delete!()
-    end
+    assert_raise Error.ForbiddenAccess, fn ->
+      {:ok, post} = Repo.find(Post, 2)
 
-    assert_raise Error.ResourceNotFound, fn ->
-      Repo.delete!(NotFoundResource, 1)
+      Repo.delete!(post)
     end
   end
 
@@ -239,42 +233,43 @@ defmodule Resty.RepoTest do
     assert {:ok, true} = Repo.exists?(Post, 1)
     assert {:ok, true} = Post.build(id: 1) |> Repo.exists?()
 
-    assert {:ok, false} = Repo.exists?(NotFoundResource, 1)
-    assert {:ok, false} = NotFoundResource.build() |> Repo.exists?()
+    assert {:ok, false} = Repo.exists?(Subscriber, 1)
+    assert {:ok, false} = Subscriber.build(id: 1) |> Repo.exists?()
   end
 
   test "exists? :error" do
-    assert {:error, %Error.BadRequest{}} = Repo.exists?(BadRequestResource, 1)
-    assert {:error, %Error.BadRequest{}} = BadRequestResource.build() |> Repo.exists?()
+    assert {:error, %Error.ForbiddenAccess{}} = Repo.exists?(Admin, 1)
   end
 
   test "reload :ok" do
-    {:ok, initial_post} = Post.build() |> Repo.save()
+    {:ok, initial_post} = Repo.find(Post, 1)
 
-    Repo.update_attributes!(initial_post, name: "updated")
-    {:ok, reloaded_post} = Repo.reload(initial_post)
+    edited_post = %{initial_post | name: "changed"}
 
-    assert reloaded_post.name != initial_post.name
-    assert "updated" == reloaded_post.name
+    {:ok, reloaded_post} = Repo.reload(edited_post)
+
+    assert edited_post.name != initial_post.name
+    assert reloaded_post.name == initial_post.name
   end
 
   test "reload :error" do
-    assert {:error, %Error.ResourceNotFound{}} = NotFoundResource.build() |> Repo.reload()
+    assert {:error, %Error.ResourceNotFound{}} = Like.build(id: 1) |> Repo.reload()
   end
 
   test "reload! ok" do
-    {:ok, initial_post} = Post.build() |> Repo.save()
+    {:ok, initial_post} = Repo.find(Post, 1)
 
-    Repo.update_attributes!(initial_post, name: "updated")
-    reloaded_post = Repo.reload!(initial_post)
+    edited_post = %{initial_post | name: "changed"}
 
-    assert reloaded_post.name != initial_post.name
-    assert "updated" == reloaded_post.name
+    reloaded_post = Repo.reload!(edited_post)
+
+    assert edited_post.name != initial_post.name
+    assert reloaded_post.name == initial_post.name
   end
 
   test "reload! error" do
     assert_raise Error.ResourceNotFound, fn ->
-      NotFoundResource.build() |> Repo.reload!()
+      Like.build(id: 1) |> Repo.reload!()
     end
   end
 end

@@ -52,7 +52,6 @@ defmodule Resty.Resource.Base do
   defmacro __using__(_opts) do
     quote do
       import unquote(__MODULE__)
-      import Resty.Resource.Base
       @before_compile unquote(__MODULE__)
 
       @default_headers Resty.default_headers()

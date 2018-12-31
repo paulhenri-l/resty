@@ -11,7 +11,7 @@ defmodule RestyTest do
   end
 
   test "default connection" do
-    assert Fakes.TestConnection == Resty.default_connection()
+    assert MockedConnection == Resty.default_connection()
   end
 
   test "default serializer" do
