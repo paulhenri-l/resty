@@ -2,10 +2,10 @@ defmodule Resty.Resource.Builder do
   alias Resty.Resource.Attributes
   @moduledoc false
 
-  def build(module, attributes, persisted) do
+  def build(module, attributes, persisted \\ nil) do
     module
     |> struct(attributes)
-    |> init_relations(module.relations())
+    # |> init_relations(module.relations())
     |> set_persisted_state(persisted)
   end
 
@@ -26,6 +26,8 @@ defmodule Resty.Resource.Builder do
         init_relations(resource, next_relations)
     end
   end
+
+  defp set_persisted_state(resource, nil), do: resource
 
   defp set_persisted_state(resource, persisted) do
     Map.put(resource, :__persisted__, persisted)

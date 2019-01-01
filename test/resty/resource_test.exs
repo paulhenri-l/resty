@@ -20,7 +20,7 @@ defmodule Resty.ResourceTest do
   end
 
   test "The resource can be cloned" do
-    original = Post.build([id: 1, name: "Hey!"], true)
+    original = Post.build(id: 1, name: "Hey!", __persisted__: true)
     cloned = original |> Resource.clone()
 
     assert cloned.id == nil
@@ -40,8 +40,8 @@ defmodule Resty.ResourceTest do
     refute Post.build() |> Resource.persisted?()
     assert Post.build() |> Resource.new?()
 
-    assert Post.build([], true) |> Resource.persisted?()
-    refute Post.build([], true) |> Resource.new?()
+    assert Post.build(__persisted__: true) |> Resource.persisted?()
+    refute Post.build(__persisted__: true) |> Resource.new?()
   end
 
   test "The resource knows which connection to use and its params" do

@@ -39,6 +39,6 @@ defmodule Resty.Serializer do
   end
 
   defp build(resource_module, data) do
-    resource_module.build(data, true)
+    Resty.Resource.Builder.build(resource_module, data, true)
   end
 end

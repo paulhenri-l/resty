@@ -179,7 +179,7 @@ defmodule Resty.Resource.Base do
   defmacro has_one(name, module) do
     quote do
       Module.put_attribute(__MODULE__, :attributes, unquote(name))
-      @relations {unquote(name), unquote(module)}
+      @relations {:has_one, unquote(name), unquote(module)}
     end
   end
 
@@ -223,12 +223,10 @@ defmodule Resty.Resource.Base do
       def relations, do: @relations
 
       @doc """
-      Create a new resource with the given attributes
+      Create a new resource with the given attributes.
       """
-      def build(), do: Resty.Resource.Builder.build(__MODULE__, [], false)
-
-      def build(attributes, persisted \\ false) do
-        Resty.Resource.Builder.build(__MODULE__, attributes, persisted)
+      def build(attributes \\ []) do
+        Resty.Resource.Builder.build(__MODULE__, attributes)
       end
     end
   end
