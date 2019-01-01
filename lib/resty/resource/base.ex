@@ -58,7 +58,6 @@ defmodule Resty.Resource.Base do
 
       Module.register_attribute(__MODULE__, :attributes, accumulate: true)
       Module.register_attribute(__MODULE__, :headers, accumulate: true)
-      Module.register_attribute(__MODULE__, :relations, accumulate: true)
       Module.put_attribute(__MODULE__, :site, Resty.default_site())
       Module.put_attribute(__MODULE__, :resource_path, "")
       Module.put_attribute(__MODULE__, :primary_key, :id)
@@ -166,23 +165,6 @@ defmodule Resty.Resource.Base do
     quote(do: @default_headers(unquote(new_headers)))
   end
 
-  @spec has_one(atom(), Resty.Resource.mod()) :: any()
-  @doc """
-  Define a has_one relation on the resource.
-
-  ```
-  has_one(:post, Post)
-  ```
-
-  Now the post resource will be loaded under the `post` attribute.
-  """
-  defmacro has_one(name, module) do
-    quote do
-      Module.put_attribute(__MODULE__, :attributes, unquote(name))
-      @relations {:has_one, unquote(name), unquote(module)}
-    end
-  end
-
   defmacro __before_compile__(_env) do
     quote do
       @known_attributes [@primary_key] ++ @attributes
@@ -218,9 +200,6 @@ defmodule Resty.Resource.Base do
 
       @doc false
       def auth, do: {@auth, @auth_params}
-
-      @doc false
-      def relations, do: @relations
 
       @doc """
       Create a new resource with the given attributes.
