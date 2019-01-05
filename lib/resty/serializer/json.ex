@@ -23,11 +23,10 @@ defmodule Resty.Serializer.Json do
   """
 
   @doc false
-  def decode(json, known_attributes, _) do
+  def decode(json, _) do
     json
     |> do_decode()
     |> remove_root()
-    |> Resty.Resource.Attributes.remove_unknown_attributes(known_attributes)
   end
 
   defp do_decode(json) do

@@ -1,4 +1,6 @@
 defmodule Resty.Serializer do
+  alias Resty.Resource
+
   @moduledoc """
   This module is used by `Resty.Repo` in order to serialize and deserialize
   data sent and received from the web API.
@@ -16,7 +18,7 @@ defmodule Resty.Serializer do
   def deserialize(serialized, resource_module) do
     {implementation, params} = resource_module.serializer()
 
-    data = implementation.decode(serialized, resource_module.known_attributes(), params)
+    data = implementation.decode(serialized, params)
 
     build(resource_module, data)
   end
@@ -39,6 +41,7 @@ defmodule Resty.Serializer do
   end
 
   defp build(resource_module, data) do
-    Resty.Resource.Builder.build(resource_module, data, true)
+    Resource.Builder.build(resource_module, data)
+    |> Resource.mark_as_persisted()
   end
 end

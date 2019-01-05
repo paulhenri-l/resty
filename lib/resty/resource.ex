@@ -80,6 +80,19 @@ defmodule Resty.Resource do
   def persisted?(%{__persisted__: persisted}), do: persisted
 
   @doc """
+  Mark the given resource as persisted
+
+  iex> Post.build()
+  ...> |> Resty.Resource.mark_as_persisted()
+  ...> |> Resty.Resource.persisted?()
+  true
+  ```
+  """
+  def mark_as_persisted(resource) do
+    %{resource|__persisted__: true}
+  end
+
+  @doc """
   Build a URL to the resource.
 
   ```

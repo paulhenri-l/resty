@@ -6,14 +6,14 @@ defmodule Resty.Serializer.JsonTest do
     json_post = %{"post" => %{"id" => 1}} |> Jason.encode!()
     json_data = %{"data" => %{"id" => 1}} |> Jason.encode!()
 
-    assert %{id: 1} == Json.decode(json_post, [:id], [])
-    assert %{id: 1} == Json.decode(json_data, [:id], [])
+    assert %{"id" => 1} == Json.decode(json_post, [])
+    assert %{"id" => 1} == Json.decode(json_data, [])
   end
 
   test "When there is no root it also works" do
     json = %{"id" => 1} |> Jason.encode!()
 
-    assert %{id: 1} == Json.decode(json, [:id], [])
+    assert %{"id" => 1} == Json.decode(json, [])
   end
 
   test "Data can be encoded" do

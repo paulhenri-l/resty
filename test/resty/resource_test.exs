@@ -20,7 +20,7 @@ defmodule Resty.ResourceTest do
   end
 
   test "The resource can be cloned" do
-    original = Post.build(id: 1, name: "Hey!", __persisted__: true)
+    original = Post.build(id: 1, name: "Hey!") |> Resource.mark_as_persisted()
     cloned = original |> Resource.clone()
 
     assert cloned.id == nil
@@ -40,8 +40,8 @@ defmodule Resty.ResourceTest do
     refute Post.build() |> Resource.persisted?()
     assert Post.build() |> Resource.new?()
 
-    assert Post.build(__persisted__: true) |> Resource.persisted?()
-    refute Post.build(__persisted__: true) |> Resource.new?()
+    assert Post.build() |> Resource.mark_as_persisted() |> Resource.persisted?()
+    refute Post.build() |> Resource.mark_as_persisted() |> Resource.new?()
   end
 
   test "The resource knows which connection to use and its params" do
@@ -76,6 +76,12 @@ defmodule Resty.ResourceTest do
 
     # url_for/3
     assert "site.tld/posts/1?key=value" == Post |> Resource.url_for(1, key: "value")
+  end
+
+  test "the resource can be marked as persisted" do
+    assert Post.build()
+    |> Resource.mark_as_persisted()
+    |> Resource.persisted?()
   end
 
   test "the resource has informations about relationhips" do
