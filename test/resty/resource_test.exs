@@ -83,9 +83,4 @@ defmodule Resty.ResourceTest do
            |> Resource.mark_as_persisted()
            |> Resource.persisted?()
   end
-
-  test "the resource has informations about relationhips" do
-    Resty.Repo.find!(Post, 1) |> IO.inspect()
-    # Post.relations |> IO.inspect()
-  end
 end

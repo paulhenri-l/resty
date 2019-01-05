@@ -1,4 +1,6 @@
 defmodule Resty.Resource.Base do
+  alias Resty.Resource.Relations
+
   @moduledoc """
   This module is used to create **resource struct** that you'll then be able to
   use with `Resty.Repo` and `Resty.Resource`.
@@ -166,10 +168,14 @@ defmodule Resty.Resource.Base do
     quote(do: @default_headers(unquote(new_headers)))
   end
 
-  defmacro belongs_to(resource, key, foreign_key) do
+  defmacro belongs_to(resource, attribute_name, foreign_key) do
     quote do
       @attributes unquote(foreign_key)
-      @relations {:belongs_to, unquote(resource), unquote(key), unquote(foreign_key)}
+      @relations %Relations.BelongsTo{
+        related: unquote(resource),
+        attribute: unquote(attribute_name),
+        foreign_key: unquote(foreign_key)
+      }
     end
   end
 
