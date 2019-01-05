@@ -6,4 +6,6 @@ defmodule Post do
   add_header(:Custom, "hello")
 
   define_attributes([:name, :body])
+
+  belongs_to(Author, :author, :author_id)
 end

@@ -4,9 +4,11 @@
 defmodule MockedConnection do
   use Resty.Connection.Mock
 
-  @first_post %{id: 1, name: "First Post", body: "lorem ipsum"}
-  @second_post %{id: 2, name: "Second Post", body: "lorem ipsum"}
-  @third_post %{id: 3, name: "Third Post", body: "lorem ipsum"}
+  @ph %{id: 1, name: "PH"}
+
+  @first_post %{id: 1, name: "First Post", body: "lorem ipsum", author_id: 1}
+  @second_post %{id: 2, name: "Second Post", body: "lorem ipsum", author_id: 1}
+  @third_post %{id: 3, name: "Third Post", body: "lorem ipsum", author_id: 1}
 
   @posts [@first_post, @second_post, @third_post] |> Jason.encode!()
 
@@ -19,6 +21,9 @@ defmodule MockedConnection do
   mock(:put, "site.tld/posts/2", {:error, Resty.Error.ResourceInvalid.new()})
   mock(:delete, "site.tld/posts/1")
   mock(:delete, "site.tld/posts/2", {:error, Resty.Error.ForbiddenAccess.new()})
+
+  # Authors
+  mock(:get, "site.tld/authors/1", {:ok, @ph |> Jason.encode!()})
 
   # Subscribers
   mock(:get, "site.tld/subscribers", {:ok, "[]"})
