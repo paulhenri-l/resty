@@ -1,5 +1,4 @@
 defmodule Resty.Resource.Builder do
-  alias Resty.Resource.Attributes
   @moduledoc false
 
   def build(module, attributes, filter_unknown \\ true) do

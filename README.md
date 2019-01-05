@@ -26,7 +26,7 @@ First, add Resty to your mix.exs dependencies:
 
 ```elixir
 def deps do
-  [{:resty, "~> 0.9.0"}]
+  [{:resty, "~> 0.10.0"}]
 end
 ```
 
