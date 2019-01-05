@@ -4,21 +4,22 @@ defmodule Resty.Resource.Builder do
   def build(module, attributes, filter_unknown \\ true) do
     attributes = attributes |> Enum.into(%{})
 
-    attributes = case filter_unknown do
-      true -> remove_unknown(attributes, module.known_attributes())
-      false -> attributes
-    end
+    attributes =
+      case filter_unknown do
+        true -> remove_unknown(attributes, module.known_attributes())
+        false -> attributes
+      end
 
     struct(module, attributes)
   end
 
-  def remove_unknown(data, known_attributes) do
-    do_remove_unknown(known_attributes, data, %{})
+  defp remove_unknown(atrributes_to_filter, known_attributes) do
+    remove_unknown(atrributes_to_filter, known_attributes, %{})
   end
 
-  defp do_remove_unknown([], _, filtered_attributes), do: filtered_attributes
+  defp remove_unknown(_, [], filtered_attributes), do: filtered_attributes
 
-  defp do_remove_unknown([attribute | next_attributes], data, filtered_attributes) do
+  defp remove_unknown(data, [attribute | next_attributes], filtered_attributes) do
     attribute_string_key = attribute |> to_string()
 
     value =
@@ -33,6 +34,6 @@ defmodule Resty.Resource.Builder do
         value -> Map.put(filtered_attributes, attribute, value)
       end
 
-    do_remove_unknown(next_attributes, data, updated_filtered_attributes)
+    remove_unknown(data, next_attributes, updated_filtered_attributes)
   end
 end
