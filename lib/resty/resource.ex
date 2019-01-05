@@ -34,7 +34,7 @@ defmodule Resty.Resource do
   iex> Post
   ...> |> Resty.Repo.first!()
   ...> |> Resty.Resource.clone()
-  %Post{id: nil, body: "lorem ipsum", name: "First Post"}
+  %Post{id: nil, body: "lorem ipsum", name: "First Post", author_id: 1}
   ```
   """
   def clone(resource), do: clone(resource.__struct__, resource)
@@ -89,7 +89,7 @@ defmodule Resty.Resource do
   ```
   """
   def mark_as_persisted(resource) do
-    %{resource|__persisted__: true}
+    %{resource | __persisted__: true}
   end
 
   @doc """

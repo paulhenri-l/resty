@@ -80,13 +80,12 @@ defmodule Resty.ResourceTest do
 
   test "the resource can be marked as persisted" do
     assert Post.build()
-    |> Resource.mark_as_persisted()
-    |> Resource.persisted?()
+           |> Resource.mark_as_persisted()
+           |> Resource.persisted?()
   end
 
   test "the resource has informations about relationhips" do
-    # post = Resty.Repo.find!(Fakes.PostWithRelations, 1)
-
-    # post.author |> IO.inspect()
+    Resty.Repo.find!(Post, 1) |> IO.inspect()
+    # Post.relations |> IO.inspect()
   end
 end
