@@ -31,10 +31,10 @@ defmodule Resty.Resource do
   states won't be updated.*
 
   ```
-  iex> Fakes.Post
+  iex> Post
   ...> |> Resty.Repo.first!()
   ...> |> Resty.Resource.clone()
-  %Fakes.Post{id: nil, name: "test1"}
+  %Post{id: nil, body: "lorem ipsum", name: "First Post"}
   ```
   """
   def clone(resource), do: clone(resource.__struct__, resource)
@@ -50,11 +50,11 @@ defmodule Resty.Resource do
   Is the given resource new? (not persisted)
 
   ```
-  iex> Fakes.Post.build()
+  iex> Post.build()
   ...> |> Resty.Resource.new?()
   true
 
-  iex> Fakes.Post.build()
+  iex> Post.build()
   ...> |> Resty.Repo.save!()
   ...> |> Resty.Resource.new?()
   false
@@ -66,11 +66,11 @@ defmodule Resty.Resource do
   Has the given resource been persisted?
 
   ```
-  iex> Fakes.Post.build()
+  iex> Post.build()
   ...> |> Resty.Resource.persisted?()
   false
 
-  iex> Fakes.Post.build()
+  iex> Post.build()
   ...> |> Resty.Repo.save!()
   ...> |> Resty.Resource.persisted?()
   true
@@ -83,10 +83,10 @@ defmodule Resty.Resource do
   Build a URL to the resource.
 
   ```
-  iex> Fakes.Post |> Resty.Resource.url_for()
+  iex> Post |> Resty.Resource.url_for()
   "site.tld/posts"
 
-  iex> Fakes.Post.build(id: 1) |> Resty.Resource.url_for()
+  iex> Post.build(id: 1) |> Resty.Resource.url_for()
   "site.tld/posts/1"
   ```
   """
@@ -106,13 +106,13 @@ defmodule Resty.Resource do
   Build a URL to the resource.
 
   ```
-  iex> Fakes.Post |> Resty.Resource.url_for(key: "value")
+  iex> Post |> Resty.Resource.url_for(key: "value")
   "site.tld/posts?key=value"
 
-  iex> Fakes.Post.build(id: 1) |> Resty.Resource.url_for(key: "value")
+  iex> Post.build(id: 1) |> Resty.Resource.url_for(key: "value")
   "site.tld/posts/1?key=value"
 
-  iex> Fakes.Post |> Resty.Resource.url_for("slug")
+  iex> Post |> Resty.Resource.url_for("slug")
   "site.tld/posts/slug"
   ```
   """
@@ -136,7 +136,7 @@ defmodule Resty.Resource do
   Build a URL to the resource.
 
   ```
-  iex> Fakes.Post |> Resty.Resource.url_for("slug", key: "value")
+  iex> Post |> Resty.Resource.url_for("slug", key: "value")
   "site.tld/posts/slug?key=value"
   ```
   """

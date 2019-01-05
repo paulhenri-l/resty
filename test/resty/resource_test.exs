@@ -1,6 +1,6 @@
 defmodule Resty.ResourceTest do
   use ExUnit.Case, async: true
-  # doctest Resty.Resource
+  doctest Resty.Resource
   alias Resty.Resource
 
   @post_headers [
