@@ -43,6 +43,26 @@ defmodule Resty.RepoTest do
     end
   end
 
+  test "show :ok" do
+    assert {:ok, [%Post{id: 1} | _]} = Repo.show(Post)
+    assert {:ok, []} = Repo.show(Subscriber)
+  end
+
+  test "show :error" do
+    assert {:error, %Error.ResourceNotFound{}} = Repo.show(Like)
+  end
+
+  test "show! ok" do
+    assert [%Post{id: 1} | _] = Repo.show!(Post)
+    assert [] = Repo.all!(Subscriber)
+  end
+
+  test "show! error" do
+    assert_raise Error.ResourceNotFound, fn ->
+      Repo.all!(Like)
+    end
+  end
+
   test "all :ok" do
     assert {:ok, [%Post{id: 1} | _]} = Repo.all(Post)
     assert {:ok, []} = Repo.all(Subscriber)
@@ -135,6 +155,14 @@ defmodule Resty.RepoTest do
 
       post |> Repo.save!()
     end
+  end
+
+  test "update singular :ok" do
+    {:ok, post} = Repo.find(Post, 1)
+
+    {:ok, updated_post} = %{post | name: "updated"} |> Repo.update()
+
+    assert "updated" == updated_post.name
   end
 
   test "update_attribute :ok" do

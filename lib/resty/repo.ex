@@ -59,6 +59,12 @@ defmodule Resty.Repo do
   end
 
   @doc """
+  Alias for `all/1`. Should be used with singular resource.
+  """
+  def show(module), do: all(module)
+  def show!(module), do: all!(module)
+
+  @doc """
   Same as `all/1` but raise in case of error.
   """
   @spec all!(Resty.Resource.mod()) :: [Resty.Resource.t()]
@@ -196,6 +202,25 @@ defmodule Resty.Repo do
     request = %Request{
       method: :put,
       url: Resource.url_for(module, id),
+      headers: module.headers(),
+      body: resource
+    }
+
+    case request |> Auth.authenticate(module) |> Connection.send(module) do
+      {:ok, response} -> {:ok, Serializer.deserialize(response, module)}
+      {:error, _} = error -> error
+    end
+  end
+
+  @doc """
+  Update without id. Should be used with singular resource.
+  """
+  def update(resource = %{__struct__: module}) do
+    resource = resource |> Serializer.serialize()
+
+    request = %Request{
+      method: :put,
+      url: Resource.url_for(module),
       headers: module.headers(),
       body: resource
     }
