@@ -59,13 +59,13 @@ defmodule Resty.Repo do
   end
 
   @doc """
-  Alias for `all/1`. Should be used with singular resource.
+  Alias for `all/2`. Should be used with singular resource.
   """
-  def show(module), do: all(module)
+  def show(module, options \\ []), do: all(module, options)
   def show!(module), do: all!(module)
 
   @doc """
-  Same as `all/1` but raise in case of error.
+  Same as `all/2` with empty `options` param but raise in case of error.
   """
   @spec all!(Resty.Resource.mod()) :: [Resty.Resource.t()]
   def all!(module) do
@@ -79,11 +79,13 @@ defmodule Resty.Repo do
   Return all the resources returned by the api.
   """
   @spec all(Resty.Resource.mod()) :: {:ok, [Resty.Resource.t()]} | {:error, Exception.t()}
-  def all(module) do
+  def all(module, options \\ []) do
+    headers = options[:headers] || []
+
     request = %Request{
       method: :get,
       url: Resource.url_for(module),
-      headers: module.headers()
+      headers: module.headers() ++ headers
     }
 
     case request |> Auth.authenticate(module) |> Connection.send(module) do
@@ -215,13 +217,14 @@ defmodule Resty.Repo do
   @doc """
   Update without id. Should be used with singular resource.
   """
-  def update(resource = %{__struct__: module}) do
+  def update(resource = %{__struct__: module}, options \\ []) do
+    headers = options[:headers] || []
     resource = resource |> Serializer.serialize()
 
     request = %Request{
       method: :put,
       url: Resource.url_for(module),
-      headers: module.headers(),
+      headers: module.headers() ++ headers,
       body: resource
     }
 
