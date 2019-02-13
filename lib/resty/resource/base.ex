@@ -61,6 +61,7 @@ defmodule Resty.Resource.Base do
       Module.register_attribute(__MODULE__, :attributes, accumulate: true)
       Module.register_attribute(__MODULE__, :headers, accumulate: true)
       Module.register_attribute(__MODULE__, :relations, accumulate: true)
+      Module.register_attribute(__MODULE__, :relation_attributes, accumulate: true)
       Module.put_attribute(__MODULE__, :site, Resty.default_site())
       Module.put_attribute(__MODULE__, :resource_path, "")
       Module.put_attribute(__MODULE__, :primary_key, :id)
@@ -171,6 +172,7 @@ defmodule Resty.Resource.Base do
   defmacro belongs_to(resource, attribute_name, foreign_key) do
     quote do
       @attributes unquote(foreign_key)
+      @relation_attributes {unquote(attribute_name), %Relations.NotLoaded{}}
       @relations %Relations.BelongsTo{
         related: unquote(resource),
         attribute: unquote(attribute_name),
@@ -183,7 +185,7 @@ defmodule Resty.Resource.Base do
     quote do
       @known_attributes [@primary_key] ++ @attributes
 
-      defstruct @known_attributes ++ [__persisted__: false]
+      defstruct @known_attributes ++ @relation_attributes ++ [__persisted__: false]
 
       @doc false
       def site, do: @site

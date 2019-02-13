@@ -4,7 +4,7 @@ defmodule Resty.Resource.BuilderTest do
 
   test "A resource can be built" do
     post1 = Builder.build(Post, %{name: "name-1", body: "body-1", __persisted__: true})
-    post2 = Builder.build(Post, [name: "name-2", body: "body-2", __persisted__: true])
+    post2 = Builder.build(Post, name: "name-2", body: "body-2", __persisted__: true)
 
     assert %Post{name: "name-1", body: "body-1", __persisted__: false} = post1
     assert %Post{name: "name-2", body: "body-2", __persisted__: false} = post2

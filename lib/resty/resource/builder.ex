@@ -19,6 +19,10 @@ defmodule Resty.Resource.Builder do
 
   defp remove_unknown(_, [], filtered_attributes), do: filtered_attributes
 
+  defp remove_unknown(data, [{attribute, _default_value} | next_attributes], filtered_attributes) do
+    remove_unknown(data, [attribute | next_attributes], filtered_attributes)
+  end
+
   defp remove_unknown(data, [attribute | next_attributes], filtered_attributes) do
     attribute_string_key = attribute |> to_string()
 

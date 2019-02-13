@@ -30,6 +30,10 @@ defmodule Resty.Serializer do
     {implementation, params} = resource_module.serializer()
 
     implementation.encode(
+      # resource |> resource_module.raw_values()
+      # This function should replace belongs_to ids if they have changed. We
+      # should send the result of this call to the encode function Leaving the
+      # resposibility of filtering unwanted values to the resource itself
       resource,
       resource_module.known_attributes(),
       params ++ [include_root: resource_module.include_root()]
