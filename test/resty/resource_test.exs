@@ -56,6 +56,22 @@ defmodule Resty.ResourceTest do
     assert {Resty.Serializer.Json, []} = Post.serializer()
   end
 
+  test "Return the resource primary key" do
+    admin = Admin.build(uuid: "abcd")
+    post = Post.build(id: 10)
+
+    assert "abcd" == Resource.get_primary_key(admin)
+    assert 10 == Resource.get_primary_key(post)
+  end
+
+  test "Return the resource raw attributes" do
+    post = Resty.Repo.find!(Post, 1)
+
+    attributes = Resource.raw_attributes(post)
+
+    assert attributes == %{id: 1, name: "First Post", body: "lorem ipsum", author_id: 1}
+  end
+
   test "generate path to resource collection" do
     assert "site.tld/posts" == Post |> Resource.url_for()
     assert "site.tld/admins.json" == Admin |> Resource.url_for()

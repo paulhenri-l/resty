@@ -53,6 +53,23 @@ defmodule Resty.Resource do
   end
 
   @doc """
+  Return the primary_key of the given resource.
+  """
+  def get_primary_key(resource = %{__struct__: resource_module}) do
+    Map.get(resource, resource_module.primary_key())
+  end
+
+  @doc """
+  Return the raw attributes of the resource. These attributes are what will
+  eventually get sent to the underlying api.
+  """
+  def raw_attributes(resource = %{__struct__: resource_module}) do
+    resource
+    |> Resty.Resource.Relations.update_foreign_keys()
+    |> Map.take(resource_module.known_attributes())
+  end
+
+  @doc """
   Is the given resource new? (not persisted)
 
   ```

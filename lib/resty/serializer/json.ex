@@ -51,9 +51,7 @@ defmodule Resty.Serializer.Json do
   defp do_remove_root(map, _), do: map
 
   @doc false
-  def encode(map, known_attributes, params) do
-    # Filtering should not be done by the serializer
-    map = Map.take(map, known_attributes)
+  def encode(map, params) do
     root = Keyword.get(params, :include_root, false)
 
     to_encode =

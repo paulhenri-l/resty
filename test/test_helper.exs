@@ -21,6 +21,7 @@ defmodule MockedConnection do
   mock(:get, "site.tld/posts/4", {:ok, @fourth_post |> Jason.encode!()})
   mock(:post, "site.tld/posts")
   mock(:put, "site.tld/posts/1")
+  mock(:put, "site.tld/posts/4")
   mock(:put, "site.tld/posts/2", {:error, Resty.Error.ResourceInvalid.new()})
   mock(:delete, "site.tld/posts/1")
   mock(:delete, "site.tld/posts/2", {:error, Resty.Error.ForbiddenAccess.new()})
