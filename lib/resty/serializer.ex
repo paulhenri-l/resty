@@ -24,9 +24,7 @@ defmodule Resty.Serializer do
   end
 
   @doc false
-  def serialize(resource), do: serialize(resource, resource.__struct__)
-
-  defp serialize(resource, resource_module) do
+  def serialize(resource = %{__struct__: resource_module}) do
     {implementation, params} = resource_module.serializer()
 
     implementation.encode(

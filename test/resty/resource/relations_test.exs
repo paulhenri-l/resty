@@ -27,7 +27,7 @@ defmodule Resty.Resource.RelationsTest do
     author = Resty.Repo.find!(Author, 1)
 
     # Test update attribute as well.
-    updated_post = %{post|author: author} |> Resty.Repo.save!()
+    updated_post = %{post | author: author} |> Resty.Repo.save!()
 
     assert updated_post.author.__struct__ == Author
     assert updated_post.author.id == 1
@@ -39,20 +39,21 @@ defmodule Resty.Resource.RelationsTest do
     post_relations = Post |> Relations.list(BelongsTo)
 
     assert author_relations == []
+
     assert post_relations == [
-      %BelongsTo{
-        attribute: :author,
-        foreign_key: :author_id,
-        related: Author
-      }
-    ]
+             %BelongsTo{
+               attribute: :author,
+               foreign_key: :author_id,
+               related: Author
+             }
+           ]
   end
 
   test "Update the resource belongs_to foreign keys" do
     post = Resty.Repo.find!(Post, 4)
     author = Resty.Repo.find!(Author, 1)
 
-    post = %{post|author: author}
+    post = %{post | author: author}
 
     # Still the old author_id
     assert post.author_id == 2
