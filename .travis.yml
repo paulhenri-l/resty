@@ -9,6 +9,11 @@ otp_release:
   - "20.0"
   - "21.0"
 
+matrix:
+  exclude:
+  - elixir: "1.8"
+    otp_release: "19.0"
+
 script:
   - "MIX_ENV=test mix coveralls.json --include external:true"
 
