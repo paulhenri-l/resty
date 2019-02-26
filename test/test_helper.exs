@@ -9,13 +9,16 @@ defmodule MockedConnection do
   @first_post %{id: 1, name: "First Post", body: "lorem ipsum", author_id: 1}
   @second_post %{id: 2, name: "Second Post", body: "lorem ipsum", author_id: 1}
   @third_post %{id: 3, name: "Third Post", body: "lorem ipsum", author_id: 1}
+  @fourth_post %{id: 4, name: "Fourth Post", body: "lorem ipsum", author_id: 2}
 
-  @posts [@first_post, @second_post, @third_post] |> Jason.encode!()
+  @posts [@first_post, @second_post, @third_post, @fourth_post] |> Jason.encode!()
 
   # Posts
   mock(:get, "site.tld/posts", {:ok, @posts})
   mock(:get, "site.tld/posts/1", {:ok, @first_post |> Jason.encode!()})
   mock(:get, "site.tld/posts/2", {:ok, @second_post |> Jason.encode!()})
+  mock(:get, "site.tld/posts/3", {:ok, @third_post |> Jason.encode!()})
+  mock(:get, "site.tld/posts/4", {:ok, @fourth_post |> Jason.encode!()})
   mock(:post, "site.tld/posts")
   mock(:put, "site.tld/posts/1")
   mock(:put, "site.tld/posts/2", {:error, Resty.Error.ResourceInvalid.new()})
@@ -24,6 +27,7 @@ defmodule MockedConnection do
 
   # Authors
   mock(:get, "site.tld/authors/1", {:ok, @ph |> Jason.encode!()})
+  mock(:get, "site.tld/authors/2", {:error, Resty.Error.ResourceNotFound.new()})
 
   # Subscribers
   mock(:get, "site.tld/subscribers", {:ok, "[]"})

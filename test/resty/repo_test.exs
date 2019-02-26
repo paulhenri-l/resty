@@ -24,7 +24,7 @@ defmodule Resty.RepoTest do
   end
 
   test "last :ok" do
-    assert {:ok, %Post{id: 3}} = Repo.last(Post)
+    assert {:ok, %Post{id: 4}} = Repo.last(Post)
     assert {:ok, nil} == Repo.last(Subscriber)
   end
 
@@ -33,7 +33,7 @@ defmodule Resty.RepoTest do
   end
 
   test "last! ok" do
-    assert %Post{id: 3} = Repo.last!(Post)
+    assert %Post{id: 4} = Repo.last!(Post)
     assert nil == Repo.last!(Subscriber)
   end
 

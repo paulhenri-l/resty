@@ -4,16 +4,18 @@ defmodule Resty.Resource.Relations.BelongsTo do
   defstruct [:related, :attribute, :foreign_key]
 
   def load(relation, resource) do
-    IO.inspect("load")
-    IO.inspect(relation)
-    IO.inspect(resource)
-
-    id = Map.get(resource, relation.foreign_key)
-    related = Resty.Repo.find(relation.related, id)
+    related =
+      case Map.get(resource, relation.foreign_key) do
+        nil -> nil
+        id -> Resty.Repo.find(relation.related, id)
+      end
 
     case related do
       {:ok, related_resource} ->
         Map.put(resource, relation.attribute, related_resource)
+
+      nil ->
+        Map.put(resource, relation.attribute, %Resty.Resource.Relations.NotLoaded{})
 
       {:error, _} ->
         Map.put(resource, relation.attribute, %Resty.Resource.Relations.NotLoaded{})

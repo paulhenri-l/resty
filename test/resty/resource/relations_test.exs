@@ -1,21 +1,23 @@
 defmodule Resty.Resource.RelationsTest do
   use ExUnit.Case, async: true
   # alias Resty.Resource.Relations
+  alias Resty.Resource.Relations.NotLoaded
 
-  test "BelongsTo relationships can be loaded" do
-    post = Post.build(author_id: 3)
+  test "By default the relation is set to a not loaded relation" do
+    assert %NotLoaded{} = Post.build().author
+  end
 
-    # resource = post |> Resty.Serializer.serialize()
+  test "BelongsTo relationships are automatically loaded" do
+    post = Resty.Repo.find!(Post, 1)
 
-    # IO.inspect(post)
-    # IO.inspect(resource)
+    assert post.author.__struct__ == Author
+    assert post.author.id == 1
+    assert post.author.name == "PH"
+  end
 
-    # post = Relations.load(post)
+  test "BelongsTo relationships are not loaded if they result in an error" do
+    post = Resty.Repo.find!(Post, 4)
 
-    # IO.inspect(post)
-
-    #     assert post.author.__struct__ = Author
-    #     assert post.author.id = 1
-    #     assert post.author.name = "PH"
+    assert post.author == %NotLoaded{}
   end
 end
