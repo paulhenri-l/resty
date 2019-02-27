@@ -1,10 +1,29 @@
 defmodule Resty.Associations do
   alias Resty.Associations.BelongsTo
 
+  @moduledoc """
+  Resty supports associations between resources. The best way to learn how to
+  use an association is to go check its doc.
+
+  ## Supported associations
+  - `Resty.Resource.Base.belongs_to/3`
+
+  ## Not loaded
+
+  If an association has not been loaded its value will be of the type
+  `Resty.Associations.NotLoaded`
+
+  What may cause an association to not be loaded is that the request resulted
+  in an error (404, 401 etc...) are that the foreign key of the relation was
+  set to null.
+  """
+
+  @doc false
   def load(resource = %{__struct__: resource_module}) do
     load(resource, resource_module.associations())
   end
 
+  @doc false
   def load(resource, []), do: resource
 
   def load(resource, [association | next_associations]) do
@@ -17,10 +36,7 @@ defmodule Resty.Associations do
     association_module.load(association, resource)
   end
 
-  @doc """
-  List all of the associations matching the given type defined on the given
-  resource.
-  """
+  @doc false
   def list(%{__struct__: resource_module}, type) do
     list(resource_module, type)
   end
@@ -32,9 +48,7 @@ defmodule Resty.Associations do
     end)
   end
 
-  @doc """
-  Update belongs_to foreign_key on the given resource.
-  """
+  @doc false
   def update_foreign_keys(resource) do
     resource
     |> list(BelongsTo)

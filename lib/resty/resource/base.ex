@@ -169,6 +169,49 @@ defmodule Resty.Resource.Base do
     quote(do: @default_headers(unquote(new_headers)))
   end
 
+  @doc """
+  Declare a new belongs_to association.
+
+  ## Arguments
+
+  - `resource`: The resource module to which this association should resolve
+  - `attribute_name`: Under which key should the resolved association be set?
+  - `foreign_key`: What is the foreign_key of the association?
+
+  ## Usage
+
+  ```elixir
+  defmodule User do
+    use Resty.Resource.Base
+
+    set_site("https://jsonplaceholder.typicode.com")
+    set_resource_path("/users")
+    define_attributes([:name, :email])
+  end
+
+  defmodule Post do
+    use Resty.Resource.Base
+
+    set_site("https://jsonplaceholder.typicode.com")
+    set_resource_path("/posts")
+    define_attributes([:title, :body, :userId])
+
+    belongs_to(User, :user, :userId)
+  end
+
+  {:ok, post} = Post |> Resty.Repo.find(1)
+
+  IO.inspect(post.user) # %User{id: 1, email: "Sincere@april.biz", name: "Leanne Graham"}
+  ```
+
+  ## When is the association loaded?
+
+  The belongs to association is automatically loaded when the resource is
+  fetched from the server.
+
+  Beware! This is highly **ineficient** if you are using the `Resty.Repo.all/1`
+  function (or any other function that relies on it).
+  """
   defmacro belongs_to(resource, attribute_name, foreign_key) do
     quote do
       @attributes unquote(foreign_key)

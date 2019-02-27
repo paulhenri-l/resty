@@ -1,10 +1,10 @@
 defmodule Resty.Associations.BelongsTo do
-  @moduledoc false
-
   alias Resty.Associations.NotLoaded
-
   defstruct [:related, :attribute, :foreign_key]
 
+  @moduledoc false
+
+  @doc false
   def load(association, resource) do
     related =
       case Map.get(resource, association.foreign_key) do
@@ -24,6 +24,7 @@ defmodule Resty.Associations.BelongsTo do
     end
   end
 
+  @doc false
   def update_foreign_key(resource, association) do
     case Map.get(resource, association.attribute) do
       %NotLoaded{} ->

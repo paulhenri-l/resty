@@ -29,8 +29,9 @@ defmodule Resty.MixProject do
             Resty.Resource,
             Resty.Resource.Base
           ],
-          Relations: [
-            Resty.Relations
+          Associations: [
+            Resty.Associations,
+            Resty.Associations.NotLoaded
           ],
           Auth: [
             Resty.Auth,

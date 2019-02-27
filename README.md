@@ -144,8 +144,6 @@ I am working on it, 1.0 won't go out without it.
 
 Resty is able to automaticaly resolve your belongs to relations.
 
-Creating the resources
-
 ```elixir
 defmodule User do
   use Resty.Resource.Base
@@ -165,14 +163,10 @@ defmodule Post do
   # Here is the belongs to
   belongs_to(User, :user, :userId)
 end
-```
 
-Querying the resource.
-
-```elixir
 {:ok, post} = Post |> Resty.Repo.find(1)
 
-IO.inspect(post.author) # %User{id: 1, email: "Sincere@april.biz", name: "Leanne Graham"}
+IO.inspect(post.user) # %User{id: 1, email: "Sincere@april.biz", name: "Leanne Graham"}
 ```
 
 Under the hood
