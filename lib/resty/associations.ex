@@ -14,7 +14,7 @@ defmodule Resty.Associations do
   `Resty.Associations.NotLoaded`
 
   What may cause an association to not be loaded is that the request resulted
-  in an error (404, 401 etc...) are that the foreign key of the relation was
+  in an error (404, 401 etc...) or that the foreign key of the relation was
   set to null.
   """
 
