@@ -140,6 +140,50 @@ Delete will issue a DELETE request to the resource
 
 I am working on it, 1.0 won't go out without it.
 
+#### BelongTo
+
+Resty is able to automaticaly resolve your belongs to relations.
+
+Creating the resources
+
+```elixir
+defmodule User do
+  use Resty.Resource.Base
+
+  set_site("https://jsonplaceholder.typicode.com")
+  set_resource_path("/users")
+  define_attributes([:name, :email])
+end
+
+defmodule Post do
+  use Resty.Resource.Base
+
+  set_site("https://jsonplaceholder.typicode.com")
+  set_resource_path("/posts")
+  define_attributes([:title, :body, :userId])
+
+  # Here is the belongs to
+  belongs_to(User, :user, :userId)
+end
+```
+
+Querying the resource.
+
+```elixir
+{:ok, post} = Post |> Resty.Repo.find(1)
+
+IO.inspect(post.author) # %User{id: 1, email: "Sincere@april.biz", name: "Leanne Graham"}
+```
+
+Under the hood
+
+```
+# Request -> GET https://jsonplaceholder.typicode.com/posts/1
+# Request -> GET https://jsonplaceholder.typicode.com/users/1
+# Response -> {"id": 1, "title": "The title", "body": "The body", "userId": 1}
+# Response -> {"id": 1, "email": "Sincere@april.biz", "name": "Leanne Graham"}
+```
+
 ### Authentication
 
 Some API will require you to authenticate your requests. Out of the box Resty
