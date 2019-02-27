@@ -1,5 +1,5 @@
-defmodule Resty.Resource.Relations do
-  alias Resty.Resource.Relations.BelongsTo
+defmodule Resty.Relations do
+  alias Resty.Relations.BelongsTo
 
   def load(resource = %{__struct__: resource_module}) do
     load(resource, resource_module.relations())

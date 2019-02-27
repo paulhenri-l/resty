@@ -170,6 +170,7 @@ defmodule Resty.Repo do
   has an id, a POST request will be sent otherwise.
   """
   def save(resource) do
+    # Use get_primary_key instead of this. (here and everywhere else)
     id = Map.get(resource, resource.__struct__.primary_key())
     save(resource, id)
   end

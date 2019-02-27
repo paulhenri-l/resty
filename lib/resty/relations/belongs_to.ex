@@ -1,7 +1,7 @@
-defmodule Resty.Resource.Relations.BelongsTo do
+defmodule Resty.Relations.BelongsTo do
   @moduledoc false
 
-  alias Resty.Resource.Relations.NotLoaded
+  alias Resty.Relations.NotLoaded
 
   defstruct [:related, :attribute, :foreign_key]
 

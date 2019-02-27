@@ -1,8 +1,8 @@
-defmodule Resty.Resource.RelationsTest do
+defmodule Resty.RelationsTest do
   use ExUnit.Case, async: true
-  alias Resty.Resource.Relations
-  alias Resty.Resource.Relations.BelongsTo
-  alias Resty.Resource.Relations.NotLoaded
+  alias Resty.Relations
+  alias Resty.Relations.BelongsTo
+  alias Resty.Relations.NotLoaded
 
   test "By default the relation is set to a not loaded relation" do
     assert %NotLoaded{} = Post.build().author

@@ -65,7 +65,7 @@ defmodule Resty.Resource do
   """
   def raw_attributes(resource = %{__struct__: resource_module}) do
     resource
-    |> Resty.Resource.Relations.update_foreign_keys()
+    |> Resty.Relations.update_foreign_keys()
     |> Map.take(resource_module.known_attributes())
   end
 

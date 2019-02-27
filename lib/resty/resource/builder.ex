@@ -42,6 +42,6 @@ defmodule Resty.Resource.Builder do
   end
 
   defp load_relations(resource) do
-    resource |> Resty.Resource.Relations.load()
+    resource |> Resty.Relations.load()
   end
 end

@@ -1,5 +1,5 @@
 defmodule Resty.Resource.Base do
-  alias Resty.Resource.Relations
+  alias Resty.Relations
 
   @moduledoc """
   This module is used to create **resource struct** that you'll then be able to
