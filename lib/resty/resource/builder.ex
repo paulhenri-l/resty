@@ -10,7 +10,7 @@ defmodule Resty.Resource.Builder do
         false -> attributes
       end
 
-    struct(module, attributes) |> load_relations()
+    struct(module, attributes) |> load_associations()
   end
 
   defp remove_unknown(atrributes_to_filter, known_attributes) do
@@ -41,7 +41,7 @@ defmodule Resty.Resource.Builder do
     remove_unknown(data, next_attributes, updated_filtered_attributes)
   end
 
-  defp load_relations(resource) do
-    resource |> Resty.Relations.load()
+  defp load_associations(resource) do
+    resource |> Resty.Associations.load()
   end
 end

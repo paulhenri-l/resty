@@ -27,7 +27,7 @@ defmodule Resty.Resource do
   This will create a new resource struct from the given one. The new struct
   will be marked as not persisted and will not have an id.
 
-  *This is not deep cloning. If there are relations their ids and persisted
+  *This is not deep cloning. If there are associations their ids and persisted
   states won't be updated.*
 
   ```
@@ -65,7 +65,7 @@ defmodule Resty.Resource do
   """
   def raw_attributes(resource = %{__struct__: resource_module}) do
     resource
-    |> Resty.Relations.update_foreign_keys()
+    |> Resty.Associations.update_foreign_keys()
     |> Map.take(resource_module.known_attributes())
   end
 

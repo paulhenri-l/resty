@@ -1,5 +1,5 @@
 defmodule Resty.Resource.Base do
-  alias Resty.Relations
+  alias Resty.Associations
 
   @moduledoc """
   This module is used to create **resource struct** that you'll then be able to
@@ -60,8 +60,8 @@ defmodule Resty.Resource.Base do
 
       Module.register_attribute(__MODULE__, :attributes, accumulate: true)
       Module.register_attribute(__MODULE__, :headers, accumulate: true)
-      Module.register_attribute(__MODULE__, :relations, accumulate: true)
-      Module.register_attribute(__MODULE__, :relation_attributes, accumulate: true)
+      Module.register_attribute(__MODULE__, :associations, accumulate: true)
+      Module.register_attribute(__MODULE__, :association_attributes, accumulate: true)
       Module.put_attribute(__MODULE__, :site, Resty.default_site())
       Module.put_attribute(__MODULE__, :resource_path, "")
       Module.put_attribute(__MODULE__, :primary_key, :id)
@@ -172,8 +172,8 @@ defmodule Resty.Resource.Base do
   defmacro belongs_to(resource, attribute_name, foreign_key) do
     quote do
       @attributes unquote(foreign_key)
-      @relation_attributes {unquote(attribute_name), %Relations.NotLoaded{}}
-      @relations %Relations.BelongsTo{
+      @association_attributes {unquote(attribute_name), %Associations.NotLoaded{}}
+      @associations %Associations.BelongsTo{
         related: unquote(resource),
         attribute: unquote(attribute_name),
         foreign_key: unquote(foreign_key)
@@ -185,7 +185,7 @@ defmodule Resty.Resource.Base do
     quote do
       @known_attributes [@primary_key] ++ @attributes
 
-      defstruct @known_attributes ++ @relation_attributes ++ [__persisted__: false]
+      defstruct @known_attributes ++ @association_attributes ++ [__persisted__: false]
 
       @doc false
       def site, do: @site
@@ -218,7 +218,7 @@ defmodule Resty.Resource.Base do
       def auth, do: {@auth, @auth_params}
 
       @doc false
-      def relations, do: @relations
+      def associations, do: @associations
 
       @doc """
       Create a new resource with the given attributes.

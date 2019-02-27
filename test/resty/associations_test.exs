@@ -1,10 +1,10 @@
-defmodule Resty.RelationsTest do
+defmodule Resty.AssociationsTest do
   use ExUnit.Case, async: true
-  alias Resty.Relations
-  alias Resty.Relations.BelongsTo
-  alias Resty.Relations.NotLoaded
+  alias Resty.Associations
+  alias Resty.Associations.BelongsTo
+  alias Resty.Associations.NotLoaded
 
-  test "By default the relation is set to a not loaded relation" do
+  test "By default the association is set to a not loaded association" do
     assert %NotLoaded{} = Post.build().author
   end
 
@@ -22,7 +22,7 @@ defmodule Resty.RelationsTest do
     assert post.author == %NotLoaded{}
   end
 
-  test "You can update a belongs_to relation" do
+  test "You can update a belongs_to association" do
     post = Resty.Repo.find!(Post, 4)
     author = Resty.Repo.find!(Author, 1)
 
@@ -34,13 +34,13 @@ defmodule Resty.RelationsTest do
     assert updated_post.author.name == "PH"
   end
 
-  test "Return the resource configured belongs_to relations" do
-    author_relations = Author.build() |> Relations.list(BelongsTo)
-    post_relations = Post |> Relations.list(BelongsTo)
+  test "Return the resource configured belongs_to associations" do
+    author_associations = Author.build() |> Associations.list(BelongsTo)
+    post_associations = Post |> Associations.list(BelongsTo)
 
-    assert author_relations == []
+    assert author_associations == []
 
-    assert post_relations == [
+    assert post_associations == [
              %BelongsTo{
                attribute: :author,
                foreign_key: :author_id,
@@ -58,7 +58,7 @@ defmodule Resty.RelationsTest do
     # Still the old author_id
     assert post.author_id == 2
 
-    post = Relations.update_foreign_keys(post)
+    post = Associations.update_foreign_keys(post)
 
     assert post.author_id == 1
   end
