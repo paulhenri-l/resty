@@ -47,13 +47,4 @@ defmodule Resty.Associations do
       association.__struct__ == type
     end)
   end
-
-  @doc false
-  def update_foreign_keys(resource) do
-    resource
-    |> list(BelongsTo)
-    |> Enum.reduce(resource, fn association, resource ->
-      BelongsTo.update_foreign_key(resource, association)
-    end)
-  end
 end

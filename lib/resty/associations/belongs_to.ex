@@ -23,16 +23,4 @@ defmodule Resty.Associations.BelongsTo do
         Map.put(resource, association.attribute, %NotLoaded{})
     end
   end
-
-  @doc false
-  def update_foreign_key(resource, association) do
-    case Map.get(resource, association.attribute) do
-      %NotLoaded{} ->
-        resource
-
-      related ->
-        id = Resty.Resource.get_primary_key(related)
-        Map.put(resource, association.foreign_key, id)
-    end
-  end
 end

@@ -64,9 +64,7 @@ defmodule Resty.Resource do
   eventually get sent to the underlying api.
   """
   def raw_attributes(resource = %{__struct__: resource_module}) do
-    resource
-    |> Resty.Associations.update_foreign_keys()
-    |> Map.take(resource_module.known_attributes())
+    resource |> Map.take(resource_module.known_attributes())
   end
 
   @doc """
