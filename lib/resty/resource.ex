@@ -21,6 +21,11 @@ defmodule Resty.Resource do
   """
   @type primary_key() :: any()
 
+  @typedoc """
+  Parameters used when building an url.
+  """
+  @type url_parameters :: Keyword.t()
+
   @doc """
   Clone the given resource
 

@@ -8,7 +8,7 @@ defmodule Resty.AssociationsTest do
     assert %NotLoaded{} = Post.build().author
   end
 
-  test "List the relations of the given type on the given resource" do
+  test "List the associations of the given type on the given resource" do
     author_associations = Author.build() |> Associations.list(BelongsTo)
     post_associations = Post |> Associations.list(BelongsTo)
 
