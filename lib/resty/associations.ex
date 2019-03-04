@@ -1,12 +1,11 @@
 defmodule Resty.Associations do
-  alias Resty.Associations.BelongsTo
-
   @moduledoc """
   Resty supports associations between resources. The best way to learn how to
   use an association is to go check its doc.
 
   ## Supported associations
   - `Resty.Resource.Base.belongs_to/3`
+  - `Resty.Resource.Base.has_one/3`
 
   ## Not loaded
 

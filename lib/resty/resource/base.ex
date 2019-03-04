@@ -176,7 +176,7 @@ defmodule Resty.Resource.Base do
 
   - `resource`: The resource module to which this association should resolve
   - `attribute_name`: Under which key should the resolved association be set?
-  - `foreign_key`: What is the foreign_key of the association?
+  - `foreign_key`: What is the foreign_key of the association (in this resource)?
 
   ## Usage
 
@@ -217,6 +217,20 @@ defmodule Resty.Resource.Base do
       @attributes unquote(foreign_key)
       @association_attributes {unquote(attribute_name), %Associations.NotLoaded{}}
       @associations %Associations.BelongsTo{
+        related: unquote(resource),
+        attribute: unquote(attribute_name),
+        foreign_key: unquote(foreign_key)
+      }
+    end
+  end
+
+  @doc """
+  Declare a new has_one association.
+  """
+  defmacro has_one(resource, attribute_name, foreign_key) do
+    quote do
+      @association_attributes {unquote(attribute_name), %Associations.NotLoaded{}}
+      @associations %Associations.HasOne{
         related: unquote(resource),
         attribute: unquote(attribute_name),
         foreign_key: unquote(foreign_key)
