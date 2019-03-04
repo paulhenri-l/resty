@@ -5,6 +5,10 @@ defmodule Resty.Associations.HasOne do
   @moduledoc false
 
   @doc false
+  def load(_, resource = %{__persisted__: false}) do
+    resource
+  end
+
   def load(association, resource) do
     # Do not refetech if relation already in the resource. Simply put it in the
     # correct struct.

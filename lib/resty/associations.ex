@@ -19,6 +19,7 @@ defmodule Resty.Associations do
 
   @doc false
   def load(resource = %{__struct__: resource_module}) do
+    # Parallel loading could easily be done.
     load(resource, resource_module.associations())
   end
 
