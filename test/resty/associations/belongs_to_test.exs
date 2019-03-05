@@ -1,7 +1,7 @@
 defmodule Resty.Associations.BelongsToTest do
   use ExUnit.Case, async: true
 
-  alias Resty.Associations.NotLoaded
+  alias Resty.Associations.LoadError
 
   test "BelongsTo relationships are automatically loaded" do
     post = Resty.Repo.find!(Post, 1)
@@ -14,6 +14,8 @@ defmodule Resty.Associations.BelongsToTest do
   test "BelongsTo relationships are not loaded if they result in an error" do
     post = Resty.Repo.find!(Post, 4)
 
-    assert post.author == %NotLoaded{}
+    assert post.author == %LoadError{
+             error: %Resty.Error.ResourceNotFound{code: 404, message: ""}
+           }
   end
 end

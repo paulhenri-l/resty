@@ -1,4 +1,7 @@
 defmodule Resty.Associations do
+  alias Resty.Associations.NotLoaded
+  alias Resty.Associations.LoadError
+
   @moduledoc """
   Resty supports associations between resources. The best way to learn how to
   use an association is to go check its doc.
@@ -33,7 +36,16 @@ defmodule Resty.Associations do
   end
 
   def load(resource, association = %{__struct__: association_module}) do
-    association_module.load(association, resource)
+    case association_module.fetch(association, resource) do
+      nil ->
+        Map.put(resource, association.attribute, %NotLoaded{})
+
+      {:ok, related_resource} ->
+        Map.put(resource, association.attribute, related_resource)
+
+      {:error, error} ->
+        Map.put(resource, association.attribute, %LoadError{error: error})
+    end
   end
 
   @doc false
@@ -43,8 +55,6 @@ defmodule Resty.Associations do
 
   def list(resource_module, type) when is_atom(resource_module) do
     resource_module.associations
-    |> Enum.filter(fn association ->
-      association.__struct__ == type
-    end)
+    |> Enum.filter(&(&1.__struct__ == type))
   end
 end

@@ -44,7 +44,7 @@ defmodule Resty.Resource do
     body: "lorem ipsum",
     name: "First Post",
     author_id: 1,
-    author: %Author{__persisted__: true, id: 1, name: "PH"}
+    author: %Resty.Associations.NotLoaded{}
   }
   ```
   """
