@@ -231,7 +231,7 @@ defmodule Resty.Repo do
   @doc """
   Same as `delete/2` but raise in case of error.
   """
-  def delete!(resource, url_parameters) when is_map(url_parameters) do
+  def delete!(resource, url_parameters) when is_list(url_parameters) do
     id = Resty.Resource.get_primary_key(resource)
     delete!(resource.__struct__, id, url_parameters)
   end
@@ -312,7 +312,7 @@ defmodule Resty.Repo do
   @doc """
   Does this resource exist on the remote api?
   """
-  def exists?(resource, url_parameters) when is_map(url_parameters) do
+  def exists?(resource, url_parameters) when is_list(url_parameters) do
     id = Map.get(resource, resource.__struct__.primary_key())
     exists?(resource.__struct__, id, url_parameters)
   end

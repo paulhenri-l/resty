@@ -205,6 +205,7 @@ defmodule Resty.RepoTest do
     {:ok, post} = Repo.find(Post, 1)
 
     assert {:ok, true} = Repo.delete(post)
+    assert {:ok, true} = Repo.delete(post, query_param: "some-value")
   end
 
   test "delete :error" do
@@ -219,6 +220,7 @@ defmodule Resty.RepoTest do
     {:ok, post} = Repo.find(Post, 1)
 
     assert true = Repo.delete!(post)
+    assert true = Repo.delete!(post, query_param: "some-value")
   end
 
   test "delete! raise" do
@@ -232,6 +234,7 @@ defmodule Resty.RepoTest do
   test "exists? :ok" do
     assert {:ok, true} = Repo.exists?(Post, 1)
     assert {:ok, true} = Post.build(id: 1) |> Repo.exists?()
+    assert {:ok, true} = Post.build(id: 1) |> Repo.exists?(query_param: "some-value")
 
     assert {:ok, false} = Repo.exists?(Subscriber, 1)
     assert {:ok, false} = Subscriber.build(id: 1) |> Repo.exists?()

@@ -19,6 +19,7 @@ defmodule MockedConnection do
   # Posts
   mock(:get, "site.tld/posts", {:ok, @posts})
   mock(:get, "site.tld/posts/1", {:ok, @first_post |> Jason.encode!()})
+  mock(:get, "site.tld/posts/1?query_param=some-value", {:ok, @first_post |> Jason.encode!()})
   mock(:get, "site.tld/posts/2", {:ok, @second_post |> Jason.encode!()})
   mock(:get, "site.tld/posts/3", {:ok, @third_post |> Jason.encode!()})
   mock(:get, "site.tld/posts/4", {:ok, @fourth_post |> Jason.encode!()})
@@ -27,6 +28,7 @@ defmodule MockedConnection do
   mock(:put, "site.tld/posts/4")
   mock(:put, "site.tld/posts/2", {:error, Resty.Error.ResourceInvalid.new()})
   mock(:delete, "site.tld/posts/1")
+  mock(:delete, "site.tld/posts/1?query_param=some-value")
   mock(:delete, "site.tld/posts/2", {:error, Resty.Error.ForbiddenAccess.new()})
 
   # Authors
