@@ -13,8 +13,6 @@ defmodule Resty.Associations.HasOne do
     # correct struct.
     #
     # Allow to disable automatic fetching of relationns in order to avoid circular.
-    #
-    # Remove duplicates between both has_one an belongs_to
     Resty.Repo.find(association.related, nil, [
       {
         association.foreign_key,
