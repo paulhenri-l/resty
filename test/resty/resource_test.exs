@@ -15,6 +15,10 @@ defmodule Resty.ResourceTest do
     assert %Post{id: 1, name: "test"} == Post.build(%{id: 1, name: "test"})
   end
 
+  test "The resource have default attributes" do
+    assert %Author{name: "default-name"} = Author.build()
+  end
+
   test "The resource holds the headers" do
     assert @post_headers == Post.headers()
   end

@@ -3,7 +3,7 @@ defmodule Author do
 
   set_site("site.tld")
   set_resource_path("/authors")
-  define_attributes([:name])
+  define_attributes([{:name, "default-name"}])
 
   has_one(Author.Address, :address, :author_id)
 end
