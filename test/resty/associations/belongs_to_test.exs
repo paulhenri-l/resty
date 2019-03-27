@@ -11,6 +11,14 @@ defmodule Resty.Associations.BelongsToTest do
     assert post.author.name == "PH"
   end
 
+  test "If the resource is not persisted loading the association won't result in an error" do
+    post = Post.build() |> Resty.Associations.load()
+    assert %Resty.Associations.NotLoaded{} = post.author
+
+    post = Post.build(author_id: 1) |> Resty.Associations.load()
+    assert %Author{name: "PH"} = post.author
+  end
+
   test "BelongsTo relationships are not loaded if they result in an error" do
     post = Resty.Repo.find!(Post, 4)
 

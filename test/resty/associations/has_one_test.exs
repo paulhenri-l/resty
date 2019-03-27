@@ -9,6 +9,12 @@ defmodule Resty.Associations.HasOneTest do
     assert author.address.city == "Somewhere"
   end
 
+  test "If the resource is not persisted the associations won't be fetched" do
+    author = Author.build() |> Resty.Associations.load()
+
+    assert %Resty.Associations.NotLoaded{} = author.address
+  end
+
   test "If the associationn is already in the resource it wont get refetched" do
     author = Resty.Repo.find!(Author, 4)
 

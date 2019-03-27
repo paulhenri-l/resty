@@ -4,7 +4,7 @@ defmodule Resty.Associations.HasOne do
   @moduledoc false
 
   @doc false
-  def load(_, _resource = %{__persisted__: false}) do
+  def fetch(_, %{__persisted__: false}) do
     nil
   end
 
