@@ -1,5 +1,5 @@
 defmodule Resty.Associations.HasOne do
-  defstruct [:related, :attribute, :foreign_key]
+  defstruct [:related, :attribute, :foreign_key, {:eager_load, true}]
 
   @moduledoc false
 
@@ -9,23 +9,15 @@ defmodule Resty.Associations.HasOne do
   end
 
   def fetch(association, resource) do
-    # Allow to disable automatic fetching of relationns in order to avoid circular.
-
     case Map.get(resource, association.attribute, nil) do
-      %Resty.Associations.NotLoaded{} ->
-        do_fetch(association, resource)
-
-      preloaded_relation ->
-        do_preload(preloaded_relation, association)
+      %Resty.Associations.NotLoaded{} -> do_fetch(association, resource)
+      preloaded_relation -> do_preload(preloaded_relation, association)
     end
   end
 
   defp do_fetch(association, resource) do
     Resty.Repo.find(association.related, nil, [
-      {
-        association.foreign_key,
-        Resty.Resource.get_primary_key(resource)
-      }
+      {association.foreign_key, Resty.Resource.get_primary_key(resource)}
     ])
   end
 

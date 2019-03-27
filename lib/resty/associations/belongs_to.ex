@@ -1,5 +1,5 @@
 defmodule Resty.Associations.BelongsTo do
-  defstruct [:related, :attribute, :foreign_key]
+  defstruct [:related, :attribute, :foreign_key, {:eager_load, true}]
 
   @moduledoc false
 

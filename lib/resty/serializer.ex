@@ -40,6 +40,6 @@ defmodule Resty.Serializer do
   defp build(resource_module, data) do
     Resource.Builder.build(resource_module, data)
     |> Resource.mark_as_persisted()
-    |> Resty.Associations.load()
+    |> Resty.Associations.eager_load()
   end
 end

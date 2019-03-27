@@ -178,6 +178,9 @@ defmodule Resty.Resource.Base do
   - `resource`: The resource module to which this association should resolve
   - `attribute_name`: Under which key should the resolved association be set?
   - `foreign_key`: What is the foreign_key of the association (in this resource)?
+  - `eager_load`: Should this association be eagerly loaded? this parameter
+  is useful in order to break circular dependencies or if you plan on using
+  collection functions such as `Resty.Repo.all/1`.
 
   ## Usage
 
@@ -213,11 +216,12 @@ defmodule Resty.Resource.Base do
   Beware! This is highly **ineficient** if you are using the `Resty.Repo.all/1`
   function (or any other function that relies on it).
   """
-  defmacro belongs_to(resource, attribute_name, foreign_key) do
+  defmacro belongs_to(resource, attribute_name, foreign_key, eager_load \\ true) do
     quote do
       @attributes unquote(foreign_key)
       @association_attributes {unquote(attribute_name), %Associations.NotLoaded{}}
       @associations %Associations.BelongsTo{
+        eager_load: unquote(eager_load),
         related: unquote(resource),
         attribute: unquote(attribute_name),
         foreign_key: unquote(foreign_key)
@@ -234,6 +238,9 @@ defmodule Resty.Resource.Base do
   - `attribute_name`: Under which key should the resolved association be set?
   - `foreign_key`: What is the foreign_key of the association (on the other resource)?
     it should be `:author_id` if the resource url is (/authors/:author_id/address)
+  - `eager_load`: Should this association be eagerly loaded? this parameter
+  is useful in order to break circular dependencies or if you plan on using
+  collection functions such as `Resty.Repo.all/1`.
 
   ## Usage
 
@@ -269,11 +276,12 @@ defmodule Resty.Resource.Base do
   Beware! This is highly **ineficient** if you are using the `Resty.Repo.all/1`
   function (or any other function that relies on it).
   """
-  defmacro has_one(resource, attribute_name, foreign_key) do
+  defmacro has_one(resource, attribute_name, foreign_key, eager_load \\ true) do
     quote do
       @known_association_attributes unquote(attribute_name)
       @association_attributes {unquote(attribute_name), %Associations.NotLoaded{}}
       @associations %Associations.HasOne{
+        eager_load: unquote(eager_load),
         related: unquote(resource),
         attribute: unquote(attribute_name),
         foreign_key: unquote(foreign_key)

@@ -26,7 +26,24 @@ defmodule Resty.Associations do
   disabled.
   """
 
-  @doc false
+  @doc """
+  Load all of the associations of the given resource that should be eager
+  loaded.
+  """
+  def eager_load(resource = %{__struct__: resource_module}) do
+    associations =
+      resource_module.associations()
+      |> Enum.filter(& &1.eager_load)
+
+    load(resource, associations)
+  end
+
+  @doc """
+  Load all of the associations of the given resource whether they should be
+  eager loaded or not.
+
+  *This function will not recursively load non eager loaded associations.*
+  """
   def load(resource = %{__struct__: resource_module}) do
     # Parallel loading could easily be done.
     load(resource, resource_module.associations())
