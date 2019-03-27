@@ -248,7 +248,7 @@ defmodule Resty.Resource.Base do
   defmodule Company do
     use Resty.Resource.Base
 
-    set_site("https://jsonplaceholder.typicode.com/users/:user_id/company")
+    set_site("https://jsonplaceholder.typicode.com")
     set_resource_path("/users/:user_id/company")
     define_attributes([:name])
   end

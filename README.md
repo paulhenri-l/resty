@@ -26,7 +26,7 @@ First, add Resty to your mix.exs dependencies:
 
 ```elixir
 def deps do
-  [{:resty, "~> 0.11.0"}]
+  [{:resty, "~> 0.12.0"}]
 end
 ```
 
@@ -138,11 +138,13 @@ Delete will issue a DELETE request to the resource
 
 ### Associations
 
-I am working on it, 1.0 won't go out without it.
+Here are the associations that are supported by resty. Do note that associations
+won't be automaticaly saved. If you change their values you'll have to manually
+save them.
 
 #### BelongTo
 
-Resty is able to automaticaly resolve your belongs to relations.
+Resty is able to automaticaly resolve your belongs to associations.
 
 ```elixir
 defmodule User do
@@ -160,7 +162,6 @@ defmodule Post do
   set_resource_path("/posts")
   define_attributes([:title, :body, :userId])
 
-  # Here is the belongs to
   belongs_to(User, :user, :userId)
 end
 
@@ -176,6 +177,45 @@ Under the hood
 # Request -> GET https://jsonplaceholder.typicode.com/users/1
 # Response -> {"id": 1, "title": "The title", "body": "The body", "userId": 1}
 # Response -> {"id": 1, "email": "Sincere@april.biz", "name": "Leanne Graham"}
+```
+
+#### HasOne
+
+Resty is able to automaticaly resolve your hase one associations.
+
+*If the association is already in the response body it won't get refetched*
+
+```elixir
+defmodule Company do
+  use Resty.Resource.Base
+
+  set_site("https://jsonplaceholder.typicode.com")
+  set_resource_path("/users/:user_id/company")
+  define_attributes([:name])
+end
+
+defmodule User do
+  use Resty.Resource.Base
+
+  set_site("https://jsonplaceholder.typicode.com")
+  set_resource_path("/users")
+  define_attributes([:name, :email])
+
+  has_one(Company, :company, :user_id)
+end
+
+{:ok, user} = User |> Resty.Repo.find(1)
+
+IO.inspect(user.company.name) # Romaguera-Crona
+```
+
+Under the hood
+
+```
+# Request -> GET https://jsonplaceholder.typicode.com/users/1
+# Request -> GET https://jsonplaceholder.typicode.com/users/1/company
+# Response -> {"id": 1, "email": "Sincere@april.biz", "name": "Leanne Graham"}
+# Response -> {"name": "Romaguera-Crona"}
 ```
 
 ### Authentication
