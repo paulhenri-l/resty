@@ -12,7 +12,7 @@ defmodule Resty.Auth.Basic do
   defmodule MyResource do
     use Resty.Resource.Base
 
-    with_auth(Resty.Auth.Basic, user: "hello", password: "hola")
+    with_auth Resty.Auth.Basic, user: "hello", password: "hola"
   end
   ```
 
@@ -28,7 +28,7 @@ defmodule Resty.Auth.Basic do
   defmodule MyResource do
     use Resty.Resource.Base
 
-    with_auth(Resty.Auth.Basic)
+    with_auth Resty.Auth.Basic
   end
   ```
   """

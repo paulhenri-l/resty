@@ -53,13 +53,13 @@ defmodule Post do
 
   # On which site is the resource available? This can also be set globally in
   # your config.exs file.
-  set_site("https://jsonplaceholder.typicode.com")
+  set_site "https://jsonplaceholder.typicode.com"
 
   # What is the path to the resource?
-  set_resource_path("/posts")
+  set_resource_path "/posts"
 
   # What attributes exists on the resource?
-  define_attributes([:title, :body, :userId])
+  define_attributes [:title, :body, :userId]
 end
 ```
 
@@ -150,19 +150,19 @@ Resty is able to automaticaly resolve your belongs to associations.
 defmodule User do
   use Resty.Resource.Base
 
-  set_site("https://jsonplaceholder.typicode.com")
-  set_resource_path("/users")
-  define_attributes([:name, :email])
+  set_site "https://jsonplaceholder.typicode.com"
+  set_resource_path "/users"
+  define_attributes [:name, :email]
 end
 
 defmodule Post do
   use Resty.Resource.Base
 
-  set_site("https://jsonplaceholder.typicode.com")
-  set_resource_path("/posts")
-  define_attributes([:title, :body, :userId])
+  set_site "https://jsonplaceholder.typicode.com"
+  set_resource_path "/posts"
+  define_attributes [:title, :body, :userId]
 
-  belongs_to(User, :user, :userId)
+  belongs_to User, :user, :userId
 end
 
 {:ok, post} = Post |> Resty.Repo.find(1)
@@ -189,19 +189,19 @@ Resty is able to automaticaly resolve your hase one associations.
 defmodule Company do
   use Resty.Resource.Base
 
-  set_site("https://jsonplaceholder.typicode.com")
-  set_resource_path("/users/:user_id/company")
-  define_attributes([:name])
+  set_site "https://jsonplaceholder.typicode.com"
+  set_resource_path "/users/:user_id/company"
+  define_attributes [:name]
 end
 
 defmodule User do
   use Resty.Resource.Base
 
-  set_site("https://jsonplaceholder.typicode.com")
-  set_resource_path("/users")
-  define_attributes([:name, :email])
+  set_site "https://jsonplaceholder.typicode.com"
+  set_resource_path "/users"
+  define_attributes [:name, :email]
 
-  has_one(Company, :company, :user_id)
+  has_one Company, :company, :user_id
 end
 
 {:ok, user} = User |> Resty.Repo.find(1)
@@ -231,10 +231,10 @@ More informations about this auth strategy can be found [here](https://hexdocs.p
 defmodule Post do
   use Resty.Resource.Base
 
-  set_site("https://jsonplaceholder.typicode.com")
-  set_resource_path("/posts")
-  define_attributes([:title, :body, :userId])
-  with_auth(Resty.Auth.Basic, user: "hello", password: "hola")
+  set_site "https://jsonplaceholder.typicode.com"
+  set_resource_path "/posts"
+  define_attributes [:title, :body, :userId]
+  with_auth Resty.Auth.Basic, user: "hello", password: "hola"
 end
 ```
 
@@ -246,10 +246,10 @@ More informations about this auth strategy can be found [here](https://hexdocs.p
 defmodule Post do
   use Resty.Resource.Base
 
-  set_site("https://jsonplaceholder.typicode.com")
-  set_resource_path("/posts")
-  define_attributes([:title, :body, :userId])
-  with_auth(Resty.Auth.Beaer, token: "my-token")
+  set_site "https://jsonplaceholder.typicode.com"
+  set_resource_path "/posts"
+  define_attributes [:title, :body, :userId]
+  with_auth Resty.Auth.Beaer, token: "my-token"
 end
 ```
 

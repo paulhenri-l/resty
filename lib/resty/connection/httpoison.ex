@@ -20,7 +20,7 @@ defmodule Resty.Connection.HTTPoison do
   defmodule MyResource do
     use Resty.Resource.Base
 
-    set_connection(Resty.Connection.HTTPoison, timeout: 8000)
+    set_connection Resty.Connection.HTTPoison, timeout: 8000
   end
   ```
 
@@ -37,7 +37,7 @@ defmodule Resty.Connection.HTTPoison do
   defmodule MyResource do
     use Resty.Resource.Base
 
-    set_connection(Resty.Connection.HTTPoison)
+    set_connection Resty.Connection.HTTPoison
   end
   ```
   """

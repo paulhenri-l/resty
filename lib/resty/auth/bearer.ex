@@ -12,7 +12,7 @@ defmodule Resty.Auth.Bearer do
   defmodule MyResource do
     use Resty.Resource.Base
 
-    with_auth(Resty.Auth.Beaer, token: "my-token")
+    with_auth Resty.Auth.Beaer, token: "my-token"
   end
   ```
 
@@ -28,7 +28,7 @@ defmodule Resty.Auth.Bearer do
   defmodule MyResource do
     use Resty.Resource.Base
 
-    with_auth(Resty.Auth.Beaer)
+    with_auth Resty.Auth.Beaer
   end
   ```
   """

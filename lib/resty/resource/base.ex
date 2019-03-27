@@ -19,10 +19,10 @@ defmodule Resty.Resource.Base do
   defmodule MyResource do
     use Resty.Resource.Base
 
-    set_site("site.tld")
-    set_resource_path("/posts")
+    set_site "site.tld"
+    set_resource_path "/posts"
 
-    define_attributes([:name])
+    define_attributes [:name]
   end
   ```
 
@@ -188,19 +188,19 @@ defmodule Resty.Resource.Base do
   defmodule User do
     use Resty.Resource.Base
 
-    set_site("https://jsonplaceholder.typicode.com")
-    set_resource_path("/users")
-    define_attributes([:name, :email])
+    set_site "https://jsonplaceholder.typicode.com"
+    set_resource_path "/users"
+    define_attributes [:name, :email]
   end
 
   defmodule Post do
     use Resty.Resource.Base
 
-    set_site("https://jsonplaceholder.typicode.com")
-    set_resource_path("/posts")
-    define_attributes([:title, :body, :userId])
+    set_site "https://jsonplaceholder.typicode.com"
+    set_resource_path "/posts"
+    define_attributes [:title, :body, :userId]
 
-    belongs_to(User, :user, :userId)
+    belongs_to User, :user, :userId
   end
 
   {:ok, post} = Post |> Resty.Repo.find(1)
@@ -248,19 +248,19 @@ defmodule Resty.Resource.Base do
   defmodule Company do
     use Resty.Resource.Base
 
-    set_site("https://jsonplaceholder.typicode.com")
-    set_resource_path("/users/:user_id/company")
-    define_attributes([:name])
+    set_site "https://jsonplaceholder.typicode.com"
+    set_resource_path "/users/:user_id/company"
+    define_attributes [:name]
   end
 
   defmodule User do
     use Resty.Resource.Base
 
-    set_site("https://jsonplaceholder.typicode.com")
-    set_resource_path("/users")
-    define_attributes([:name, :email])
+    set_site "https://jsonplaceholder.typicode.com"
+    set_resource_path "/users"
+    define_attributes [:name, :email]
 
-    has_one(Company, :company, :user_id)
+    has_one Company, :company, :user_id
   end
 
   {:ok, user} = User |> Resty.Repo.find(1)

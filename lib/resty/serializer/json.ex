@@ -17,7 +17,7 @@ defmodule Resty.Serializer.Json do
   defmodule MyResource do
     use Resty.Resource.Base
 
-    set_serializer(Resty.Serializer.Json)
+    set_serializer Resty.Serializer.Json
   end
   ```
   """

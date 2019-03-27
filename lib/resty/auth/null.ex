@@ -12,7 +12,7 @@ defmodule Resty.Auth.Null do
   defmodule MyResource do
     use Resty.Resource.Base
 
-    with_auth(Resty.Auth.Null)
+    with_auth Resty.Auth.Null
   end
   ```
   """
