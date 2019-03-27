@@ -31,7 +31,8 @@ defmodule Resty.MixProject do
           ],
           Associations: [
             Resty.Associations,
-            Resty.Associations.NotLoaded
+            Resty.Associations.NotLoaded,
+            Resty.Associations.LoadError
           ],
           Auth: [
             Resty.Auth,
