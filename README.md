@@ -259,13 +259,10 @@ The documentation is available here [https://hexdocs.pm/resty](https://hexdocs.p
 
 The most important modules are `Resty.Repo`, `Resty.Resource.Base` and `Resty.Resource`.
 
-## This is a work in progress
+## Contributing
 
-If you want to known what I am currently working on you can also have a look at
-the open issues.
+If you have any questions about how to use this library feel free to open
+an issue :)
 
-I'll do my best not to make any backward incompatible changes but as this project
-is quite new the api cannot be considered stable yet. I'll stop making these big
-changes when we'll hit 1.0. Which should be comming soon.
-
-If you have any comment or suggestion please feel free to open an issue :)
+If you think that the documentation or the code could be improved open a PR
+and I'll happily review it!
