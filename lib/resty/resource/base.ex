@@ -227,6 +227,47 @@ defmodule Resty.Resource.Base do
 
   @doc """
   Declare a new has_one association.
+
+  ## Arguments
+
+  - `resource`: The resource module to which this association should resolve
+  - `attribute_name`: Under which key should the resolved association be set?
+  - `foreign_key`: What is the foreign_key of the association (on the other resource)?
+    it should be `:author_id` if the resource url is (/authors/:author_id/address)
+
+  ## Usage
+
+  ```elixir
+  defmodule Company do
+    use Resty.Resource.Base
+
+    set_site("https://jsonplaceholder.typicode.com/users/:user_id/company")
+    set_resource_path("/users/:user_id/company")
+    define_attributes([:name])
+  end
+
+  defmodule User do
+    use Resty.Resource.Base
+
+    set_site("https://jsonplaceholder.typicode.com")
+    set_resource_path("/users")
+    define_attributes([:name, :email])
+
+    has_one(Company, :company, :user_id)
+  end
+
+  {:ok, user} = User |> Resty.Repo.find(1)
+
+  IO.inspect(user.company.name) # Romaguera-Crona
+  ```
+
+  ## When is the association loaded?
+
+  The has_one association is automatically loaded when the resource is
+  fetched from the server.
+
+  Beware! This is highly **ineficient** if you are using the `Resty.Repo.all/1`
+  function (or any other function that relies on it).
   """
   defmacro has_one(resource, attribute_name, foreign_key) do
     quote do

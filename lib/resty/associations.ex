@@ -10,14 +10,20 @@ defmodule Resty.Associations do
   - `Resty.Resource.Base.belongs_to/3`
   - `Resty.Resource.Base.has_one/3`
 
+  ## Load error
+
+  If loading an association results in an error its value will be replaced by
+  the `Resty.Associations.LoadError` struct. The `:error` attribute will be
+  loaded with the error that has been returned by the `Resty.Repo.find/2` call.
+
   ## Not loaded
 
   If an association has not been loaded its value will be of the type
   `Resty.Associations.NotLoaded`
 
-  What may cause an association to not be loaded is that the request resulted
-  in an error (404, 401 etc...) or that the foreign key of the relation was
-  set to null.
+  What may cause an association to not be loaded is that the foreign key of the
+  relation was set to null or that the relation automatic loading has been
+  disabled.
   """
 
   @doc false
