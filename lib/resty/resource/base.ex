@@ -62,6 +62,7 @@ defmodule Resty.Resource.Base do
       Module.register_attribute(__MODULE__, :headers, accumulate: true)
       Module.register_attribute(__MODULE__, :associations, accumulate: true)
       Module.register_attribute(__MODULE__, :association_attributes, accumulate: true)
+      Module.register_attribute(__MODULE__, :known_association_attributes, accumulate: true)
       Module.put_attribute(__MODULE__, :site, Resty.default_site())
       Module.put_attribute(__MODULE__, :resource_path, "")
       Module.put_attribute(__MODULE__, :primary_key, :id)
@@ -229,6 +230,7 @@ defmodule Resty.Resource.Base do
   """
   defmacro has_one(resource, attribute_name, foreign_key) do
     quote do
+      @known_association_attributes unquote(attribute_name)
       @association_attributes {unquote(attribute_name), %Associations.NotLoaded{}}
       @associations %Associations.HasOne{
         related: unquote(resource),
@@ -240,9 +242,11 @@ defmodule Resty.Resource.Base do
 
   defmacro __before_compile__(_env) do
     quote do
-      @known_attributes [@primary_key] ++ @attributes
+      all_arrtibutes = [@primary_key] ++ @attributes
 
-      defstruct @known_attributes ++ @association_attributes ++ [__persisted__: false]
+      @known_attributes all_arrtibutes ++ @known_association_attributes
+
+      defstruct all_arrtibutes ++ @association_attributes ++ [__persisted__: false]
 
       @doc false
       def site, do: @site

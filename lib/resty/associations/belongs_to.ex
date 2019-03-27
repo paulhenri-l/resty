@@ -1,5 +1,4 @@
 defmodule Resty.Associations.BelongsTo do
-  alias Resty.Associations.NotLoaded
   defstruct [:related, :attribute, :foreign_key]
 
   @moduledoc false

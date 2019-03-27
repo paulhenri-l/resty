@@ -4,20 +4,37 @@ defmodule Resty.Associations.HasOne do
   @moduledoc false
 
   @doc false
-  def load(_, resource = %{__persisted__: false}) do
+  def load(_, _resource = %{__persisted__: false}) do
     nil
   end
 
   def fetch(association, resource) do
-    # Do not refetech if relation already in the resource. Simply put it in the
-    # correct struct.
-    #
     # Allow to disable automatic fetching of relationns in order to avoid circular.
-    Resty.Repo.find(association.related, nil, [
-      {
-        association.foreign_key,
-        Resty.Resource.get_primary_key(resource)
-      }
-    ])
+
+    case Map.get(resource, association.attribute, nil) do
+      %Resty.Associations.NotLoaded{} ->
+        do_fetch(association, resource)
+
+      preloaded_relation ->
+        do_preload(preloaded_relation, association)
+    end
+  end
+
+  defp do_fetch(association, resource) do
+        Resty.Repo.find(association.related, nil, [
+          {
+            association.foreign_key,
+            Resty.Resource.get_primary_key(resource)
+          }
+        ])
+  end
+
+  defp do_preload(preloaded_relation, association) do
+        relation =
+          preloaded_relation
+          |> association.related.build()
+          |> Resty.Resource.mark_as_persisted()
+
+        {:ok, relation}
   end
 end

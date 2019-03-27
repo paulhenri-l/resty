@@ -8,6 +8,9 @@ defmodule MockedConnection do
   @hp %{id: 3, name: "HP"}
 
   @ph_address %{id: 1, author_id: 1, city: "Somewhere"}
+  @phl_address %{id: 2, author_id: 4, city: "Another somewhere"}
+
+  @phl %{id: 4, name: "PHL", address: @phl_address}
 
   @first_post %{id: 1, name: "First Post", body: "lorem ipsum", author_id: 1}
   @second_post %{id: 2, name: "Second Post", body: "lorem ipsum", author_id: 1}
@@ -37,6 +40,8 @@ defmodule MockedConnection do
   mock(:get, "site.tld/authors/2", {:error, Resty.Error.ResourceNotFound.new()})
   mock(:get, "site.tld/authors/3", {:ok, @hp |> Jason.encode!()})
   mock(:get, "site.tld/authors/3/address", {:error, Resty.Error.ResourceNotFound.new()})
+  mock(:get, "site.tld/authors/4", {:ok, @phl |> Jason.encode!()})
+  mock(:get, "site.tld/authors/4/address", {:error, Resty.Error.ResourceNotFound.new()})
 
   # Subscribers
   mock(:get, "site.tld/subscribers", {:ok, "[]"})
