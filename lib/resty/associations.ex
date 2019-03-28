@@ -9,6 +9,7 @@ defmodule Resty.Associations do
   ## Supported associations
   - `Resty.Resource.Base.belongs_to/3`
   - `Resty.Resource.Base.has_one/3`
+  - `Resty.Resource.Base.has_many/3`
 
   ## Load error
 
