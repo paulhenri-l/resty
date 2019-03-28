@@ -23,11 +23,12 @@ defmodule Resty.Associations.HasMany do
   end
 
   defp do_preload(preloaded_relation, association) do
-    preloaded_relation = Enum.map(preloaded_relation, fn relation ->
-      relation
-      |> association.related.build()
-      |> Resty.Resource.mark_as_persisted()
-    end)
+    preloaded_relation =
+      Enum.map(preloaded_relation, fn relation ->
+        relation
+        |> association.related.build()
+        |> Resty.Resource.mark_as_persisted()
+      end)
 
     {:ok, preloaded_relation}
   end

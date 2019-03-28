@@ -7,4 +7,3 @@ defmodule Post.Comment do
 
   belongs_to Post, :post, :post_id, false
 end
-

@@ -13,7 +13,13 @@ defmodule MockedConnection do
   @phl %{id: 4, name: "PHL", address: @phl_address}
 
   @first_post %{id: 1, name: "First Post", body: "lorem ipsum", author_id: 1}
-  @second_post %{id: 2, name: "Second Post", body: "lorem ipsum", author_id: 1, comments: [%{id: 4, post_id: 2, body: "A comment"}]}
+  @second_post %{
+    id: 2,
+    name: "Second Post",
+    body: "lorem ipsum",
+    author_id: 1,
+    comments: [%{id: 4, post_id: 2, body: "A comment"}]
+  }
   @third_post %{id: 3, name: "Third Post", body: "lorem ipsum", author_id: 1}
   @fourth_post %{id: 4, name: "Fourth Post", body: "lorem ipsum", author_id: 2}
 
