@@ -181,7 +181,7 @@ Under the hood
 
 #### HasOne
 
-Resty is able to automaticaly resolve your hase one associations.
+Resty is able to automaticaly resolve your has one associations.
 
 *If the association is already in the response body it won't get refetched*
 
@@ -201,7 +201,7 @@ defmodule User do
   set_resource_path "/users"
   define_attributes [:name, :email]
 
-  has_one Company, :company, :user_id
+  has_one Company, :company, :userId
 end
 
 {:ok, user} = User |> Resty.Repo.find(1)
@@ -216,6 +216,45 @@ Under the hood
 # Request -> GET https://jsonplaceholder.typicode.com/users/1/company
 # Response -> {"id": 1, "email": "Sincere@april.biz", "name": "Leanne Graham"}
 # Response -> {"name": "Romaguera-Crona"}
+```
+
+#### HasMany
+
+Resty is able to automaticaly resolve your has many associations.
+
+*If the association is already in the response body it won't get refetched*
+
+```elixir
+defmodule Comment do
+  use Resty.Resource.Base
+
+  set_site "https://jsonplaceholder.typicode.com"
+  set_resource_path "/posts/:post_id/comments"
+  define_attributes [:postId, :body]
+end
+
+defmodule Post do
+  use Resty.Resource.Base
+
+  set_site "https://jsonplaceholder.typicode.com"
+  set_resource_path "/posts"
+  define_attributes [:title, :body]
+
+  has_many Comment, :comments, :postId
+end
+
+{:ok, post} = Post |> Resty.Repo.find(1)
+
+IO.inspect(user.post.comments) # [%Comment{name: "id labore ex et quam laborum""} | _]
+```
+
+Under the hood
+
+```
+# Request -> GET https://jsonplaceholder.typicode.com/posts/1
+# Request -> GET https://jsonplaceholder.typicode.com/posts/1/comments
+# Response -> {"userId": 1, "id": 1, "title": "...", "body": "..."}
+# Response -> [{"postId": 1, "id": 1, "name": "...", "email": "...", "body": "..."}, {...}]
 ```
 
 ### Authentication

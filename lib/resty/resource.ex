@@ -44,7 +44,8 @@ defmodule Resty.Resource do
     body: "lorem ipsum",
     name: "First Post",
     author_id: 1,
-    author: %Resty.Associations.NotLoaded{}
+    author: %Resty.Associations.NotLoaded{},
+    comments: %Resty.Associations.NotLoaded{}
   }
   ```
   """
@@ -52,7 +53,7 @@ defmodule Resty.Resource do
 
   defp clone(resource_module, resource) do
     resource
-    |> Map.take(resource_module.known_attributes())
+    |> Map.take(resource_module.raw_attributes())
     |> Map.delete(resource_module.primary_key())
     |> resource_module.build()
   end
@@ -69,7 +70,7 @@ defmodule Resty.Resource do
   eventually get sent to the underlying api.
   """
   def raw_attributes(resource = %{__struct__: resource_module}) do
-    resource |> Map.take(resource_module.known_attributes())
+    resource |> Map.take(resource_module.raw_attributes())
   end
 
   @doc """

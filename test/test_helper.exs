@@ -13,9 +13,14 @@ defmodule MockedConnection do
   @phl %{id: 4, name: "PHL", address: @phl_address}
 
   @first_post %{id: 1, name: "First Post", body: "lorem ipsum", author_id: 1}
-  @second_post %{id: 2, name: "Second Post", body: "lorem ipsum", author_id: 1}
+  @second_post %{id: 2, name: "Second Post", body: "lorem ipsum", author_id: 1, comments: [%{id: 4, post_id: 2, body: "A comment"}]}
   @third_post %{id: 3, name: "Third Post", body: "lorem ipsum", author_id: 1}
   @fourth_post %{id: 4, name: "Fourth Post", body: "lorem ipsum", author_id: 2}
+
+  @comment1 %{id: 1, post_id: 1, body: "My first comment"}
+  @comment2 %{id: 2, post_id: 1, body: "My second comment"}
+  @comment3 %{id: 3, post_id: 1, body: "My third comment"}
+  @first_post_comments [@comment1, @comment2, @comment3] |> Jason.encode!()
 
   @posts [@first_post, @second_post, @third_post, @fourth_post] |> Jason.encode!()
 
@@ -33,6 +38,12 @@ defmodule MockedConnection do
   mock(:delete, "site.tld/posts/1")
   mock(:delete, "site.tld/posts/1?query_param=some-value")
   mock(:delete, "site.tld/posts/2", {:error, Resty.Error.ForbiddenAccess.new()})
+
+  # Posts/Comments
+  mock(:get, "site.tld/posts/1/comments", {:ok, @first_post_comments})
+  mock(:get, "site.tld/posts/2/comments", {:error, Resty.Error.ResourceNotFound.new()})
+  mock(:get, "site.tld/posts/3/comments", {:error, Resty.Error.ResourceNotFound.new()})
+  mock(:get, "site.tld/posts/4/comments", {:ok, "[]"})
 
   # Authors
   mock(:get, "site.tld/authors/1", {:ok, @ph |> Jason.encode!()})

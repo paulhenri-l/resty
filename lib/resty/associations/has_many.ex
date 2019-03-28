@@ -1,4 +1,4 @@
-defmodule Resty.Associations.HasOne do
+defmodule Resty.Associations.HasMany do
   defstruct [:related, :attribute, :foreign_key, {:eager_load, true}]
 
   @moduledoc false
@@ -18,16 +18,17 @@ defmodule Resty.Associations.HasOne do
   defp do_fetch(association, resource) do
     case Resty.Resource.get_primary_key(resource) do
       nil -> nil
-      key -> Resty.Repo.find(association.related, nil, [{association.foreign_key, key}])
+      key -> Resty.Repo.all(association.related, [{association.foreign_key, key}])
     end
   end
 
   defp do_preload(preloaded_relation, association) do
-    relation =
-      preloaded_relation
+    preloaded_relation = Enum.map(preloaded_relation, fn relation ->
+      relation
       |> association.related.build()
       |> Resty.Resource.mark_as_persisted()
+    end)
 
-    {:ok, relation}
+    {:ok, preloaded_relation}
   end
 end

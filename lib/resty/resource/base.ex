@@ -260,7 +260,7 @@ defmodule Resty.Resource.Base do
     set_resource_path "/users"
     define_attributes [:name, :email]
 
-    has_one Company, :company, :user_id
+    has_one Company, :company, :userId
   end
 
   {:ok, user} = User |> Resty.Repo.find(1)
@@ -289,13 +289,73 @@ defmodule Resty.Resource.Base do
     end
   end
 
+  @doc """
+  Declare a new has_many association.
+
+  ## Arguments
+
+  - `resource`: The resource module to which this association should resolve
+  - `attribute_name`: Under which key should the resolved association be set?
+  - `foreign_key`: What is the foreign_key of the association (on the other resource)?
+    it should be `:post_id` if the resource url is (/posts/:post_id/comments)
+  - `eager_load`: Should this association be eagerly loaded? this parameter
+  is useful in order to break circular dependencies or if you plan on using
+  collection functions such as `Resty.Repo.all/1`.
+
+  ## Usage
+
+  ```elixir
+  defmodule Comment do
+    use Resty.Resource.Base
+
+    set_site "https://jsonplaceholder.typicode.com"
+    set_resource_path "/posts/:post_id/comments"
+    define_attributes [:postId, :body]
+  end
+
+  defmodule Post do
+    use Resty.Resource.Base
+
+    set_site "https://jsonplaceholder.typicode.com"
+    set_resource_path "/posts"
+    define_attributes [:title, :body]
+
+    has_many Comment, :comments, :postId
+  end
+
+  {:ok, post} = Post |> Resty.Repo.find(1)
+
+  IO.inspect(user.post.comments) # [%Comment{name: "id labore ex et quam laborum""} | _]
+  ```
+
+  ## When is the association loaded?
+
+  The has_many association is automatically loaded when the resource is
+  fetched from the server.
+
+  Beware! This is highly **ineficient** if you are using the `Resty.Repo.all/1`
+  function (or any other function that relies on it).
+  """
+  defmacro has_many(resource, attribute_name, foreign_key, eager_load \\ true) do
+    quote do
+      @known_association_attributes unquote(attribute_name)
+      @association_attributes {unquote(attribute_name), %Associations.NotLoaded{}}
+      @associations %Associations.HasMany{
+        eager_load: unquote(eager_load),
+        related: unquote(resource),
+        attribute: unquote(attribute_name),
+        foreign_key: unquote(foreign_key)
+      }
+    end
+  end
+
   defmacro __before_compile__(_env) do
     quote do
-      all_arrtibutes = [@primary_key] ++ @attributes
+      @raw_attributes [@primary_key] ++ @attributes
 
-      @known_attributes all_arrtibutes ++ @known_association_attributes
+      @known_attributes @raw_attributes ++ @known_association_attributes
 
-      defstruct all_arrtibutes ++ @association_attributes ++ [__persisted__: false]
+      defstruct @raw_attributes ++ @association_attributes ++ [__persisted__: false]
 
       @doc false
       def site, do: @site
@@ -305,6 +365,9 @@ defmodule Resty.Resource.Base do
 
       @doc false
       def resource_path, do: @resource_path
+
+      @doc false
+      def raw_attributes, do: @raw_attributes
 
       @doc false
       def known_attributes, do: @known_attributes

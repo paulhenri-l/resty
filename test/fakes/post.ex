@@ -8,4 +8,5 @@ defmodule Post do
   define_attributes [:name, :body]
 
   belongs_to Author, :author, :author_id
+  has_many Post.Comment, :comments, :post_id
 end
